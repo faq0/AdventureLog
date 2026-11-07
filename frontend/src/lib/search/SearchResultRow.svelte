@@ -14,16 +14,13 @@
 	let { hit, selected = false, compact = false, spotlight = false }: Props = $props();
 
 	const dispatch = createEventDispatcher<{ select: SearchHit }>();
+	let ResultIcon = $derived(getSearchTypeIcon(hit.type));
 
 	function typeLabel(type: SearchEntityType): string {
 		const key = `search.types.${type}`;
 		const translated = $t(key);
 		return translated === key ? type : translated;
 	}
-
-	let emojiIcon = $derived(
-		hit.type === 'location' && hit.meta?.category_icon ? String(hit.meta.category_icon) : null
-	);
 
 	let rowClass = $derived(
 		[
@@ -44,24 +41,11 @@
 
 <button type="button" class={rowClass} onclick={() => dispatch('select', hit)}>
 	<div
-		class="flex shrink-0 items-center justify-center rounded-xl"
-		class:h-10={spotlight}
-		class:w-10={spotlight}
-		class:text-2xl={spotlight && emojiIcon}
-		class:h-9={!spotlight}
-		class:w-9={!spotlight}
-		class:text-xl={!spotlight && emojiIcon}
-		class:bg-primary-content={selected}
-		class:text-primary={selected && !emojiIcon}
-		class:bg-base-200={!selected}
-		class:text-base-content={!selected && !emojiIcon}
+		class="flex shrink-0 items-center justify-center w-8 h-8"
+		class:text-primary-content={selected}
+		class:text-base-content={!selected}
 	>
-		{#if emojiIcon}
-			<span aria-hidden="true">{emojiIcon}</span>
-		{:else}
-			{@const SvelteComponent = getSearchTypeIcon(hit.type)}
-			<SvelteComponent class={spotlight ? 'w-5 h-5' : 'w-4 h-4'} />
-		{/if}
+		<ResultIcon class="w-4 h-4 opacity-60" />
 	</div>
 
 	<div class="min-w-0 flex-1">

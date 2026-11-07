@@ -32,6 +32,7 @@
 	let isAboutModalOpen: boolean = $state(false);
 	let isMac = $state(false);
 	let settingsOpen = $state(false);
+	let mobileOpen = $state(false);
 	let settingsOpenUpward = $state(false);
 	let settingsMenuEl: HTMLDivElement | undefined = $state();
 
@@ -63,7 +64,9 @@
 		isMac = /Mac|iPhone|iPad/.test(navigator.platform);
 		document.addEventListener('keydown', handleKeydown);
 		// @ts-ignore
-		theme = document.documentElement.getAttribute('data-theme');
+		theme =
+			document.documentElement.getAttribute('data-theme') ||
+			(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
 		return () => {
 			document.removeEventListener('keydown', handleKeydown);
@@ -176,266 +179,315 @@
 </script>
 
 <svelte:window onclick={closeSettingsMenu} onkeydown={handleSettingsKeydown} />
+{#if isAboutModalOpen}<AboutModal on:close={() => (isAboutModalOpen = false)} />{/if}
 
-{#if isAboutModalOpen}
-	<AboutModal on:close={() => (isAboutModalOpen = false)} />
-{/if}
-
-<div class="navbar bg-base-100/95 backdrop-blur-lg border-b border-base-300 top-0 z-[999] relative">
-	<div class="navbar-start">
-		<!-- Mobile Menu -->
-		<div class="dropdown z-[999]">
-			<div tabindex="0" role="button" class="btn btn-ghost btn-square lg:hidden">
-				<Menu class="h-5 w-5" />
-			</div>
-			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-			<ul
-				tabindex="-1"
-				class="menu dropdown-content mt-3 z-[999] p-4 shadow-2xl bg-base-100 border border-base-300 rounded-2xl gap-2 w-80 max-h-[80vh] overflow-y-auto"
+<header class="app-navigation">
+	<div class="navigation-inner">
+		<a class="wordmark" href={data.user ? '/dashboard' : '/'} aria-label="AdventureLog home">
+			<span class="wordmark-symbol" aria-hidden="true">A</span>
+			<span>AdventureLog</span>
+		</a>
+		{#if showFullNav}
+			<nav class="desktop-navigation" aria-label="Main navigation">
+				{#each navigationItems as item}
+					<a
+						href={item.path}
+						class:current={page.url.pathname.startsWith(item.path)}
+						aria-current={page.url.pathname.startsWith(item.path) ? 'page' : undefined}
+					>
+						{$t(item.label)}
+						{#if item.path === '/collections' && pendingInviteCount > 0}<span class="nav-count"
+								>{pendingInviteCount}</span
+							>{/if}
+					</a>
+				{/each}
+			</nav>
+		{/if}
+		<div class="navigation-actions">
+			{#if showFullNav}
+				<button
+					type="button"
+					class="search-trigger"
+					onclick={() => openSearch()}
+					aria-label={$t('search.open_palette')}
+				>
+					<Magnify class="h-4 w-4" />
+					<span class="search-label">{$t('navbar.search')}</span>
+					<kbd>{modifierHint}</kbd>
+				</button>
+			{/if}
+			{#if data.user && cloudMode && subscription}
+				{#if showExpiredCta}<a href="/subscribe" class="btn btn-warning btn-sm"
+						>{$t('navbar.access_paused')}</a
+					>
+				{:else if showTrialCta}<a href="/subscribe" class="btn btn-primary btn-sm"
+						>{$t('navbar.trial_days_left', { values: { days: daysRemaining ?? 0 } })}</a
+					>{/if}
+			{/if}
+			{#if data.user}<Avatar user={data.user} cloudMode={data.cloudMode} />
+			{:else}<a class="btn btn-primary btn-sm" href="/login">{$t('auth.login')}</a>{/if}
+			<div
+				bind:this={settingsMenuEl}
+				class="dropdown dropdown-end"
+				class:dropdown-open={settingsOpen}
+				class:dropdown-close={!settingsOpen}
 			>
-				{#if data.user}
-					<!-- Navigation Items -->
-					<div class="mb-4">
-						<h3
-							class="text-sm font-semibold text-base-content/60 uppercase tracking-wide mb-2 px-2"
+				<button
+					type="button"
+					class="btn btn-ghost btn-square btn-sm"
+					aria-label="Appearance and language"
+					aria-haspopup="menu"
+					aria-expanded={settingsOpen}
+					onclick={toggleSettingsMenu}><DotsHorizontal class="w-5 h-5" /></button
+				>
+				{#if settingsOpen}
+					<div class="dropdown-content appearance-menu surface" role="menu">
+						<a
+							class="menu-link"
+							href="https://adventurelog.app/docs/"
+							target="_blank"
+							rel="noreferrer">{$t('navbar.documentation')}</a
 						>
-							{$t('navbar.navigation')}
-						</h3>
-						{#each navigationItems as item}
-							<li>
-								<a
-									href={item.path}
-									class="btn btn-ghost justify-start gap-3 w-full text-left rounded-xl"
-									class:btn-active={page.url.pathname === item.path}
-									title={item.path === '/collections' && pendingInviteCount > 0
-										? `${$t(item.label)} (${pendingInviteCount} ${$t('invites.pending_invites')})`
-										: undefined}
-								>
-									<span class="relative inline-flex shrink-0">
-										<item.icon class="w-5 h-5" />
-										{#if item.path === '/collections' && pendingInviteCount > 0}
-											<span
-												class="absolute top-0 right-0 h-2 w-2 translate-x-1/3 -translate-y-1/3 rounded-full bg-error ring-2 ring-base-100"
-												aria-hidden="true"
-											></span>
-										{/if}
-									</span>
-									{$t(item.label)}
-								</a>
-							</li>
-						{/each}
-					</div>
-
-					<div class="divider my-2"></div>
-
-					<!-- Search Section -->
-					<div class="mb-4">
-						<h3
-							class="text-sm font-semibold text-base-content/60 uppercase tracking-wide mb-2 px-2"
+						<a
+							class="menu-link"
+							href="https://github.com/faq0/AdventureLog"
+							target="_blank"
+							rel="noreferrer">Source code</a
 						>
-							{$t('navbar.search')}
-						</h3>
-						<button
-							type="button"
-							class="btn btn-outline w-full justify-start gap-2"
-							onclick={() => openSearch()}
+						<button class="menu-link" type="button" onclick={openAbout}>{$t('navbar.about')}</button
 						>
-							<Magnify class="h-4 w-4 opacity-70" />
-							{$t('search.open_palette')}
-						</button>
-					</div>
-				{:else}
-					<!-- Auth Buttons -->
-					<div class="space-y-2">
-						<li>
-							<button class="btn btn-primary w-full" onclick={() => goto('/login')}>
-								{$t('auth.login')}
-							</button>
-						</li>
-						<li>
-							<button class="btn btn-outline w-full" onclick={() => goto('/signup')}>
-								{$t('auth.signup')}
-							</button>
-						</li>
+						<div class="menu-separator"></div>
+						<form method="POST" use:enhance>
+							<label class="field-label" for="app-language">{$t('navbar.language_selection')}</label
+							>
+							<select
+								id="app-language"
+								class="select select-sm w-full"
+								onchange={submitLocaleChange}
+								bind:value={$locale}
+							>
+								{#each $locales as loc (loc)}<option value={loc}>{languages[loc]}</option>{/each}
+							</select>
+							<input type="hidden" name="locale" value={$locale} />
+						</form>
+						<form method="POST" use:enhance={submitUpdateTheme}>
+							<label class="field-label" for="app-theme">{$t('navbar.theme_selection')}</label>
+							<select
+								id="app-theme"
+								class="select select-sm w-full"
+								bind:value={theme}
+								onchange={submitThemeChange}
+							>
+								{#each themes as option}<option value={option.name}
+										>{$t(`navbar.themes.${option.name}`)}</option
+									>{/each}
+							</select>
+						</form>
 					</div>
 				{/if}
-			</ul>
-		</div>
-
-		<!-- Logo -->
-		<a class="btn btn-ghost hover:bg-transparent p-2 text-2xl font-bold tracking-tight" href="/">
-			<div class="flex items-center gap-3">
-				<img src="/favicon.png" alt="AdventureLog" class="w-10 h-10" />
-				<span class="hidden sm:inline mb-1"> AdventureLog </span>
 			</div>
-		</a>
-	</div>
-
-	<!-- Desktop Navigation -->
-	<div class="navbar-center hidden lg:flex">
-		{#if showFullNav}
-			<ul class="menu menu-horizontal gap-1">
-				{#each navigationItems as item}
-					<li>
-						<a
-							href={item.path}
-							class="btn btn-ghost gap-2 rounded-xl transition-all duration-200 hover:bg-base-200"
-							class:bg-primary-10={page.url.pathname === item.path}
-							class:text-primary={page.url.pathname === item.path}
-							title={item.path === '/collections' && pendingInviteCount > 0
-								? `${$t(item.label)} (${pendingInviteCount} ${$t('invites.pending_invites')})`
-								: undefined}
-						>
-							<span class="relative inline-flex shrink-0">
-								<item.icon class="w-4 h-4" />
-								{#if item.path === '/collections' && pendingInviteCount > 0}
-									<span
-										class="absolute top-0 right-0 h-2 w-2 translate-x-1/3 -translate-y-1/3 rounded-full bg-error ring-2 ring-base-100"
-										aria-hidden="true"
-									></span>
-								{/if}
-							</span>
-							<span class="hidden xl:inline">{$t(item.label)}</span>
-						</a>
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
-
-	<div class="navbar-end gap-3">
-		<!-- Desktop Search -->
-		{#if showFullNav}
-			<button
-				type="button"
-				class="hidden lg:flex input input-sm items-center gap-2 w-64 text-left"
-				onclick={() => openSearch()}
-			>
-				<Magnify class="w-4 h-4 opacity-60 shrink-0" />
-				<span class="grow text-base-content/50 truncate">
-					{query || $t('navbar.search')}
-				</span>
-				<kbd class="kbd kbd-xs opacity-60">{modifierHint}</kbd>
-			</button>
-		{/if}
-
-		{#if data.user && cloudMode && subscription}
-			{#if showExpiredCta}
-				<a href="/subscribe" class="btn btn-warning btn-sm">{$t('navbar.access_paused')}</a>
-			{:else if showTrialCta}
-				<a href="/subscribe" class="btn btn-primary btn-sm">
-					{$t('navbar.trial_days_left', { values: { days: daysRemaining ?? 0 } })}
-				</a>
+			{#if showFullNav}
+				<button
+					class="btn btn-ghost btn-square btn-sm mobile-navigation-toggle"
+					type="button"
+					aria-label="Navigation"
+					aria-controls="mobile-navigation"
+					aria-expanded={mobileOpen}
+					onclick={() => (mobileOpen = !mobileOpen)}><Menu class="w-5 h-5" /></button
+				>
 			{/if}
-		{/if}
-
-		<!-- Auth Buttons (Desktop) -->
-		{#if !data.user}
-			<div class="hidden lg:flex gap-2">
-				<button class="btn btn-primary btn-sm" onclick={() => goto('/login')}>
-					{$t('auth.login')}
-				</button>
-				<button class="btn btn-neutral btn-sm" onclick={() => goto('/signup')}>
-					{$t('auth.signup')}
-				</button>
-			</div>
-		{/if}
-
-		<!-- User Avatar -->
-		{#if data.user}
-			<Avatar user={data.user} cloudMode={data.cloudMode} />
-		{/if}
-
-		<!-- Settings -->
-		<div
-			bind:this={settingsMenuEl}
-			class="dropdown dropdown-end z-[999]"
-			class:dropdown-open={settingsOpen}
-			class:dropdown-close={!settingsOpen}
-			class:dropdown-top={settingsOpenUpward}
-			class:dropdown-bottom={!settingsOpenUpward}
-		>
-			<button
-				type="button"
-				class="btn btn-neutral-300 btn-sm btn-square"
-				aria-haspopup="menu"
-				aria-expanded={settingsOpen}
-				onclick={toggleSettingsMenu}
-			>
-				<DotsHorizontal class="w-5 h-5" />
-			</button>
-			<ul
-				class="dropdown-content bg-base-100 border border-base-300 shadow-2xl z-[999] menu p-4 rounded-2xl w-80"
-				role="menu"
-			>
-				<!-- Quick Actions -->
-				<div class="space-y-2 mb-4">
-					<button class="btn btn-ghost w-full justify-start gap-3" onclick={openAbout}
-						>{$t('navbar.about')}</button
-					>
-
-					<button
-						class="btn btn-ghost w-full justify-start gap-3"
-						onclick={() => (window.location.href = 'https://adventurelog.app')}
-						>{$t('navbar.documentation')}</button
-					>
-
-					<button
-						class="btn btn-ghost w-full justify-start gap-3"
-						onclick={() => (window.location.href = 'https://discord.gg/wRbQ9Egr8C')}>Discord</button
-					>
-
-					<button
-						class="btn btn-ghost w-full justify-start gap-3"
-						onclick={() => (window.location.href = 'https://seanmorley.com/sponsor')}
-						>{$t('navbar.support')} 💖</button
-					>
-				</div>
-
-				<div class="divider my-3"></div>
-
-				<!-- Language Selection -->
-				<div class="mb-4">
-					<h3 class="font-semibold text-sm text-base-content/70 mb-3 flex items-center gap-2">
-						<Earth class="w-4 h-4" />
-						{$t('navbar.language_selection')}
-					</h3>
-					<form method="POST" use:enhance>
-						<select
-							class="select select-sm w-full bg-base-100"
-							onchange={submitLocaleChange}
-							bind:value={$locale}
-							onmousedown={(e) => e.stopPropagation()}
-						>
-							{#each $locales as loc (loc)}
-								<option value={loc}>{languages[loc]}</option>
-							{/each}
-						</select>
-						<input type="hidden" name="locale" value={$locale} />
-					</form>
-				</div>
-
-				<!-- Theme Selection -->
-				<div>
-					<h3 class="font-semibold text-sm text-base-content/70 mb-3">
-						{$t('navbar.theme_selection')}
-					</h3>
-					<form method="POST" use:enhance={submitUpdateTheme}>
-						<select
-							class="select select-sm w-full bg-base-100"
-							bind:value={theme}
-							onchange={submitThemeChange}
-							onmousedown={(e) => e.stopPropagation()}
-						>
-							{#each themes as themeOption}
-								<option value={themeOption.name}>
-									{$t(`navbar.themes.${themeOption.name}`)}
-								</option>
-							{/each}
-						</select>
-					</form>
-				</div>
-			</ul>
 		</div>
 	</div>
-</div>
+	{#if mobileOpen && showFullNav}
+		<nav id="mobile-navigation" class="mobile-navigation" aria-label="Mobile navigation">
+			<a href="/dashboard" onclick={() => (mobileOpen = false)}>{$t('dashboard.page_title')}</a>
+			{#each navigationItems as item}<a
+					href={item.path}
+					class:current={page.url.pathname.startsWith(item.path)}
+					aria-current={page.url.pathname.startsWith(item.path) ? 'page' : undefined}
+					onclick={() => (mobileOpen = false)}>{$t(item.label)}</a
+				>{/each}
+			<a href="/settings" onclick={() => (mobileOpen = false)}>{$t('navbar.settings')}</a>
+		</nav>
+	{/if}
+</header>
+
+<style>
+	.app-navigation {
+		position: sticky;
+		top: 0;
+		z-index: 999;
+		background: var(--color-base-100);
+		border-bottom: 1px solid var(--color-base-300);
+	}
+	.navigation-inner {
+		display: flex;
+		align-items: center;
+		gap: 2rem;
+		height: 64px;
+		max-width: 1600px;
+		margin-inline: auto;
+		padding-inline: 2rem;
+	}
+	.wordmark {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.65rem;
+		flex-shrink: 0;
+		font-size: 1.1rem;
+		font-weight: 650;
+		letter-spacing: -0.04em;
+	}
+	.wordmark-symbol {
+		display: grid;
+		place-items: center;
+		width: 27px;
+		height: 29px;
+		background: var(--color-primary);
+		color: var(--color-primary-content);
+		font-size: 18px;
+		font-weight: 500;
+		border-radius: 7px;
+		letter-spacing: -0.07em;
+	}
+	.desktop-navigation {
+		display: flex;
+		align-items: center;
+		gap: 0.15rem;
+		flex: 1;
+	}
+	.desktop-navigation a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.5rem 0.65rem;
+		border-radius: 0.4rem;
+		font-size: 0.825rem;
+		font-weight: 500;
+		white-space: nowrap;
+		color: color-mix(in srgb, var(--color-base-content) 65%, transparent);
+	}
+	.desktop-navigation a:hover,
+	.desktop-navigation .current {
+		background: var(--color-base-200);
+		color: var(--color-base-content);
+	}
+	.nav-count {
+		font-size: 0.65rem;
+		font-variant-numeric: tabular-nums;
+		background: var(--color-primary);
+		color: var(--color-primary-content);
+		padding: 0 0.3rem;
+		border-radius: 0.25rem;
+	}
+	.navigation-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-left: auto;
+	}
+	.search-trigger {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 34px;
+		padding: 0.4rem 0.6rem;
+		color: color-mix(in srgb, var(--color-base-content) 55%, transparent);
+		border: 1px solid var(--color-base-300);
+		border-radius: 0.5rem;
+		cursor: pointer;
+		font-size: 0.8rem;
+	}
+	.search-trigger:hover {
+		color: var(--color-base-content);
+		background: var(--color-base-200);
+	}
+	kbd {
+		font-size: 0.65rem;
+		margin-left: 1.5rem;
+		opacity: 0.75;
+	}
+	.appearance-menu {
+		width: 260px;
+		padding: 0.75rem;
+		margin-top: 0.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+	.appearance-menu form {
+		padding: 0.4rem 0.35rem;
+	}
+	.menu-link {
+		display: block;
+		padding: 0.5rem 0.4rem;
+		font-size: 0.85rem;
+		border-radius: 0.3rem;
+		text-align: left;
+	}
+	.menu-link:hover {
+		background: var(--color-base-200);
+	}
+	.menu-separator {
+		border-top: 1px solid var(--color-base-300);
+		margin-block: 0.4rem;
+	}
+	.mobile-navigation-toggle {
+		display: none;
+	}
+	.mobile-navigation {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.3rem;
+		padding: 0.75rem 1rem;
+		border-top: 1px solid var(--color-base-300);
+	}
+	.mobile-navigation a {
+		padding: 0.7rem;
+		font-size: 0.9rem;
+		border-radius: 0.4rem;
+	}
+	.mobile-navigation .current {
+		background: var(--color-base-200);
+		color: var(--color-primary);
+	}
+	@media (max-width: 1250px) {
+		.navigation-inner {
+			gap: 1rem;
+			padding-inline: 1.25rem;
+		}
+		.search-label,
+		kbd {
+			display: none;
+		}
+		.search-trigger {
+			border: 0;
+		}
+		.desktop-navigation a {
+			padding-inline: 0.5rem;
+		}
+	}
+	@media (max-width: 1023px) {
+		.desktop-navigation {
+			display: none;
+		}
+		.mobile-navigation-toggle {
+			display: inline-flex;
+		}
+	}
+	@media (max-width: 480px) {
+		.navigation-inner {
+			padding-inline: 1rem;
+			gap: 0.5rem;
+		}
+		.navigation-actions {
+			gap: 0.2rem;
+		}
+		.wordmark {
+			font-size: 1rem;
+		}
+		.wordmark-symbol {
+			display: none;
+		}
+	}
+</style>

@@ -34,13 +34,13 @@
 	}
 
 	const sportTypeConfig: Record<string, SportConfig> = {
-		StandUpPaddling: { color: 'info', icon: '🏄', name: 'Stand Up Paddling' },
-		Run: { color: 'success', icon: '🏃', name: 'Running' },
-		Ride: { color: 'warning', icon: '🚴', name: 'Cycling' },
-		Swim: { color: 'primary', icon: '🏊', name: 'Swimming' },
-		Hike: { color: 'accent', icon: '🥾', name: 'Hiking' },
-		Walk: { color: 'neutral', icon: '🚶', name: 'Walking' },
-		default: { color: 'secondary', icon: '⚡', name: 'Activity' }
+		StandUpPaddling: { color: 'info', icon: '', name: 'Stand Up Paddling' },
+		Run: { color: 'success', icon: '', name: 'Running' },
+		Ride: { color: 'warning', icon: '', name: 'Cycling' },
+		Swim: { color: 'primary', icon: '', name: 'Swimming' },
+		Hike: { color: 'accent', icon: '', name: 'Hiking' },
+		Walk: { color: 'neutral', icon: '', name: 'Walking' },
+		default: { color: 'secondary', icon: '', name: 'Activity' }
 	};
 
 	function getTypeConfig(type: string): SportConfig {
@@ -111,7 +111,6 @@
 		<!-- Activity Header -->
 		<div class="flex items-start justify-between mb-3">
 			<div class="flex items-center gap-3">
-				<div class="text-2xl" aria-label="Sport icon">{typeConfig.icon}</div>
 				<div>
 					<h3 class="font-semibold text-lg">{activity.name}</h3>
 					<div class="flex items-center gap-2 text-sm text-base-content/70">

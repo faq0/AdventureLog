@@ -338,7 +338,7 @@
 			{#each immichImages as image (image.id)}
 				<button
 					type="button"
-					class="card bg-base-100 border border-base-300 hover:border-primary hover:shadow-lg transition-all duration-200 cursor-pointer group relative"
+					class="card bg-base-100 border border-base-300 hover:border-primary hover:shadow-sm transition-all duration-200 cursor-pointer group relative"
 					onclick={() => handleImageSelect(image)}
 					disabled={loading}
 				>

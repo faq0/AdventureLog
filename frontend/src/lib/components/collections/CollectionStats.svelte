@@ -26,7 +26,7 @@
 	const dateFormat = $derived(dateFormatFromUser(user));
 
 	function getLodgingIcon(type: string): string {
-		return (LODGING_TYPES_ICONS as Record<string, string>)[type] || '🏨';
+		return (LODGING_TYPES_ICONS as Record<string, string>)[type] || '';
 	}
 
 	function convertDistance(km: number): number {
@@ -222,16 +222,15 @@
 		})()
 	);
 
-	let categoriesWithIcons = $derived(
+	let categorySummary = $derived(
 		(() => {
-			const map = new Map<string, { name: string; icon: string; count: number }>();
+			const map = new Map<string, { name: string; count: number }>();
 			visitedLocations.forEach((loc) => {
 				if (!loc.category) return;
 				const name = loc.category.display_name || loc.category.name;
-				const icon = loc.category.icon || '📍';
 				if (!name) return;
 				if (!map.has(name)) {
-					map.set(name, { name, icon, count: 0 });
+					map.set(name, { name, count: 0 });
 				}
 				const existing = map.get(name)!;
 				existing.count++;
@@ -318,34 +317,34 @@
 			normalized.includes('plane') ||
 			normalized.includes('air')
 		) {
-			return { key: 'flight', icon: '✈️', label: 'Flights' };
+			return { key: 'flight', icon: '', label: 'Flights' };
 		}
 		if (normalized.includes('train') || normalized.includes('rail')) {
-			return { key: 'train', icon: '🚆', label: 'Trains' };
+			return { key: 'train', icon: '', label: 'Trains' };
 		}
 		if (normalized.includes('bus')) {
-			return { key: 'bus', icon: '🚌', label: 'Bus' };
+			return { key: 'bus', icon: '', label: 'Bus' };
 		}
 		if (
 			normalized.includes('boat') ||
 			normalized.includes('ferry') ||
 			normalized.includes('ship')
 		) {
-			return { key: 'boat', icon: '🚢', label: 'Boat' };
+			return { key: 'boat', icon: '', label: 'Boat' };
 		}
 		if (normalized.includes('walk')) {
-			return { key: 'walk', icon: '🚶', label: 'Walking' };
+			return { key: 'walk', icon: '', label: 'Walking' };
 		}
 		if (normalized.includes('bike') || normalized.includes('cycle')) {
-			return { key: 'bike', icon: '🚴', label: 'Cycling' };
+			return { key: 'bike', icon: '', label: 'Cycling' };
 		}
 		if (normalized.includes('drive') || normalized.includes('car')) {
-			return { key: 'car', icon: '🚗', label: 'Car' };
+			return { key: 'car', icon: '', label: 'Car' };
 		}
 
 		return {
 			key: normalized || 'other',
-			icon: '🧭',
+			icon: '',
 			label: capitalize(type) || 'Other'
 		};
 	}
@@ -448,9 +447,7 @@
 
 <div class="space-y-6">
 	<!-- Hero Overview Card -->
-	<div
-		class="card bg-gradient-to-br from-primary/10 to-secondary/10 shadow-xl border border-primary/20"
-	>
+	<div class="card bg-base-200 shadow-sm border border-primary/20">
 		<div class="card-body space-y-4">
 			<div class="flex flex-col gap-3">
 				<div class="flex flex-wrap items-center gap-2">
@@ -466,27 +463,25 @@
 
 				{#if windowLabel}
 					<div class="flex flex-wrap items-center gap-2 text-sm">
-						<span class="badge badge-lg badge-ghost">📅 {windowLabel}</span>
+						<span class="badge badge-lg badge-ghost"> {windowLabel}</span>
 						{#if scopeLabel}
 							<span class="badge badge-lg badge-primary">{scopeLabel}</span>
 						{/if}
 					</div>
 				{:else}
-					<p class="text-sm opacity-70">📁 {$t('adventures.folder_view')}</p>
+					<p class="text-sm opacity-70">{$t('adventures.folder_view')}</p>
 				{/if}
 			</div>
 
 			<!-- Key Stats Row -->
 			<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 				<div class="stat bg-base-100 rounded-lg shadow-sm p-4 border border-info/20">
-					<div class="stat-figure text-info text-3xl">📍</div>
 					<div class="stat-title text-xs">{$t('adventures.footprints')}</div>
 					<div class="stat-value text-info text-2xl">{visitedLocations.length}</div>
 					<div class="stat-desc">{$t('adventures.locations_visited')}</div>
 				</div>
 
 				<div class="stat bg-base-100 rounded-lg shadow-sm p-4 border border-success/20">
-					<div class="stat-figure text-success text-3xl">📸</div>
 					<div class="stat-title text-xs">{$t('adventures.photos')}</div>
 					<div class="stat-value text-success text-2xl">
 						{compactFormatter.format(imagesInRange)}
@@ -495,7 +490,6 @@
 				</div>
 
 				<div class="stat bg-base-100 rounded-lg shadow-sm p-4 border border-warning/20">
-					<div class="stat-figure text-warning text-3xl">🗺️</div>
 					<div class="stat-title text-xs">{$t('adventures.countries')}</div>
 					<div class="stat-value text-warning text-2xl">{countriesVisited.length}</div>
 					<div class="stat-desc">
@@ -506,7 +500,6 @@
 				</div>
 
 				<div class="stat bg-base-100 rounded-lg shadow-sm p-4 border border-accent/20">
-					<div class="stat-figure text-accent text-3xl">👥</div>
 					<div class="stat-title text-xs">{$t('adventures.travelers')}</div>
 					<div class="stat-value text-accent text-2xl">
 						{collection.collaborators?.length || 0}
@@ -518,17 +511,15 @@
 	</div>
 
 	<!-- Geographic Breakdown -->
-	<div class="card bg-base-200 shadow-xl">
+	<div class="card bg-base-200 shadow-sm">
 		<div class="card-body space-y-4">
 			<h3 class="card-title text-xl flex items-center gap-2">
-				<span class="text-2xl">🌎</span>
 				{$t('adventures.geographic_breakdown')}
 			</h3>
 
 			{#if countriesVisited.length}
 				<div>
 					<h4 class="font-semibold mb-2 flex items-center gap-2">
-						<span>🏳️</span>
 						{$t('adventures.countries')} ({countriesVisited.length})
 					</h4>
 					<div class="flex flex-wrap gap-2">
@@ -547,7 +538,6 @@
 			{#if regionsVisited.length}
 				<div>
 					<h4 class="font-semibold mb-2 flex items-center gap-2">
-						<span>🗺️</span>
 						{$t('adventures.regions')} ({regionsVisited.length})
 					</h4>
 					<div class="flex flex-wrap gap-2">
@@ -566,7 +556,6 @@
 			{#if citiesVisited.length}
 				<div>
 					<h4 class="font-semibold mb-2 flex items-center gap-2">
-						<span>🏙️</span>
 						{$t('adventures.cities')} ({citiesVisited.length})
 					</h4>
 					<div class="flex flex-wrap gap-2">
@@ -585,10 +574,9 @@
 	</div>
 
 	<!-- Trip Timeline & Duration -->
-	<div class="card bg-base-200 shadow-xl">
+	<div class="card bg-base-200 shadow-sm">
 		<div class="card-body">
 			<h3 class="card-title text-xl flex items-center gap-2">
-				<span class="text-2xl">📆</span>
 				{$t('adventures.trip_timeline')}
 			</h3>
 			<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -618,16 +606,13 @@
 
 	<!-- Distance Breakdown -->
 	{#if totalDistance > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<h3 class="card-title text-xl flex items-center gap-2 mb-2">
-					<span class="text-2xl">🛣️</span>
 					{$t('adventures.distance_traveled')}
 				</h3>
 
-				<div
-					class="flex items-center justify-center p-6 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg mb-4"
-				>
+				<div class="flex items-center justify-center p-6 bg-base-200 rounded-lg mb-4">
 					<div class="text-center">
 						<div class="text-5xl font-bold text-primary">
 							{numberFormatter.format(totalDistance)}
@@ -643,7 +628,6 @@
 					<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 						{#each distanceByTransportType as type}
 							<div class="stat bg-base-300 rounded-lg p-3">
-								<div class="stat-figure text-3xl">{type.icon}</div>
 								<div class="stat-title text-xs">{type.label}</div>
 								<div class="stat-value text-lg">
 									{distanceFormatter.format(type.distance)}
@@ -658,22 +642,19 @@
 	{/if}
 	<!-- Activities Stats -->
 	{#if activitiesInRange.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<h3 class="card-title text-xl flex items-center gap-2 mb-2">
-					<span class="text-2xl">🏃</span>
 					{$t('adventures.physical_activities')}
 				</h3>
 
 				<div class="stats stats-vertical sm:stats-horizontal bg-base-100 shadow-sm mb-4">
 					<div class="stat bg-accent/10">
-						<div class="stat-figure text-accent text-3xl">🎯</div>
 						<div class="stat-title">{$t('adventures.activities')}</div>
 						<div class="stat-value text-accent">{activitiesInRange.length}</div>
 						<div class="stat-desc">{$t('adventures.total_recorded')}</div>
 					</div>
 					<div class="stat bg-info/10">
-						<div class="stat-figure text-info text-3xl">📏</div>
 						<div class="stat-title">{$t('adventures.distance')}</div>
 						<div class="stat-value text-info">
 							{distanceFormatter.format(totalActivityDistance)}
@@ -681,7 +662,6 @@
 						<div class="stat-desc">{getDistanceUnitLong()}</div>
 					</div>
 					<div class="stat bg-success/10">
-						<div class="stat-figure text-success text-3xl">⛰️</div>
 						<div class="stat-title">{$t('adventures.elevation')}</div>
 						<div class="stat-value text-success">
 							{numberFormatter.format(totalActivityElevation)}
@@ -689,7 +669,6 @@
 						<div class="stat-desc">{getElevationUnitLong()} {$t('adventures.gained')}</div>
 					</div>
 					<div class="stat bg-warning/10">
-						<div class="stat-figure text-warning text-3xl">🔥</div>
 						<div class="stat-title">{$t('adventures.calories')}</div>
 						<div class="stat-value text-warning">
 							{compactFormatter.format(totalActivityCalories)}
@@ -717,18 +696,14 @@
 	{/if}
 
 	<!-- Content & Media -->
-	<div class="card bg-base-200 shadow-xl">
+	<div class="card bg-base-200 shadow-sm">
 		<div class="card-body">
 			<h3 class="card-title text-xl flex items-center gap-2 mb-2">
-				<span class="text-2xl">📱</span>
 				{$t('adventures.content_media')}
 			</h3>
 
 			<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-				<div
-					class="stat bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg p-4 border border-primary/30"
-				>
-					<div class="stat-figure text-primary text-3xl">📸</div>
+				<div class="stat bg-base-200 rounded-lg p-4 border border-primary/30">
 					<div class="stat-title text-xs">{$t('adventures.photos')}</div>
 					<div class="stat-value text-primary text-2xl">
 						{numberFormatter.format(imagesInRange)}
@@ -736,46 +711,31 @@
 					<div class="stat-desc">{$t('adventures.images')}</div>
 				</div>
 
-				<div
-					class="stat bg-gradient-to-br from-secondary/20 to-secondary/5 rounded-lg p-4 border border-secondary/30"
-				>
-					<div class="stat-figure text-secondary text-3xl">📝</div>
+				<div class="stat bg-base-200 rounded-lg p-4 border border-secondary/30">
 					<div class="stat-title text-xs">{$t('adventures.notes')}</div>
 					<div class="stat-value text-secondary text-2xl">{notesInRange.length}</div>
 					<div class="stat-desc">{$t('adventures.written')}</div>
 				</div>
 
-				<div
-					class="stat bg-gradient-to-br from-accent/20 to-accent/5 rounded-lg p-4 border border-accent/30"
-				>
-					<div class="stat-figure text-accent text-3xl">✅</div>
+				<div class="stat bg-base-200 rounded-lg p-4 border border-accent/30">
 					<div class="stat-title text-xs">{$t('adventures.checklists')}</div>
 					<div class="stat-value text-accent text-2xl">{checklistsInRange.length}</div>
 					<div class="stat-desc">{$t('adventures.lists')}</div>
 				</div>
 
-				<div
-					class="stat bg-gradient-to-br from-info/20 to-info/5 rounded-lg p-4 border border-info/30"
-				>
-					<div class="stat-figure text-info text-3xl">🚆</div>
+				<div class="stat bg-base-200 from-info/20 to-info/5 rounded-lg p-4 border border-info/30">
 					<div class="stat-title text-xs">{$t('adventures.transportation')}</div>
 					<div class="stat-value text-info text-2xl">{transportSegments.length}</div>
 					<div class="stat-desc">{$t('adventures.segments')}</div>
 				</div>
 
-				<div
-					class="stat bg-gradient-to-br from-success/20 to-success/5 rounded-lg p-4 border border-success/30"
-				>
-					<div class="stat-figure text-success text-3xl">🏨</div>
+				<div class="stat bg-base-200 rounded-lg p-4 border border-success/30">
 					<div class="stat-title text-xs">{$t('adventures.lodging')}</div>
 					<div class="stat-value text-success text-2xl">{lodgingStays.length}</div>
 					<div class="stat-desc">{$t('adventures.places')}</div>
 				</div>
 
-				<div
-					class="stat bg-gradient-to-br from-warning/20 to-warning/5 rounded-lg p-4 border border-warning/30"
-				>
-					<div class="stat-figure text-warning text-3xl">📍</div>
+				<div class="stat bg-base-200 rounded-lg p-4 border border-warning/30">
 					<div class="stat-title text-xs">{$t('locations.locations')}</div>
 					<div class="stat-value text-warning text-2xl">{visitedLocations.length}</div>
 					<div class="stat-desc">{$t('adventures.visited')}</div>
@@ -783,9 +743,8 @@
 
 				{#if totalAttachments > 0}
 					<div
-						class="stat bg-gradient-to-br from-error/20 to-error/5 rounded-lg p-4 border border-error/30"
+						class="stat bg-base-200 from-error/20 to-error/5 rounded-lg p-4 border border-error/30"
 					>
-						<div class="stat-figure text-error text-3xl">📎</div>
 						<div class="stat-title text-xs">{$t('adventures.attachments')}</div>
 						<div class="stat-value text-error text-2xl">{totalAttachments}</div>
 						<div class="stat-desc">{$t('adventures.files')}</div>
@@ -799,7 +758,7 @@
 				<div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
 					{#if averageLocationRating > 0}
 						<div class="stat bg-base-300 rounded-lg p-4">
-							<div class="stat-figure text-2xl">⭐</div>
+							<div class="stat-figure text-2xl"></div>
 							<div class="stat-title text-xs">{$t('adventures.avg_rating')}</div>
 							<div class="stat-value text-lg">{averageLocationRating.toFixed(1)}</div>
 							<div class="stat-desc text-xs">{$t('adventures.of_locations')}</div>
@@ -808,7 +767,6 @@
 
 					{#if checklistStats.total > 0}
 						<div class="stat bg-base-300 rounded-lg p-4">
-							<div class="stat-figure text-2xl">✓</div>
 							<div class="stat-title text-xs">{$t('adventures.tasks_done')}</div>
 							<div class="stat-value text-lg">{checklistStats.percentage}%</div>
 							<div class="stat-desc text-xs">
@@ -820,7 +778,6 @@
 
 					{#if lodgingTypeBreakdown.length > 0}
 						<div class="stat bg-base-300 rounded-lg p-4">
-							<div class="stat-figure text-2xl">🛏️</div>
 							<div class="stat-title text-xs">{$t('adventures.lodging_types')}</div>
 							<div class="stat-value text-lg">{lodgingTypeBreakdown.length}</div>
 							<div class="stat-desc text-xs truncate">
@@ -835,17 +792,15 @@
 	</div>
 
 	<!-- Categories -->
-	{#if categoriesWithIcons.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+	{#if categorySummary.length > 0}
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<h3 class="card-title text-xl flex items-center gap-2">
-					<span class="text-2xl">🏷️</span>
 					{$t('adventures.categories')}
 				</h3>
 				<div class="flex flex-wrap gap-2">
-					{#each categoriesWithIcons as category}
+					{#each categorySummary as category}
 						<div class="badge badge-lg badge-primary badge-outline p-3 flex items-center gap-2">
-							<span class="text-lg">{category.icon}</span>
 							<span class="font-medium">{category.name}</span>
 							<span class="badge badge-xs badge-primary">{category.count}</span>
 						</div>
@@ -857,12 +812,9 @@
 
 	<!-- Lodging Types Breakdown -->
 	{#if lodgingTypeBreakdown.length > 1}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
-				<h3 class="card-title text-xl flex items-center gap-2">
-					<span class="text-2xl">🏨</span>
-					Lodging Types
-				</h3>
+				<h3 class="card-title text-xl flex items-center gap-2">Lodging Types</h3>
 				<div class="flex flex-wrap gap-2">
 					{#each lodgingTypeBreakdown as [type, count]}
 						<div class="badge badge-lg badge-success badge-outline p-3 flex items-center gap-2">

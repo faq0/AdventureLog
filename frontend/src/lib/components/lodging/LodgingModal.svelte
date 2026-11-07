@@ -298,7 +298,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
-		class="modal-box lodging-modal-box w-11/12 max-w-6xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl flex flex-col p-0 overflow-hidden rounded-none md:rounded-2xl"
+		class="modal-box lodging-modal-box w-11/12 max-w-6xl bg-base-200 border border-base-300 shadow-sm flex flex-col p-0 overflow-hidden rounded-none md:rounded-2xl"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -313,7 +313,7 @@
 						<Bed class="w-6 h-6 text-primary" />
 					</div>
 					<div>
-						<h1 class="text-3xl font-bold text-primary bg-clip-text">
+						<h1 class="text-3xl font-bold text-base-content bg-clip-text">
 							{lodgingToEdit ? $t('lodging.edit_lodging') : $t('lodging.new_lodging')}
 						</h1>
 						<p class="text-sm text-base-content/80">

@@ -107,6 +107,14 @@
 				background: var(--color-primary) !important;
 				color: var(--color-primary-content) !important;
 			}
+            @media (max-width: 640px) {
+                .ec-toolbar { display: flex !important; flex-wrap: wrap !important; gap: .5rem !important; padding: .75rem !important; }
+                .ec-toolbar .ec-start { order: 1; flex: 1 1 auto; }
+                .ec-toolbar .ec-center { order: 2; margin-left: auto; }
+                .ec-toolbar .ec-end { order: 3; flex: 1 0 100%; display: flex; justify-content: flex-end; }
+                .ec-toolbar .ec-title { font-size: 1rem !important; }
+                .ec-toolbar .ec-button { padding: .35rem .55rem !important; font-size: .8rem !important; }
+            }
 			.ec-day {
 				background: var(--color-base-100) !important;
 				border: 1px solid var(--color-base-300) !important;

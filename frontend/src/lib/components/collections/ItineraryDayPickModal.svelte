@@ -39,9 +39,7 @@
 
 {#if isOpen}
 	<dialog class="modal modal-open backdrop-blur-xs">
-		<div
-			class="modal-box w-11/12 max-w-4xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl"
-		>
+		<div class="modal-box w-11/12 max-w-4xl bg-base-200 border border-base-300 shadow-sm">
 			<div
 				class="sticky top-0 z-10 bg-base-100/90 backdrop-blur-lg border-b border-base-300 -mx-6 -mt-6 px-6 py-4 mb-6"
 			>
@@ -51,7 +49,7 @@
 							<CalendarBlank class="w-6 h-6 text-primary" />
 						</div>
 						<div>
-							<h1 class="text-xl font-bold text-primary">
+							<h1 class="text-xl font-bold text-base-content">
 								Add "{itemName}" to itinerary
 							</h1>
 							<p class="text-xs text-base-content/60">
@@ -60,9 +58,7 @@
 							</p>
 						</div>
 					</div>
-					<button class="btn btn-ghost btn-square" onclick={handleClose}>
-						<span class="text-lg">✕</span>
-					</button>
+					<button class="btn btn-ghost btn-square" onclick={handleClose}>Close</button>
 				</div>
 			</div>
 

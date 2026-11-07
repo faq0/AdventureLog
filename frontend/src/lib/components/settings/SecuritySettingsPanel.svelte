@@ -108,7 +108,7 @@
 <div class="space-y-8">
 	<SettingsCard>
 		<SettingsSectionHeader
-			icon="🔐"
+			icon=""
 			iconBgClass="bg-warning/10"
 			title={$t('settings.change_password')}
 			description={$t('settings.pass_change_desc')}
@@ -168,14 +168,14 @@
 				</div>
 			{/if}
 			<div class="tooltip tooltip-warning" data-tip={$t('settings.password_change_logout_warning')}>
-				<button class="btn btn-warning">🔑 {$t('settings.password_change')}</button>
+				<button class="btn btn-warning"> {$t('settings.password_change')}</button>
 			</div>
 		</form>
 	</SettingsCard>
 
 	<SettingsCard>
 		<SettingsSectionHeader
-			icon="💻"
+			icon=""
 			iconBgClass="bg-info/10"
 			title={$t('settings.sessions_title')}
 			description={$t('settings.sessions_desc')}
@@ -223,7 +223,7 @@
 
 	<SettingsCard>
 		<SettingsSectionHeader
-			icon="🛡️"
+			icon=""
 			iconBgClass="bg-success/10"
 			title={$t('settings.mfa_page_title')}
 			description={$t('settings.mfa_desc')}
@@ -231,7 +231,7 @@
 		<div class="flex items-center justify-between p-4 bg-base-200 rounded-xl gap-4 flex-wrap">
 			<div class="flex items-center gap-4">
 				<span class="badge {authenticators ? 'badge-success' : 'badge-error'}">
-					{authenticators ? `✅ ${$t('settings.enabled')}` : `❌ ${$t('settings.disabled')}`}
+					{authenticators ? ` ${$t('settings.enabled')}` : ` ${$t('settings.disabled')}`}
 				</span>
 				<span class="font-medium">
 					{authenticators ? $t('settings.mfa_is_enabled') : $t('settings.mfa_not_enabled')}
@@ -309,7 +309,7 @@
 	{#if socialProviders?.length > 0}
 		<SettingsCard>
 			<SettingsSectionHeader
-				icon="🔗"
+				icon=""
 				iconBgClass="bg-info/10"
 				title={$t('settings.sign_in_methods')}
 				description={$t('settings.social_auth_desc_1')}
@@ -344,14 +344,14 @@
 				target="_blank"
 				rel="noreferrer"
 			>
-				🔗 {$t('settings.launch_account_connections')}
+				{$t('settings.launch_account_connections')}
 			</a>
 		</SettingsCard>
 	{/if}
 
 	<SettingsCard>
 		<SettingsSectionHeader
-			icon="🔑"
+			icon=""
 			iconBgClass="bg-warning/10"
 			title={$t('api_keys.title')}
 			description={$t('api_keys.description')}
@@ -362,7 +362,8 @@
 					class="flex items-center justify-between px-5 py-3 bg-warning/10 border-b border-warning/20"
 				>
 					<span class="text-sm font-semibold text-warning">{$t('api_keys.new_key_title')}</span>
-					<button type="button" class="btn btn-ghost btn-xs" onclick={onDismissNewKey}>✕</button>
+					<button type="button" class="btn btn-ghost btn-xs" onclick={onDismissNewKey}>Close</button
+					>
 				</div>
 				<div class="px-5 py-4">
 					<div class="flex items-center gap-2 bg-base-200 rounded-xl px-4 py-3">

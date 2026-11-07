@@ -124,18 +124,13 @@
 	/>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
-	<div class="sticky top-0 z-40 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
-		<div class="container mx-auto px-6 py-4">
+<div class="min-h-screen bg-base-200">
+	<div class="app-page-toolbar relative z-30">
+		<div class="container mx-auto px-6 py-6">
 			<div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 				<div class="flex items-center gap-3">
-					<div class="p-2 bg-primary/10 rounded-xl">
-						<Magnify class="w-8 h-8 text-primary" />
-					</div>
 					<div>
-						<h1
-							class="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
-						>
+						<h1 class="text-3xl font-semibold text-base-content">
 							{$t('navbar.search')}{hasQuery ? `: ${query}` : ''}
 						</h1>
 						{#if hasQuery && hasResults}
@@ -187,9 +182,6 @@
 			</div>
 		{:else if !hasQuery}
 			<div class="flex flex-col items-center justify-center py-16 text-center">
-				<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-					<Magnify class="w-16 h-16 text-base-content/30" />
-				</div>
 				<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 					{$t('search.empty_prompt_title')}
 				</h3>
@@ -202,9 +194,6 @@
 			</div>
 		{:else if !hasResults}
 			<div class="flex flex-col items-center justify-center py-16 text-center">
-				<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-					<Magnify class="w-16 h-16 text-base-content/30" />
-				</div>
 				<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 					{$t('adventures.no_results')}
 				</h3>

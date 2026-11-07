@@ -84,15 +84,13 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
-		class="modal-box w-11/12 max-w-2xl p-0 bg-base-100 border border-base-300 shadow-2xl max-h-[90vh] flex flex-col"
+		class="modal-box w-11/12 max-w-2xl p-0 bg-base-100 border border-base-300 shadow-sm max-h-[90vh] flex flex-col"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
 	>
 		<!-- Hero -->
-		<div
-			class="relative bg-gradient-to-r from-primary via-primary/90 to-secondary/80 text-primary-content px-6 pt-6 pb-5 shrink-0"
-		>
+		<div class="relative bg-base-200 text-primary-content px-6 pt-6 pb-5 shrink-0">
 			<button
 				type="button"
 				class="btn btn-ghost btn-sm btn-circle absolute top-4 right-4 text-primary-content hover:bg-base-100/20"

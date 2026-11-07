@@ -58,7 +58,7 @@
 
 {#if sharing}
 	<div
-		class="card w-full max-w-xs bg-base-100 text-base-content shadow-lg border border-base-300/60 hover:shadow-xl transition-all"
+		class="card w-full max-w-xs bg-base-100 text-base-content shadow-sm border border-base-300/60 hover:shadow-sm transition-all"
 	>
 		<div class="card-body items-center text-center gap-4 p-5">
 			<div class="avatar">
@@ -108,15 +108,15 @@
 {:else}
 	<button
 		type="button"
-		class="group card w-full bg-base-100 border border-base-300/60 shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 text-left overflow-hidden"
+		class="group card w-full bg-base-100 border border-base-300/60 shadow-md hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 text-left overflow-hidden"
 		onclick={openProfile}
 	>
-		<div class="h-16 bg-gradient-to-r from-primary/15 via-secondary/10 to-accent/10"></div>
+		<div class="h-16 bg-base-200"></div>
 
 		<div class="px-5 pb-5 -mt-10">
 			<div class="flex items-end justify-between gap-3">
 				<div class="avatar">
-					<div class="w-20 rounded-2xl ring-4 ring-base-100 shadow-lg overflow-hidden bg-base-200">
+					<div class="w-20 rounded-2xl ring-4 ring-base-100 shadow-sm overflow-hidden bg-base-200">
 						<UserAvatar
 							{user}
 							alt={displayName}
@@ -135,7 +135,7 @@
 
 			<div class="mt-3 min-w-0">
 				<h3
-					class="text-lg font-bold leading-tight truncate group-hover:text-primary transition-colors"
+					class="text-lg font-bold leading-tight truncate group-hover:text-base-content transition-colors"
 				>
 					{displayName}
 				</h3>

@@ -54,7 +54,7 @@
 
 <SettingsCard>
 	<SettingsSectionHeader
-		icon="👤"
+		icon=""
 		title={$t('settings.profile_info')}
 		description={$t('settings.profile_info_desc')}
 	/>
@@ -195,14 +195,13 @@
 				>
 					{#if showsStoredFallback}
 						<option value={user.map_style} hidden>
-							{defaultBasemapOption?.icon}
 							{defaultBasemapOption?.label}
 						</option>
 					{/if}
 					{#each groupedBasemapOptions as group (group.category)}
 						<optgroup label={group.category}>
 							{#each group.options as option (option.value)}
-								<option value={option.value}>{option.icon} {option.label}</option>
+								<option value={option.value}> {option.label}</option>
 							{/each}
 						</optgroup>
 					{/each}

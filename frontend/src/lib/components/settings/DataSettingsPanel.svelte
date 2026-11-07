@@ -42,7 +42,7 @@
 
 <SettingsCard>
 	<SettingsSectionHeader
-		icon="📦"
+		icon=""
 		iconBgClass="bg-accent/10"
 		title={$t('settings.data_and_storage')}
 		description={$t('settings.data_and_storage_desc')}
@@ -103,12 +103,12 @@
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 			<div class="space-y-2">
 				{#each [[$t('locations.locations')], [$t('adventures.visits')], [$t('navbar.collections')], [$t('settings.media')]] as [label]}
-					<div class="flex justify-between"><span>{label}</span><span>✅</span></div>
+					<div class="flex justify-between"><span>{label}</span><span></span></div>
 				{/each}
 			</div>
 			<div class="space-y-2">
 				{#each [[$t('navbar.settings')], [$t('navbar.profile')], [$t('settings.integrations_settings')]] as [label]}
-					<div class="flex justify-between"><span>{label}</span><span>❌</span></div>
+					<div class="flex justify-between"><span>{label}</span><span></span></div>
 				{/each}
 			</div>
 		</div>
@@ -116,15 +116,15 @@
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 		<div class="p-6 bg-base-200 rounded-xl">
-			<h3 class="font-semibold mb-2">📤 {$t('settings.backup_your_data')}</h3>
+			<h3 class="font-semibold mb-2">{$t('settings.backup_your_data')}</h3>
 			<p class="text-sm text-base-content/80 mb-4">{$t('settings.backup_your_data_desc')}</p>
-			<a class="btn btn-primary" href="/api/backup/export">💾 {$t('settings.download_backup')}</a>
+			<a class="btn btn-primary" href="/api/backup/export"> {$t('settings.download_backup')}</a>
 		</div>
 		<div class="p-6 bg-base-200 rounded-xl">
-			<h3 class="font-semibold mb-2">📥 {$t('settings.restore_data')}</h3>
+			<h3 class="font-semibold mb-2">{$t('settings.restore_data')}</h3>
 			<p class="text-sm text-base-content/80 mb-4">{$t('settings.restore_data_desc')}</p>
 			<div class="alert alert-warning py-2 mb-4 text-sm">
-				<span>⚠️ {$t('settings.data_override_warning')}</span>
+				<span> {$t('settings.data_override_warning')}</span>
 			</div>
 			<form
 				method="post"
@@ -165,7 +165,7 @@
 					disabled={!acknowledgeRestoreOverride || isRestoring}
 				>
 					{#if isRestoring}<span class="loading loading-spinner loading-sm"></span>{/if}
-					🚀 {$t('settings.restore_data')}
+					{$t('settings.restore_data')}
 				</button>
 			</form>
 		</div>

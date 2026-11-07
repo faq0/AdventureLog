@@ -173,7 +173,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
-		class="modal-box w-11/12 max-w-3xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl"
+		class="modal-box w-11/12 max-w-3xl bg-base-200 border border-base-300 shadow-sm"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -188,7 +188,7 @@
 						<Phone class="w-8 h-8 text-primary" />
 					</div>
 					<div>
-						<h1 class="text-3xl font-bold text-primary bg-clip-text">
+						<h1 class="text-3xl font-bold text-base-content bg-clip-text">
 							{$t('mobile.qr_title', { default: 'Mobile App Login' })}
 						</h1>
 						<p class="text-sm text-base-content/60">

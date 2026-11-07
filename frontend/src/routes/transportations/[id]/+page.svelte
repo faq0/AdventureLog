@@ -76,7 +76,7 @@
 		if (type in TRANSPORTATION_TYPES_ICONS) {
 			return TRANSPORTATION_TYPES_ICONS[type as keyof typeof TRANSPORTATION_TYPES_ICONS];
 		}
-		return '🚗';
+		return '';
 	}
 
 	function renderStars(rating: number) {
@@ -341,11 +341,11 @@
 </script>
 
 {#if notFound}
-	<div class="hero min-h-screen bg-gradient-to-br from-base-200 to-base-300 overflow-x-hidden">
+	<div class="hero min-h-screen bg-base-200 overflow-x-hidden">
 		<div class="hero-content text-center">
 			<div class="max-w-md">
 				<img src={Lost} alt="Lost" class="w-64 mx-auto mb-8 opacity-80" />
-				<h1 class="text-5xl font-bold text-primary mb-4">Transportation not found</h1>
+				<h1 class="text-3xl font-bold text-base-content mb-4">Transportation not found</h1>
 				<p class="text-lg opacity-70 mb-8">{$t('adventures.location_not_found_desc')}</p>
 				<button class="btn btn-primary btn-lg" onclick={() => goto('/')}>
 					{$t('adventures.homepage')}
@@ -385,183 +385,97 @@
 	{#if data.user?.uuid && transportation.user && data.user.uuid === transportation.user}
 		<div class="fixed bottom-6 right-6 z-50">
 			<button
-				class="btn btn-primary btn-circle w-16 h-16 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
+				class="btn btn-outline bg-base-100 btn-circle w-10 h-10 shadow-sm hover:shadow-sm transition-all duration-300 hover:scale-110"
 				onclick={() => (isEditModalOpen = true)}
 			>
-				<ClipboardList class="w-8 h-8" />
+				<ClipboardList class="w-5 h-5" />
 			</button>
 		</div>
 	{/if}
 
-	<!-- Hero Section -->
-	<div class="relative">
-		<div
-			class="hero min-h-[60vh] relative overflow-hidden"
-			class:min-h-[30vh]={!transportation.images || transportation.images.length === 0}
-		>
-			<!-- Background: Images or Gradient -->
-			{#if transportation.images && transportation.images.length > 0}
-				<div class="hero-overlay bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-				{#each transportation.images as image, i}
-					<div
-						class="absolute inset-0 transition-opacity duration-500"
-						class:opacity-100={i === currentSlide}
-						class:opacity-0={i !== currentSlide}
-					>
-						<button
-							class="w-full h-full p-0 bg-transparent border-0"
-							onclick={() => openImageModal(i)}
-							aria-label={`View full image of ${transportation.name}`}
-						>
-							<ImageFrame source={image.source} className="w-full h-full">
-								<img
-									src={image.image}
-									class="w-full h-full object-cover"
-									alt={transportation.name}
-								/>
-							</ImageFrame>
-						</button>
-					</div>
-				{/each}
-			{:else}
-				<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-			{/if}
-
-			<!-- Content -->
-			<div
-				class="hero-content relative z-10 text-center"
-				class:text-white={transportation.images?.length > 0}
-			>
-				<div class="max-w-4xl">
-					<div class="flex justify-center items-center gap-3 mb-4">
-						<span class="text-5xl">{getTransportationIcon(transportation.type)}</span>
-						<h1 class="text-6xl font-bold drop-shadow-lg">{transportation.name}</h1>
-					</div>
-
-					<!-- Rating -->
-					{#if transportation.rating !== undefined && transportation.rating !== null}
-						<div class="flex justify-center mb-6">
-							<div class="rating rating-lg">
-								{#each Array.from({ length: 5 }, (_, i) => i + 1) as star}
-									<input
-										type="radio"
-										name="rating-hero"
-										class="mask mask-star-2 bg-warning"
-										checked={star <= transportation.rating}
-										disabled
-									/>
-								{/each}
-							</div>
-						</div>
-					{/if}
-
-					<!-- Quick Info Badges -->
-					<div class="flex flex-wrap justify-center gap-4 mb-6">
-						{#if transportation.type}
-							<div class="badge badge-lg badge-primary font-semibold px-4 py-3">
-								{$t(`transportation.modes.${transportation.type}`)}
-							</div>
-						{/if}
-						{#if transportation.from_location}
-							<div class="badge badge-lg badge-secondary font-semibold px-4 py-3">
-								🚩 {transportation.from_location}
-							</div>
-						{/if}
-						{#if transportation.to_location}
-							<div class="badge badge-lg badge-secondary font-semibold px-4 py-3">
-								🏁 {transportation.to_location}
-							</div>
-						{/if}
-						{#if getRouteCodes(transportation)}
-							<div class="badge badge-lg badge-outline font-semibold px-4 py-3 gap-2">
-								✈️ {getRouteCodes(transportation)}
-							</div>
-						{/if}
-						{#if transportation.is_public}
-							<div class="badge badge-lg badge-accent font-semibold px-4 py-3">
-								👁️ {$t('adventures.public')}
-							</div>
-						{:else}
-							<div class="badge badge-lg badge-ghost font-semibold px-4 py-3">
-								🔒 {$t('adventures.private')}
-							</div>
-						{/if}
-					</div>
-
-					<!-- Image Navigation (only shown when multiple images exist) -->
-					{#if transportation.images && transportation.images.length > 1}
-						<div class="w-full max-w-md mx-auto">
-							<!-- Navigation arrows and current position -->
-							<div class="flex items-center justify-center gap-4 mb-3">
-								<button
-									onclick={() =>
-										goToSlide(
-											currentSlide > 0 ? currentSlide - 1 : (transportation?.images.length ?? 1) - 1
-										)}
-									class="btn btn-circle btn-sm btn-primary"
-									aria-label={$t('adventures.previous_image')}
-								>
-									❮
-								</button>
-
-								<div class="text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
-									{currentSlide + 1} / {transportation.images.length}
-								</div>
-
-								<button
-									onclick={() =>
-										goToSlide(
-											currentSlide < (transportation?.images.length ?? 1) - 1 ? currentSlide + 1 : 0
-										)}
-									class="btn btn-circle btn-sm btn-primary"
-									aria-label={$t('adventures.next_image')}
-								>
-									❯
-								</button>
-							</div>
-
-							<!-- Dot navigation -->
-							{#if transportation.images.length <= 12}
-								<div class="flex justify-center gap-2 flex-wrap">
-									{#each transportation.images as _, i}
-										<button
-											onclick={() => goToSlide(i)}
-											class="btn btn-circle btn-xs transition-all duration-200"
-											class:btn-primary={i === currentSlide}
-											class:btn-outline={i !== currentSlide}
-											class:opacity-50={i !== currentSlide}
-										>
-											{i + 1}
-										</button>
-									{/each}
-								</div>
-							{:else}
-								<div class="relative">
-									<div
-										class="absolute left-0 top-0 bottom-2 w-4 bg-gradient-to-r from-black/30 to-transparent pointer-events-none"
-									></div>
-									<div
-										class="absolute right-0 top-0 bottom-2 w-4 bg-gradient-to-l from-black/30 to-transparent pointer-events-none"
-									></div>
-								</div>
-							{/if}
-						</div>
-					{/if}
-				</div>
+	<div class="app-page pb-0">
+		<div class="flex items-center justify-between gap-4 mb-5">
+			<a href="/collections" class="text-link">← {$t('navbar.collections')}</a>
+			<div class="page-actions">
+				{#if data.user?.uuid === transportation.user}<button
+						class="btn btn-primary btn-sm"
+						onclick={() => (isEditModalOpen = true)}>{$t('lodging.edit')}</button
+					>{/if}
 			</div>
 		</div>
+		{#if transportation.images?.length > 0}
+			<div class="detail-gallery">
+				{#each transportation.images as image, i}
+					<div
+						class="absolute inset-0 transition-opacity duration-300"
+						class:opacity-100={i === currentSlide}
+						class:opacity-0={i !== currentSlide}
+						class:pointer-events-none={i !== currentSlide}
+						aria-hidden={i !== currentSlide}
+					>
+						<button
+							class="block w-full h-full cursor-zoom-in"
+							onclick={() => openImageModal(i)}
+							tabindex={i === currentSlide ? 0 : -1}
+							aria-label={`View image ${i + 1} of ${transportation.name}`}
+							><ImageFrame source={image.source} className="w-full h-full"
+								><img
+									src={image.image}
+									alt={transportation.name}
+									class="w-full h-full object-cover"
+								/></ImageFrame
+							></button
+						>
+					</div>
+				{/each}
+				{#if transportation.images.length > 1}<div class="detail-gallery-controls">
+						<button
+							class="btn btn-sm btn-square"
+							onclick={() =>
+								goToSlide(
+									currentSlide > 0 ? currentSlide - 1 : (transportation?.images.length ?? 1) - 1
+								)}
+							aria-label={$t('adventures.previous_image')}>←</button
+						><span class="text-xs tabular-nums px-1"
+							>{currentSlide + 1} / {transportation.images.length}</span
+						><button
+							class="btn btn-sm btn-square"
+							onclick={() =>
+								goToSlide(
+									currentSlide < (transportation?.images.length ?? 1) - 1 ? currentSlide + 1 : 0
+								)}
+							aria-label={$t('adventures.next_image')}>→</button
+						>
+					</div>{/if}
+			</div>
+		{/if}
+		<header class="detail-header">
+			<h1>{transportation.name}</h1>
+			<div class="detail-meta">
+				{#if transportation.type}<span class="badge"
+						>{$t(`transportation.modes.${transportation.type}`)}</span
+					>{/if}
+				<span class="badge"
+					>{transportation.is_public ? $t('adventures.public') : $t('adventures.private')}</span
+				>
+				<span>{transportation.from_location} → {transportation.to_location}</span>
+				{#if transportation.rating !== null && transportation.rating !== undefined && transportation.rating > 0}<span
+						>{$t('adventures.rating')} {transportation.rating}/5</span
+					>{/if}
+			</div>
+		</header>
 	</div>
 
 	<!-- Main Content -->
-	<div class="container mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-7xl">
+	<div class="app-page pt-6">
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
 			<!-- Left Column - Main Content -->
 			<div class="lg:col-span-2 space-y-6 sm:space-y-8">
 				<!-- Description Card -->
 				{#if transportation.description}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-4">📝 {$t('adventures.description')}</h2>
+							<h2 class="card-title text-2xl mb-4">{$t('adventures.description')}</h2>
 							<article class="prose max-w-none">
 								{@html DOMPurify.sanitize(renderMarkdown(transportation.description))}
 							</article>
@@ -571,10 +485,10 @@
 
 				<!-- Map Section -->
 				{#if mapCenter}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-4">🗺️ {$t('adventures.transportation')}</h2>
-							<div class="rounded-lg overflow-hidden shadow-lg">
+							<h2 class="card-title text-2xl mb-4">{$t('adventures.transportation')}</h2>
+							<div class="rounded-lg overflow-hidden shadow-sm">
 								<FullMap
 									bind:basemapType={mapBasemapType}
 									mapClass="w-full h-96"
@@ -622,7 +536,7 @@
 													{/if}
 													{#if transportation.from_location}
 														<div class="text-xs text-black">
-															📍 {transportation.from_location}
+															{transportation.from_location}
 														</div>
 													{/if}
 												</div>
@@ -660,7 +574,7 @@
 													{/if}
 													{#if transportation.to_location}
 														<div class="text-xs text-black">
-															📍 {transportation.to_location}
+															{transportation.to_location}
 														</div>
 													{/if}
 												</div>
@@ -689,7 +603,7 @@
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
 									{#if transportation.from_location}
-										<div class="rounded-lg p-3 bg-gradient-to-br from-primary/10 to-secondary/10">
+										<div class="rounded-lg p-3 bg-base-200">
 											<p class="flex items-center gap-2 text-sm mb-2">
 												<MapMarker class="w-4 h-4" />
 												{transportation.from_location}
@@ -699,7 +613,7 @@
 									{/if}
 
 									{#if transportation.to_location}
-										<div class="rounded-lg p-3 bg-gradient-to-br from-primary/10 to-secondary/10">
+										<div class="rounded-lg p-3 bg-base-200">
 											<p class="flex items-center gap-2 text-sm mb-2">
 												<MapMarker class="w-4 h-4" />
 												{transportation.to_location}
@@ -717,9 +631,9 @@
 			<!-- Right Column - Sidebar -->
 			<div class="space-y-4 sm:space-y-6">
 				<!-- Quick Info Card -->
-				<div class="card bg-base-200 shadow-xl">
+				<div class="card bg-base-100">
 					<div class="card-body">
-						<h2 class="card-title text-xl mb-4">ℹ️ {$t('adventures.details')}</h2>
+						<h2 class="card-title text-xl mb-4">{$t('adventures.details')}</h2>
 						<div class="space-y-4">
 							<!-- Departure/Arrival -->
 							{#if transportation.date || transportation.end_date}
@@ -749,8 +663,7 @@
 													{#if transportation.date && !isAllDay(transportation.date)}
 														<span
 															class="badge badge-ghost badge-xs"
-															class:tooltip={Boolean(getTimezoneTip(transportation.start_timezone))}
-															data-tip={getTimezoneTip(transportation.start_timezone) ?? undefined}
+															title={getTimezoneTip(transportation.start_timezone) ?? undefined}
 														>
 															{#if shouldShowTzBadge(transportation.start_timezone)}
 																{getTimezoneLabel(transportation.start_timezone)}
@@ -783,12 +696,7 @@
 													{#if transportation.end_date && !isAllDay(transportation.end_date)}
 														<span
 															class="badge badge-ghost badge-xs"
-															class:tooltip={Boolean(
-																getTimezoneTip(
-																	transportation.end_timezone ?? transportation.start_timezone
-																)
-															)}
-															data-tip={getTimezoneTip(
+															title={getTimezoneTip(
 																transportation.end_timezone ?? transportation.start_timezone
 															) ?? undefined}
 														>
@@ -908,9 +816,9 @@
 
 				<!-- Additional Images -->
 				{#if transportation.images && transportation.images.length > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-xl mb-4">🖼️ {$t('adventures.images')}</h2>
+							<h2 class="card-title text-xl mb-4">{$t('adventures.images')}</h2>
 							<div class="grid grid-cols-2 gap-2">
 								{#each transportation.images as image, i}
 									<button
@@ -933,9 +841,9 @@
 
 				<!-- Attachments -->
 				{#if transportation.attachments && transportation.attachments.length > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-xl mb-4">📎 {$t('adventures.attachments')}</h2>
+							<h2 class="card-title text-xl mb-4">{$t('adventures.attachments')}</h2>
 							<div class="space-y-2">
 								{#each transportation.attachments as attachment}
 									<AttachmentCard {attachment} />

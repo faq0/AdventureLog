@@ -237,35 +237,34 @@
 {/if}
 
 <div
-	class="card w-full max-w-md bg-base-300 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
+	class="card content-card bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
 >
 	<!-- Image Carousel -->
 	<div class="relative overflow-hidden rounded-t-2xl">
-		<CardCarousel images={location_images} name={collection.name} icon="📚" />
+		<CardCarousel images={location_images} name={collection.name} icon="" />
 
 		<!-- Status Badge Overlay -->
 		<div class="absolute top-2 left-4 flex items-center gap-2">
 			{#if collection.status === 'folder'}
 				<div class="badge badge-sm badge-neutral shadow-xs">
-					📁 {$t('adventures.folder')}
+					{$t('adventures.folder')}
 				</div>
 			{:else if collection.status === 'upcoming'}
 				<div class="badge badge-sm badge-info shadow-xs">
-					🚀 {$t('adventures.upcoming')}
+					{$t('adventures.upcoming')}
 				</div>
 				{#if collection.days_until_start !== null}
 					<div class="badge badge-sm badge-accent shadow-xs">
-						⏳ {collection.days_until_start}
+						{collection.days_until_start}
 						{collection.days_until_start === 1 ? $t('adventures.day') : $t('adventures.days')}
 					</div>
 				{/if}
 			{:else if collection.status === 'in_progress'}
 				<div class="badge badge-sm badge-success shadow-xs">
-					🎯 {$t('adventures.in_progress')}
+					{$t('adventures.in_progress')}
 				</div>
 			{:else if collection.status === 'completed'}
 				<div class="badge badge-sm badge-primary shadow-xs">
-					<Check class="w-4 h-4" />
 					{$t('adventures.completed')}
 				</div>
 			{/if}
@@ -276,25 +275,10 @@
 			{/if}
 		</div>
 
-		<!-- Privacy Indicator -->
-		<div class="absolute top-2 right-4">
-			<div
-				class="tooltip tooltip-left"
-				data-tip={collection.is_public ? $t('adventures.public') : $t('adventures.private')}
+		<div class="absolute top-3 right-3">
+			<span class="badge badge-sm"
+				>{collection.is_public ? $t('adventures.public') : $t('adventures.private')}</span
 			>
-				<div
-					class="badge badge-sm {collection.is_public
-						? 'badge-secondary'
-						: 'badge-ghost'} shadow-lg"
-					aria-label={collection.is_public ? $t('adventures.public') : $t('adventures.private')}
-				>
-					{#if collection.is_public}
-						<Eye class="w-4 h-4" />
-					{:else}
-						<EyeOff class="w-4 h-4" />
-					{/if}
-				</div>
-			</div>
 		</div>
 	</div>
 
@@ -401,7 +385,7 @@
 								</div>
 								<ul
 									tabindex="-1"
-									class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-64 p-2 shadow-xl border border-base-300"
+									class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-64 p-2 shadow-sm border border-base-300"
 								>
 									{#if type != 'viewonly'}
 										<li>
@@ -527,7 +511,7 @@
 								</div>
 								<ul
 									tabindex="-1"
-									class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-64 p-2 shadow-xl border border-base-300"
+									class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-64 p-2 shadow-sm border border-base-300"
 								>
 									<li>
 										<button

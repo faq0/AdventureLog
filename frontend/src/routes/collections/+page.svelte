@@ -399,25 +399,22 @@
 	</dialog>
 {/if}
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+<div class="min-h-screen bg-base-200">
 	<div class="drawer lg:drawer-open">
 		<input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={sidebarOpen} />
 
 		<div class="drawer-content">
 			<!-- Header Section -->
-			<div class="sticky top-0 z-40 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
-				<div class="container mx-auto px-6 py-4">
+			<div class="app-page-toolbar relative z-30">
+				<div class="container mx-auto px-6 py-6">
 					<div class="flex flex-wrap gap-2 items-center justify-between">
 						<div class="flex items-center gap-4">
 							<button class="btn btn-ghost btn-square lg:hidden" onclick={toggleSidebar}>
 								<Filter class="w-5 h-5" />
 							</button>
 							<div class="flex items-center gap-3">
-								<div class="p-2 bg-primary/10 rounded-xl">
-									<CollectionIcon class="w-8 h-8 text-primary" />
-								</div>
 								<div>
-									<h1 class="text-3xl font-bold bg-clip-text text-primary">
+									<h1 class="text-3xl font-semibold text-base-content">
 										{activeView === 'invites'
 											? $t('invites.title')
 											: $t(`adventures.my_collections`)}
@@ -437,7 +434,7 @@
 						</div>
 
 						<!-- View Toggle -->
-						<div class="tabs tabs-box bg-base-200">
+						<div class="tabs tabs-box bg-base-200 collection-tabs">
 							<button
 								class="tab gap-2 {activeView === 'owned' ? 'tab-active' : ''}"
 								onclick={() => switchView('owned')}
@@ -508,9 +505,6 @@
 					<!-- Invites Content -->
 					{#if invites.length === 0}
 						<div class="flex flex-col items-center justify-center py-16">
-							<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-								<MailIcon class="w-16 h-16 text-base-content/30" />
-							</div>
 							<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 								{$t('invites.no_invites')}
 							</h3>
@@ -522,7 +516,7 @@
 						<div class="space-y-4">
 							{#each invites as invite}
 								<div
-									class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-xl transition-shadow"
+									class="card bg-base-100 shadow-sm border border-base-300 hover:shadow-sm transition-shadow"
 								>
 									<div class="card-body p-6">
 										<div class="flex items-start justify-between">
@@ -634,7 +628,7 @@
 					<!-- Pagination -->
 					{#if activeView === 'owned' && (next || previous)}
 						<div class="flex justify-center mt-12">
-							<div class="join bg-base-100 shadow-lg rounded-2xl p-2">
+							<div class="join bg-base-100 shadow-sm rounded-2xl p-2">
 								{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
 									<button
 										class="join-item btn btn-sm {currentPage === page
@@ -655,7 +649,7 @@
 		<!-- Sidebar -->
 		<div class="drawer-side z-50">
 			<label for="my-drawer" class="drawer-overlay"></label>
-			<div class="w-80 min-h-full bg-base-100 shadow-2xl">
+			<div class="w-64 min-h-full bg-base-100 shadow-sm">
 				<div class="p-6">
 					<!-- Sidebar Header -->
 					<div class="flex items-center gap-3 mb-8">
@@ -693,7 +687,7 @@
 										checked={statusFilter === 'folder'}
 										onchange={() => updateStatusFilter('folder')}
 									/>
-									<span class="text-sm leading-snug min-w-0">📁 {$t('adventures.folder')}</span>
+									<span class="text-sm leading-snug min-w-0"> {$t('adventures.folder')}</span>
 								</label>
 								<label class="filter-option">
 									<input
@@ -703,7 +697,7 @@
 										checked={statusFilter === 'upcoming'}
 										onchange={() => updateStatusFilter('upcoming')}
 									/>
-									<span class="text-sm leading-snug min-w-0">🚀 {$t('adventures.upcoming')}</span>
+									<span class="text-sm leading-snug min-w-0"> {$t('adventures.upcoming')}</span>
 								</label>
 								<label class="filter-option">
 									<input
@@ -713,8 +707,7 @@
 										checked={statusFilter === 'in_progress'}
 										onchange={() => updateStatusFilter('in_progress')}
 									/>
-									<span class="text-sm leading-snug min-w-0">🎯 {$t('adventures.in_progress')}</span
-									>
+									<span class="text-sm leading-snug min-w-0"> {$t('adventures.in_progress')}</span>
 								</label>
 								<label class="filter-option">
 									<input
@@ -724,7 +717,7 @@
 										checked={statusFilter === 'completed'}
 										onchange={() => updateStatusFilter('completed')}
 									/>
-									<span class="text-sm leading-snug min-w-0">✓ {$t('adventures.completed')}</span>
+									<span class="text-sm leading-snug min-w-0"> {$t('adventures.completed')}</span>
 								</label>
 							</div>
 						</div>
@@ -810,13 +803,13 @@
 				<div
 					tabindex="0"
 					role="button"
-					class="btn btn-primary btn-circle w-16 h-16 shadow-2xl hover:shadow-primary/25 transition-all duration-200"
+					class="btn btn-primary btn-circle w-16 h-16 shadow-sm hover:shadow-primary/25 transition-all duration-200"
 				>
 					<Plus class="w-8 h-8" />
 				</div>
 				<ul
 					tabindex="-1"
-					class="dropdown-content z-[1] menu p-4 shadow-2xl bg-base-100 rounded-2xl w-64 border border-base-300"
+					class="dropdown-content z-[1] menu p-4 shadow-sm bg-base-100 rounded-2xl w-64 border border-base-300"
 				>
 					<div class="text-center mb-4">
 						<h3 class="font-bold text-lg">{$t(`adventures.create_new`)}</h3>

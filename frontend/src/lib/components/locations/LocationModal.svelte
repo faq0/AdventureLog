@@ -269,7 +269,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
-		class="modal-box location-modal-box w-11/12 max-w-6xl bg-base-100 border border-base-300 shadow-2xl flex flex-col p-0 overflow-hidden rounded-none md:rounded-2xl"
+		class="modal-box location-modal-box w-11/12 max-w-6xl bg-base-100 border border-base-300 shadow-sm flex flex-col p-0 overflow-hidden rounded-none md:rounded-2xl"
 		role="dialog"
 		aria-labelledby="location-modal-title"
 		onkeydown={handleKeydown}
@@ -297,7 +297,7 @@
 					<div class="min-w-0">
 						<h1
 							id="location-modal-title"
-							class="text-2xl md:text-3xl font-bold text-primary truncate"
+							class="text-2xl md:text-3xl font-bold text-base-content truncate"
 						>
 							{locationToEdit ? $t('adventures.edit_location') : $t('adventures.new_location')}
 						</h1>

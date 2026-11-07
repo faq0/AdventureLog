@@ -179,7 +179,7 @@
 					<Share class="w-6 h-6 text-primary" />
 				</div>
 				<div>
-					<h3 class="text-2xl font-bold text-primary">
+					<h3 class="text-2xl font-bold text-base-content">
 						{$t('adventures.share')} <span class="text-base-content">{collection.name}</span>
 					</h3>
 					<p class="text-sm text-base-content/60">{$t('share.share_desc')}</p>

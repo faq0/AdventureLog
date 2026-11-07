@@ -322,9 +322,6 @@
 								<div
 									class="flex items-center gap-3 p-3 bg-base-200/40 border border-base-300 rounded-lg"
 								>
-									{#if location.category?.icon}
-										<span class="text-xl shrink-0">{location.category.icon}</span>
-									{/if}
 									<span class="font-medium">
 										{location.category?.display_name || location.category?.name}
 									</span>

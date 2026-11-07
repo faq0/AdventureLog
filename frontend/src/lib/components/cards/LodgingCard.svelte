@@ -62,7 +62,7 @@
 		if (type in LODGING_TYPES_ICONS) {
 			return LODGING_TYPES_ICONS[type as keyof typeof LODGING_TYPES_ICONS];
 		} else {
-			return '🏨';
+			return '';
 		}
 	}
 
@@ -174,7 +174,7 @@
 {/if}
 
 <div
-	class="card w-full max-w-md bg-base-300 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
+	class="card content-card bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
 	aria-label="lodging-card"
 >
 	<!-- Image Section with Overlay -->
@@ -204,7 +204,7 @@
 		<!-- Category Badge -->
 		{#if lodging.type}
 			<div class="absolute bottom-4 left-4">
-				<div class="badge badge-primary shadow-lg font-medium">
+				<div class="badge badge-primary shadow-sm font-medium">
 					{$t(`lodging.${lodging.type}`)}
 					{getLodgingIcon(lodging.type)}
 				</div>
@@ -255,7 +255,7 @@
 						</button>
 						<ul
 							tabindex="-1"
-							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-lg border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
+							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-sm border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
 						>
 							<li>
 								<button
@@ -377,7 +377,7 @@
 
 								{#if hasTimePortion(lodging.check_in) && shouldShowTzBadge(lodging.timezone)}
 									<div class="flex items-center gap-2 text-xs text-base-content/70">
-										<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+										<div class="inline-block" title={getTimezoneTip(lodging.timezone) ?? undefined}>
 											<span class="badge badge-ghost badge-sm">
 												{getTimezoneLabel(lodging.timezone)}
 											</span>
@@ -419,7 +419,10 @@
 
 									{#if hasTimePortion(lodging.check_out) && shouldShowTzBadge(lodging.timezone)}
 										<div class="flex items-center gap-2 text-xs text-base-content/70">
-											<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+											<div
+												class="inline-block"
+												title={getTimezoneTip(lodging.timezone) ?? undefined}
+											>
 												<span class="badge badge-ghost badge-sm">
 													{getTimezoneLabel(lodging.timezone)}
 												</span>
@@ -448,7 +451,7 @@
 
 						{#if hasTimePortion(lodging.check_in) && shouldShowTzBadge(lodging.timezone)}
 							<div class="flex items-center gap-2 text-xs text-base-content/70">
-								<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+								<div class="inline-block" title={getTimezoneTip(lodging.timezone) ?? undefined}>
 									<span class="badge badge-ghost badge-sm">
 										{getTimezoneLabel(lodging.timezone)}
 									</span>
@@ -474,7 +477,7 @@
 
 						{#if hasTimePortion(lodging.check_out) && shouldShowTzBadge(lodging.timezone)}
 							<div class="flex items-center gap-2 text-xs text-base-content/70">
-								<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+								<div class="inline-block" title={getTimezoneTip(lodging.timezone) ?? undefined}>
 									<span class="badge badge-ghost badge-sm">
 										{getTimezoneLabel(lodging.timezone)}
 									</span>
@@ -530,7 +533,7 @@
 					</span>
 				{/if}
 				{#if lodgingPriceLabel}
-					<span class="badge badge-ghost badge-sm">💰 {lodgingPriceLabel}</span>
+					<span class="badge badge-ghost badge-sm"> {lodgingPriceLabel}</span>
 				{/if}
 			{/if}
 		</div>

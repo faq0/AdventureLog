@@ -40,3 +40,9 @@ backend/server/.venv/
 
 # Root node_modules if present
 node_modules
+
+# Private deployment configuration, backups and verification artifacts
+deploy/
+
+# Local pnpm package store
+frontend/.pnpm-store/

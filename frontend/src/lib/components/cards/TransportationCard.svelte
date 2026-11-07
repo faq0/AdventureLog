@@ -60,7 +60,7 @@
 		if (type in TRANSPORTATION_TYPES_ICONS) {
 			return TRANSPORTATION_TYPES_ICONS[type as keyof typeof TRANSPORTATION_TYPES_ICONS];
 		} else {
-			return '🚗';
+			return '';
 		}
 	}
 
@@ -199,7 +199,7 @@
 {/if}
 
 <div
-	class="card w-full max-w-md bg-base-300 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
+	class="card content-card bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
 	aria-label="transportation-card"
 >
 	<!-- Image Section with Overlay -->
@@ -241,7 +241,7 @@
 		<!-- Category Badge -->
 		{#if transportation.type}
 			<div class="absolute bottom-4 left-4">
-				<div class="badge badge-primary shadow-lg font-medium">
+				<div class="badge badge-primary shadow-sm font-medium">
 					{$t(`transportation.modes.${transportation.type}`)}
 					{getTransportationIcon(transportation.type)}
 				</div>
@@ -293,7 +293,7 @@
 						</button>
 						<ul
 							tabindex="-1"
-							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-lg border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
+							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-sm border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
 						>
 							<li>
 								<button
@@ -435,8 +435,8 @@
 
 						<div class="flex items-center gap-2 text-xs text-base-content/70">
 							<div
-								class="tooltip"
-								data-tip={getTimezoneTip(transportation.start_timezone) ?? undefined}
+								class="inline-block"
+								title={getTimezoneTip(transportation.start_timezone) ?? undefined}
 							>
 								<span class="badge badge-ghost badge-sm">
 									{getTimezoneLabel(transportation.start_timezone)}
@@ -479,8 +479,8 @@
 
 									<div class="flex items-center gap-2 text-xs text-base-content/70">
 										<div
-											class="tooltip"
-											data-tip={getTimezoneTip(
+											class="inline-block"
+											title={getTimezoneTip(
 												transportation.end_timezone ?? transportation.start_timezone
 											) ?? undefined}
 										>
@@ -502,18 +502,18 @@
 		<!-- Stats & Rating -->
 		<div class="flex flex-wrap items-center gap-2 text-sm">
 			{#if transportationPriceLabel}
-				<span class="badge badge-ghost badge-sm">💰 {transportationPriceLabel}</span>
+				<span class="badge badge-ghost badge-sm"> {transportationPriceLabel}</span>
 			{/if}
 			{#if transportation.distance && !isNaN(+transportation.distance)}
 				<span class="badge badge-ghost badge-sm">
-					🌍 {user?.measurement_system === 'imperial'
+					{user?.measurement_system === 'imperial'
 						? `${toMiles(transportation.distance)} mi`
 						: `${(+transportation.distance).toFixed(1)} km`}
 				</span>
 			{/if}
 
 			{#if travelDurationLabel}
-				<span class="badge badge-ghost badge-sm">⏱️ {travelDurationLabel}</span>
+				<span class="badge badge-ghost badge-sm"> {travelDurationLabel}</span>
 			{/if}
 
 			{#if transportation.rating}

@@ -338,11 +338,13 @@
 </script>
 
 {#if notFound}
-	<div class="hero min-h-screen bg-gradient-to-br from-base-200 to-base-300 overflow-x-hidden">
+	<div class="hero min-h-screen bg-base-200 overflow-x-hidden">
 		<div class="hero-content text-center">
 			<div class="max-w-md">
 				<img src={Lost} alt="Lost" class="w-64 mx-auto mb-8 opacity-80" />
-				<h1 class="text-5xl font-bold text-primary mb-4">{$t('adventures.location_not_found')}</h1>
+				<h1 class="text-5xl font-bold text-base-content mb-4">
+					{$t('adventures.location_not_found')}
+				</h1>
 				<p class="text-lg opacity-70 mb-8">{$t('adventures.location_not_found_desc')}</p>
 				<button class="btn btn-primary btn-lg" onclick={() => goto('/')}>
 					{$t('adventures.homepage')}
@@ -389,17 +391,17 @@
 
 {#if adventure}
 	{#if data.user?.uuid && adventure.user?.uuid && data.user.uuid === adventure.user.uuid}
-		<div class="fixed bottom-6 right-6 z-50">
+		<div class="fixed bottom-5 right-5 z-50">
 			<div class="dropdown dropdown-top dropdown-end" class:dropdown-open={isFabMenuOpen}>
 				<button
-					class="btn btn-primary btn-circle w-16 h-16 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
+					class="btn btn-outline btn-circle w-10 h-10 bg-base-100"
 					onclick={() => (isFabMenuOpen = !isFabMenuOpen)}
 				>
-					<DotsVertical class="w-8 h-8" />
+					<DotsVertical class="w-5 h-5" />
 				</button>
 				<ul
 					tabindex="-1"
-					class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow-lg border border-base-300 mb-2"
+					class="dropdown-content menu bg-base-100 rounded-box w-52 p-2 shadow-sm border border-base-300 mb-2"
 				>
 					<li>
 						<button
@@ -440,176 +442,112 @@
 		</div>
 	{/if}
 
-	<!-- Hero Section -->
-	<div class="relative">
-		<div
-			class="hero min-h-[60vh] relative overflow-hidden"
-			class:min-h-[30vh]={!adventure.images || adventure.images.length === 0}
-		>
-			<!-- Background: Images or Gradient -->
-			{#if adventure.images && adventure.images.length > 0}
-				<div class="hero-overlay bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+	<div class="app-page pb-0">
+		<div class="flex items-center justify-between gap-4 mb-5">
+			<a href="/locations" class="text-link">← {$t('locations.locations')}</a>
+			{#if data.user?.uuid === adventure.user?.uuid}
+				<div class="page-actions">
+					<button class="btn btn-outline btn-sm" onclick={() => (isSocialShareModalOpen = true)}
+						>{$t('social_share.share_externally')}</button
+					>
+					<button class="btn btn-primary btn-sm" onclick={() => (isEditModalOpen = true)}
+						>{$t('adventures.edit_location')}</button
+					>
+				</div>
+			{/if}
+		</div>
+		{#if adventure.images?.length > 0}
+			<div class="detail-gallery">
 				{#each adventure.images as image, i}
 					<div
-						class="absolute inset-0 transition-opacity duration-500"
+						class="absolute inset-0 transition-opacity duration-300"
 						class:opacity-100={i === currentSlide}
 						class:opacity-0={i !== currentSlide}
+						class:pointer-events-none={i !== currentSlide}
+						aria-hidden={i !== currentSlide}
 					>
 						<button
-							class="w-full h-full p-0 bg-transparent border-0"
+							class="block w-full h-full cursor-zoom-in"
 							onclick={() => openImageModal(i)}
-							aria-label={`View full image of ${adventure.name}`}
+							tabindex={i === currentSlide ? 0 : -1}
+							aria-label={`View image ${i + 1} of ${adventure.name}`}
 						>
-							<ImageFrame source={image.source} showSourceBadge className="w-full h-full">
-								<img src={image.image} class="w-full h-full object-cover" alt={adventure.name} />
-							</ImageFrame>
+							<ImageFrame source={image.source} showSourceBadge className="w-full h-full"
+								><img
+									src={image.image}
+									alt={adventure.name}
+									class="w-full h-full object-cover"
+								/></ImageFrame
+							>
 						</button>
 					</div>
 				{/each}
-			{:else}
-				<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-			{/if}
-
-			<!-- Content -->
-			<div
-				class="hero-content relative z-10 text-center"
-				class:text-white={adventure.images?.length > 0}
-			>
-				<div class="max-w-4xl">
-					<h1 class="text-6xl font-bold mb-4 drop-shadow-lg">{adventure.name}</h1>
-
-					<!-- Rating -->
-					{#if adventure.rating !== undefined && adventure.rating !== null}
-						<div class="flex justify-center mb-6">
-							<div class="rating rating-lg">
-								{#each Array.from({ length: 5 }, (_, i) => i + 1) as star}
-									<input
-										type="radio"
-										name="rating-hero"
-										class="mask mask-star-2 bg-warning"
-										checked={star <= adventure.rating}
-										disabled
-									/>
-								{/each}
-							</div>
-						</div>
-					{/if}
-
-					<!-- Quick Info Badges -->
-					<div class="flex flex-wrap justify-center gap-4 mb-6">
-						<a
-							href="/locations?types={adventure.category?.name}"
-							class="badge badge-lg badge-primary font-semibold px-4 py-3 cursor-pointer hover:brightness-110 transition-all"
+				{#if adventure.images.length > 1}
+					<div class="detail-gallery-controls">
+						<button
+							class="btn btn-sm btn-square"
+							onclick={goToPreviousImage}
+							aria-label={$t('adventures.previous_image')}>←</button
 						>
-							{adventure.category?.display_name}
-							{adventure.category?.icon}
-						</a>
-						{#if adventure.location}
-							<div class="badge badge-lg badge-secondary font-semibold px-4 py-3">
-								📍 {adventure.location}
-							</div>
-						{/if}
-						{#if adventure.visits.length > 0}
-							<div class="badge badge-lg badge-accent font-semibold px-4 py-3">
-								🎯 {adventure.visits.length}
-								{adventure.visits.length === 1 ? $t('adventures.visit') : $t('adventures.visits')}
-							</div>
-						{/if}
-						{#if adventure.is_visited}
-							<div class="badge badge-lg badge-success font-semibold px-4 py-3">
-								✅ {$t('adventures.visited')}
-							</div>
-						{:else}
-							<div class="badge badge-lg badge-warning font-semibold px-4 py-3">
-								⏳ {$t('adventures.not_visited')}
-							</div>
-						{/if}
-						{#if adventure.trails && adventure.trails.length > 0}
-							<div class="badge badge-lg badge-info font-semibold px-4 py-3">
-								🥾 {adventure.trails.length} Trail{adventure.trails.length === 1 ? '' : 's'}
-							</div>
-						{/if}
+						<span class="text-xs tabular-nums px-1"
+							>{currentSlide + 1} / {adventure.images.length}</span
+						>
+						<button
+							class="btn btn-sm btn-square"
+							onclick={goToNextImage}
+							aria-label={$t('adventures.next_image')}>→</button
+						>
 					</div>
-
-					<!-- Image Navigation (only shown when multiple images exist) -->
-					{#if adventure.images && adventure.images.length > 1}
-						<div class="w-full max-w-md mx-auto">
-							<!-- Navigation arrows and current position -->
-							<div class="flex items-center justify-center gap-4 mb-3">
-								<button
-									onclick={goToPreviousImage}
-									class="btn btn-circle btn-sm btn-primary"
-									aria-label={$t('adventures.previous_image')}
-								>
-									❮
-								</button>
-
-								<div class="text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
-									{currentSlide + 1} / {adventure.images.length}
-								</div>
-
-								<button
-									onclick={goToNextImage}
-									class="btn btn-circle btn-sm btn-primary"
-									aria-label={$t('adventures.next_image')}
-								>
-									❯
-								</button>
-							</div>
-
-							<!-- Dot navigation -->
-							{#if adventure.images.length <= 12}
-								<div class="flex justify-center gap-2 flex-wrap">
-									{#each adventure.images as _, i}
-										<button
-											onclick={() => goToSlide(i)}
-											class="btn btn-circle btn-xs transition-all duration-200"
-											class:btn-primary={i === currentSlide}
-											class:btn-outline={i !== currentSlide}
-											class:opacity-50={i !== currentSlide}
-										>
-											{i + 1}
-										</button>
-									{/each}
-								</div>
-							{:else}
-								<div class="relative">
-									<div
-										class="absolute left-0 top-0 bottom-2 w-4 bg-gradient-to-r from-black/30 to-transparent pointer-events-none"
-									></div>
-									<div
-										class="absolute right-0 top-0 bottom-2 w-4 bg-gradient-to-l from-black/30 to-transparent pointer-events-none"
-									></div>
-								</div>
-							{/if}
-						</div>
-					{/if}
-				</div>
+				{/if}
 			</div>
-		</div>
+		{/if}
+		<header class="detail-header">
+			<div class="flex flex-wrap items-start justify-between gap-4">
+				<h1>{adventure.name}</h1>
+				{#if adventure.rating !== undefined && adventure.rating !== null && adventure.rating > 0}<span
+						class="text-sm text-base-content/60 pt-2"
+						>{$t('adventures.rating')}
+						<strong class="text-base-content font-semibold">{adventure.rating}/5</strong></span
+					>{/if}
+			</div>
+			<div class="detail-meta">
+				{#if adventure.category}<a href="/locations?types={adventure.category.name}" class="badge"
+						>{adventure.category.display_name}</a
+					>{/if}
+				<span class="badge" class:badge-success={adventure.is_visited}
+					>{adventure.is_visited ? $t('adventures.visited') : $t('adventures.planned')}</span
+				>
+				{#if adventure.location}<span>{adventure.location}</span>{/if}
+				{#if adventure.visits.length > 0}<span
+						>{adventure.visits.length}
+						{adventure.visits.length === 1 ? $t('adventures.visit') : $t('adventures.visits')}</span
+					>{/if}
+				{#if adventure.trails?.length > 0}<span
+						>{adventure.trails.length} {$t('adventures.trails')}</span
+					>{/if}
+			</div>
+		</header>
 	</div>
 
 	<!-- Main Content -->
-	<div class="container mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-7xl">
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+	<div class="app-page pt-6">
+		<div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6 lg:gap-8">
 			<!-- Left Column - Main Content -->
-			<div class="lg:col-span-2 space-y-6 sm:space-y-8">
+			<div class="min-w-0 space-y-6">
 				<!-- Author Info Card -->
 				{#if adventure.user}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
 							<div class="flex items-center gap-4">
 								<div class="avatar shrink-0">
-									<div
-										class="w-16 overflow-hidden rounded-full ring-3 ring-neutral ring-offset-base-100 ring-offset-2"
-									>
+									<div class="w-10 overflow-hidden rounded-full">
 										<UserAvatar
 											user={adventure.user}
 											alt={adventure.user.first_name && adventure.user.last_name
 												? `${adventure.user.first_name} ${adventure.user.last_name}`
 												: adventure.user.username}
-											className="w-16 h-16 rounded-full"
-											textClass="text-xl"
+											className="w-10 h-10 rounded-full"
+											textClass="text-sm"
 										/>
 									</div>
 								</div>
@@ -628,12 +566,11 @@
 									<div class="flex items-center gap-2 text-sm opacity-70 mt-1">
 										<div class="badge badge-sm">
 											{adventure.is_public
-												? `🌍 ${$t('adventures.public')}`
-												: `🔒 ${$t('adventures.private')}`}
+												? ` ${$t('adventures.public')}`
+												: ` ${$t('adventures.private')}`}
 										</div>
 										{#if adventure.collections && adventure.collections.length > 0}
 											<div class="badge badge-sm badge-outline">
-												📚
 												<p>{adventure.collections.length} {$t('navbar.collections')}</p>
 											</div>
 										{/if}
@@ -646,9 +583,9 @@
 
 				<!-- Description Card -->
 				{#if adventure.description}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-4">📝 {$t('adventures.description')}</h2>
+							<h2 class="card-title text-2xl mb-4">{$t('adventures.description')}</h2>
 							<article class="prose max-w-none">
 								{@html DOMPurify.sanitize(renderMarkdown(adventure.description))}
 							</article>
@@ -658,9 +595,9 @@
 
 				<!-- Trails Section -->
 				{#if adventure.trails && adventure.trails.length > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-6">🥾 {$t('adventures.trails')}</h2>
+							<h2 class="card-title text-2xl mb-6">{$t('adventures.trails')}</h2>
 							<div class="grid gap-4">
 								{#each adventure.trails as trail}
 									<TrailCard
@@ -675,9 +612,9 @@
 
 				<!-- Visits Timeline -->
 				{#if adventure.visits.length > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-6">🎯 {$t('adventures.visits')}</h2>
+							<h2 class="card-title text-2xl mb-6">{$t('adventures.visits')}</h2>
 							<div class="space-y-4">
 								{#each adventure.visits as visit, index}
 									{@const visitDate = visitDateKey(visit.start_date)}
@@ -706,8 +643,8 @@
 															{:else}
 																<div class="space-y-2">
 																	<div class="flex items-center gap-2">
-																		<span class="badge badge-primary"
-																			>🕓 {$t('adventures.timed')}</span
+																		<span class="badge badge-primary">
+																			{$t('adventures.timed')}</span
 																		>
 																		{#if visit.timezone}
 																			<span class="badge badge-outline">{visit.timezone}</span>
@@ -739,7 +676,7 @@
 															{#if visit.activities && visit.activities.length > 0}
 																<div class="mt-4">
 																	<h4 class="font-semibold mb-3 flex items-center gap-2">
-																		🏃‍♂️ Activities ({visit.activities.length})
+																		Activities ({visit.activities.length})
 																	</h4>
 																	<div class="space-y-3">
 																		{#each visit.activities as activity}
@@ -820,19 +757,17 @@
 
 				<!-- Map Section -->
 				{#if (adventure.longitude && adventure.latitude) || hasAttachmentGeojson(adventure) || hasActivityGeojson(adventure)}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-4">🗺️ {$t('adventures.location')}</h2>
+							<h2 class="card-title text-2xl mb-4">{$t('adventures.location')}</h2>
 
 							{#if adventure.longitude && adventure.latitude}
 								<!-- Compact Coordinates Card -->
-								<div
-									class="card bg-gradient-to-br from-primary/5 to-secondary/5 shadow-lg mb-4 border border-primary/10"
-								>
+								<div class="card bg-base-200 shadow-sm mb-4 border border-primary/10">
 									<div class="card-body p-4">
 										<div class="flex items-center justify-between mb-3">
 											<h3 class="text-lg font-bold flex items-center gap-2">
-												🎯 {$t('adventures.coordinates')}
+												{$t('adventures.coordinates')}
 											</h3>
 										</div>
 
@@ -863,7 +798,7 @@
 														class="btn btn-xs btn-outline hover:btn-info"
 														onclick={navigateToWorldTravelRegion}
 													>
-														🏙️ {adventure.city.name}
+														{adventure.city.name}
 													</button>
 												{/if}
 												{#if adventure.region}
@@ -871,7 +806,7 @@
 														class="btn btn-xs btn-outline hover:btn-warning"
 														onclick={navigateToWorldTravelRegion}
 													>
-														🗺️ {adventure.region.name}
+														{adventure.region.name}
 													</button>
 												{/if}
 												{#if adventure.country}
@@ -885,8 +820,6 @@
 																alt={adventure.country.name}
 																class="w-4 h-3 rounded-sm"
 															/>
-														{:else}
-															🌎
 														{/if}
 														{adventure.country.name}
 													</button>
@@ -908,20 +841,20 @@
 												class="btn btn-xs btn-ghost flex-1 text-xs"
 												onclick={copyAdventureCoordinates}
 											>
-												📋 {$t('adventures.copy_coordinates')}
+												{$t('adventures.copy_coordinates')}
 											</button>
 											<button
 												class="btn btn-xs btn-ghost flex-1 text-xs"
 												onclick={copyAdventureGoogleMapsLink}
 											>
-												🔗 {$t('adventures.copy_link')}
+												{$t('adventures.copy_link')}
 											</button>
 										</div>
 									</div>
 								</div>
 							{/if}
 
-							<div class="rounded-lg overflow-hidden shadow-lg">
+							<div class="rounded-lg overflow-hidden shadow-sm">
 								<FullMap
 									bind:basemapType={mapBasemapType}
 									mapClass="w-full h-96"
@@ -1001,7 +934,7 @@
 												<div class="p-2">
 													<div class="text-lg font-bold text-black mb-1">{adventure.name}</div>
 													<p class="font-semibold text-black text-sm mb-2">
-														{adventure.category?.display_name + ' ' + adventure.category?.icon}
+														{adventure.category?.display_name}
 													</p>
 													{#if adventure.visits.length > 0}
 														<div class="text-xs text-black">
@@ -1025,9 +958,9 @@
 			<!-- Right Column - Sidebar -->
 			<div class="space-y-4 sm:space-y-6">
 				<!-- Quick Info Card -->
-				<div class="card bg-base-200 shadow-xl">
+				<div class="card bg-base-100">
 					<div class="card-body">
-						<h3 class="card-title text-lg mb-4">ℹ️ {$t('adventures.basic_information')}</h3>
+						<h3 class="card-title text-lg mb-4">{$t('adventures.basic_information')}</h3>
 						<div class="space-y-3">
 							{#if adventurePriceLabel}
 								<div class="flex items-start gap-3">
@@ -1068,9 +1001,9 @@
 
 				<!-- Activity Summary -->
 				{#if getTotalActivities(adventure) > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h3 class="card-title text-lg mb-4">🏃‍♂️ Activity Summary</h3>
+							<h3 class="card-title text-lg mb-4">Activity Summary</h3>
 							<div class="space-y-2">
 								<div class="stat">
 									<div class="stat-title">Total Activities</div>
@@ -1103,10 +1036,10 @@
 
 				<!-- Attachments -->
 				{#if adventure.attachments && adventure.attachments.length > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
 							<h3 class="card-title text-lg mb-4">
-								📎 {$t('adventures.attachments')}
+								{$t('adventures.attachments')}
 								<div class="tooltip" data-tip={$t('adventures.gpx_tip')}>
 									<LightbulbOn class="w-4 h-4 opacity-60" />
 								</div>
@@ -1122,9 +1055,9 @@
 
 				<!-- Additional Images -->
 				{#if adventure.images}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h3 class="card-title text-lg mb-4">🖼️ {$t('adventures.images')}</h3>
+							<h3 class="card-title text-lg mb-4">{$t('adventures.images')}</h3>
 							<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
 								{#each adventure.images as image, index}
 									<ImageFrame source={image.source} showSourceBadge className="relative group">

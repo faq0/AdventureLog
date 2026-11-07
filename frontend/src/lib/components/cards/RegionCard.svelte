@@ -66,17 +66,14 @@
 >
 	<button
 		type="button"
-		class="btn btn-ghost btn-sm btn-square {isVisited
+		class="btn btn-ghost btn-xs {isVisited
 			? 'text-success'
 			: 'text-base-content/30 hover:text-success'}"
 		title={isVisited ? $t('adventures.remove') : $t('adventures.mark_visited')}
+		aria-pressed={isVisited}
 		onclick={isVisited ? removeVisit : markVisited}
 	>
-		{#if isVisited}
-			<CheckFilled class="w-5 h-5" />
-		{:else}
-			<Check class="w-5 h-5" />
-		{/if}
+		{isVisited ? $t('adventures.visited') : $t('adventures.mark_visited')}
 	</button>
 
 	{#if region.num_cities > 0}
@@ -106,14 +103,13 @@
 				<City class="w-4 h-4" />
 				{region.num_cities}
 			</span>
-			<span></span>
 		</div>
 	{/if}
 </div>
 
 <style>
 	.region-row {
-		grid-template-columns: 2.5rem 1fr;
+		grid-template-columns: 7rem 1fr;
 	}
 
 	.region-main {

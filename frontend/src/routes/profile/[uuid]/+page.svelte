@@ -135,7 +135,7 @@
 			name: 'Walking & Hiking',
 			icon: Walk,
 			color: 'success',
-			bgGradient: 'from-success/10 to-success/5',
+			bgGradient: ' ',
 			borderColor: 'border-success/20'
 		},
 		cycling: {
@@ -149,28 +149,28 @@
 			name: 'Winter Sports',
 			icon: Snowflake,
 			color: 'primary',
-			bgGradient: 'from-primary/10 to-primary/5',
+			bgGradient: ' ',
 			borderColor: 'border-primary/20'
 		},
 		water_sports: {
 			name: 'Water Sports',
 			icon: WaterOutline,
 			color: 'accent',
-			bgGradient: 'from-accent/10 to-accent/5',
+			bgGradient: ' ',
 			borderColor: 'border-accent/20'
 		},
 		fitness_gym: {
 			name: 'Fitness & Gym',
 			icon: Dumbbell,
 			color: 'warning',
-			bgGradient: 'from-warning/10 to-warning/5',
+			bgGradient: ' ',
 			borderColor: 'border-warning/20'
 		},
 		racket_sports: {
 			name: 'Racket Sports',
 			icon: TennisOutline,
 			color: 'secondary',
-			bgGradient: 'from-secondary/10 to-secondary/5',
+			bgGradient: ' ',
 			borderColor: 'border-secondary/20'
 		},
 		climbing_adventure: {
@@ -307,83 +307,36 @@
 	<meta name="description" content="User Profile" />
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
-	<!-- Hero Profile Section -->
-	<div class="relative overflow-hidden">
-		<!-- Background Pattern -->
-		<div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5"></div>
-
-		<div class="container mx-auto px-6 py-16 relative">
-			<div class="profile-header flex flex-col items-center text-center">
-				<!-- Profile Picture with Enhanced Styling -->
-				<div class="relative mb-6">
-					<div class="avatar">
-						<div
-							class="w-32 h-32 rounded-full ring-4 ring-primary ring-offset-4 ring-offset-base-100 shadow-2xl overflow-hidden"
-						>
-							<UserAvatar
-								{user}
-								alt={user.first_name && user.last_name
-									? `${user.first_name} ${user.last_name}`
-									: user.username}
-								className="w-32 h-32 rounded-full"
-								textClass="text-4xl"
-							/>
-						</div>
-					</div>
-				</div>
-
-				<!-- User Info -->
-				<div class="space-y-4">
-					{#if user && user.first_name && user.last_name}
-						<h1
-							class="text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
-						>
-							{user.first_name}
-							{user.last_name}
-						</h1>
-					{:else}
-						<h1
-							class="text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent"
-						>
-							{user.username}
-						</h1>
-					{/if}
-
-					<p class="text-xl text-base-content/70">@{user.username}</p>
-
-					<!-- Member Since -->
-					{#if user && user.date_joined}
-						<div class="flex items-center justify-center gap-2 text-base-content/60">
-							<Calendar class="w-5 h-5" />
-							<span class="text-lg">
-								{$t('profile.member_since')}
-								{formatDisplayDate(user.date_joined, dateFormat, {
-									timeZone: 'UTC',
-									month: 'long'
-								})}
-							</span>
-						</div>
-					{/if}
-
-					<!-- User rank achievement -->
-					{#if stats && stats.location_count > 0}
-						<div class="flex items-center justify-center gap-2 text-base-content/70">
-							<Award class="w-5 h-5" />
-							<span class={`text-lg ${achievementColor}`}>{achievementLevel}</span>
-						</div>
-					{/if}
-				</div>
+<div class="min-h-screen bg-base-200">
+	<header class="border-b border-base-300 bg-base-100">
+		<div class="app-page py-8 flex items-center gap-5">
+			<div class="w-16 h-16 overflow-hidden rounded-full shrink-0">
+				<UserAvatar
+					{user}
+					alt={user.username}
+					className="w-16 h-16 rounded-full"
+					textClass="text-xl"
+				/>
+			</div>
+			<div class="min-w-0">
+				<h1 class="text-3xl font-semibold">
+					{[user.first_name, user.last_name].filter(Boolean).join(' ') || user.username}
+				</h1>
+				<p class="text-sm text-base-content/55 mt-1">@{user.username}</p>
+				{#if user.date_joined}<p class="text-xs text-base-content/50 mt-2">
+						{$t('profile.member_since')}
+						{formatDisplayDate(user.date_joined, dateFormat, { timeZone: 'UTC', month: 'long' })}
+					</p>{/if}
 			</div>
 		</div>
-	</div>
+	</header>
 
 	<div class="container mx-auto px-6 py-8">
 		<!-- Enhanced Stats Section -->
 		{#if stats}
-			<div class="content-section mb-16">
-				<div class="text-center mb-8">
-					<h2 class="text-3xl font-bold mb-2">{$t('profile.travel_statistics')}</h2>
+			<div class="content-section surface p-6 mb-10">
+				<div class="mb-6">
+					<h2 class="text-xl font-semibold mb-2">{$t('profile.travel_statistics')}</h2>
 					<p class="text-base-content/60">{$t('profile.your_journey_at_a_glance')}</p>
 				</div>
 
@@ -391,7 +344,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
 					<!-- Adventures -->
 					<div
-						class="stat-card card bg-gradient-to-br from-primary/10 to-primary/5 shadow-xl border border-primary/20 hover:shadow-2xl transition-all duration-300"
+						class="stat-card card bg-base-200 shadow-sm border border-primary/20 hover:shadow-sm transition-all duration-300"
 					>
 						<div class="card-body p-6">
 							<div class="flex items-center justify-between">
@@ -414,7 +367,7 @@
 
 					<!-- Collections -->
 					<div
-						class="stat-card card bg-gradient-to-br from-secondary/10 to-secondary/5 shadow-xl border border-secondary/20 hover:shadow-2xl transition-all duration-300"
+						class="stat-card card bg-base-200 shadow-sm border border-secondary/20 hover:shadow-sm transition-all duration-300"
 					>
 						<div class="card-body p-6">
 							<div class="flex items-center justify-between">
@@ -434,7 +387,7 @@
 
 					<!-- Countries -->
 					<div
-						class="stat-card card bg-gradient-to-br from-success/10 to-success/5 shadow-xl border border-success/20 hover:shadow-2xl transition-all duration-300"
+						class="stat-card card bg-base-200 shadow-sm border border-success/20 hover:shadow-sm transition-all duration-300"
 					>
 						<div class="card-body p-6">
 							<div class="flex items-center justify-between">
@@ -469,7 +422,7 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 					<!-- Regions -->
 					<div
-						class="stat-card card bg-gradient-to-br from-info/10 to-info/5 shadow-xl border border-info/20 hover:shadow-2xl transition-all duration-300"
+						class="stat-card card bg-base-200 from-info/10 to-info/5 shadow-sm border border-info/20 hover:shadow-sm transition-all duration-300"
 					>
 						<div class="card-body p-6">
 							<div class="flex items-center justify-between">
@@ -477,7 +430,7 @@
 									<div class="text-info/70 font-medium text-sm uppercase tracking-wide">
 										{$t('profile.visited_regions')}
 									</div>
-									<div class="text-3xl font-bold text-info">{stats.visited_region_count}</div>
+									<div class="text-xl font-semibold text-info">{stats.visited_region_count}</div>
 									<div class="text-info/60 mt-2">
 										<div class="flex items-center justify-between mb-1">
 											<span>{regionExplorationPercentage}% {$t('profile.explored')}</span>
@@ -500,7 +453,7 @@
 
 					<!-- Cities -->
 					<div
-						class="stat-card card bg-gradient-to-br from-warning/10 to-warning/5 shadow-xl border border-warning/20 hover:shadow-2xl transition-all duration-300"
+						class="stat-card card bg-base-200 shadow-sm border border-warning/20 hover:shadow-sm transition-all duration-300"
 					>
 						<div class="card-body p-6">
 							<div class="flex items-center justify-between">
@@ -508,7 +461,7 @@
 									<div class="text-warning/70 font-medium text-sm uppercase tracking-wide">
 										{$t('profile.visited_cities')}
 									</div>
-									<div class="text-3xl font-bold text-warning">{stats.visited_city_count}</div>
+									<div class="text-xl font-semibold text-warning">{stats.visited_city_count}</div>
 									<div class="text-warning/60 mt-2">
 										<div class="flex items-center justify-between mb-1">
 											<span>{cityExplorationPercentage}% {$t('profile.discovered')}</span>
@@ -541,7 +494,7 @@
 						<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
 							<!-- Total Activities -->
 							<div
-								class="stat-card card bg-gradient-to-br from-accent/10 to-accent/5 shadow-xl border border-accent/20 hover:shadow-2xl transition-all duration-300"
+								class="stat-card card bg-base-200 shadow-sm border border-accent/20 hover:shadow-sm transition-all duration-300"
 							>
 								<div class="card-body p-6">
 									<div class="flex items-center justify-between">
@@ -549,7 +502,7 @@
 											<div class="text-accent/70 font-medium text-sm uppercase tracking-wide">
 												{$t('adventures.total_activities')}
 											</div>
-											<div class="text-3xl font-bold text-accent">
+											<div class="text-xl font-semibold text-accent">
 												{stats.activities_overall.total_count}
 											</div>
 											<div class="text-accent/60 mt-2">{$t('adventures.recorded_sessions')}</div>
@@ -563,7 +516,7 @@
 
 							<!-- Total Distance -->
 							<div
-								class="stat-card card bg-gradient-to-br from-error/10 to-error/5 shadow-xl border border-error/20 hover:shadow-2xl transition-all duration-300"
+								class="stat-card card bg-base-200 from-error/10 to-error/5 shadow-sm border border-error/20 hover:shadow-sm transition-all duration-300"
 							>
 								<div class="card-body p-6">
 									<div class="flex items-center justify-between">
@@ -571,7 +524,7 @@
 											<div class="text-error/70 font-medium text-sm uppercase tracking-wide">
 												{$t('adventures.total_distance')}
 											</div>
-											<div class="text-3xl font-bold text-error">
+											<div class="text-xl font-semibold text-error">
 												{getDistance(stats.activities_overall.total_distance)}
 											</div>
 											<div class="text-error/60 mt-2">{$t('adventures.distance_covered')}</div>
@@ -600,7 +553,7 @@
 
 							<!-- Moving Time -->
 							<div
-								class="stat-card card bg-gradient-to-br from-purple-500/10 to-purple-500/5 shadow-xl border border-purple-500/20 hover:shadow-2xl transition-all duration-300"
+								class="stat-card card bg-base-200 from-purple-500/10 to-purple-500/5 shadow-sm border border-purple-500/20 hover:shadow-sm transition-all duration-300"
 							>
 								<div class="card-body p-6">
 									<div class="flex items-center justify-between">
@@ -608,7 +561,7 @@
 											<div class="text-purple-500/70 font-medium text-sm uppercase tracking-wide">
 												{$t('adventures.moving_time')}
 											</div>
-											<div class="text-3xl font-bold text-purple-500">
+											<div class="text-xl font-semibold text-purple-500">
 												{formatTime(stats.activities_overall.total_moving_time)}
 											</div>
 											<div class="text-purple-500/60 mt-2">{$t('adventures.active_duration')}</div>
@@ -622,7 +575,7 @@
 
 							<!-- Elevation Gain -->
 							<div
-								class="stat-card card bg-gradient-to-br from-orange-500/10 to-orange-500/5 shadow-xl border border-orange-500/20 hover:shadow-2xl transition-all duration-300"
+								class="stat-card card bg-base-200 from-orange-500/10 to-orange-500/5 shadow-sm border border-orange-500/20 hover:shadow-sm transition-all duration-300"
 							>
 								<div class="card-body p-6">
 									<div class="flex items-center justify-between">
@@ -630,7 +583,7 @@
 											<div class="text-orange-500/70 font-medium text-sm uppercase tracking-wide">
 												{$t('adventures.elevation_gain')}
 											</div>
-											<div class="text-3xl font-bold text-orange-500">
+											<div class="text-xl font-semibold text-orange-500">
 												{getElevation(stats.activities_overall.total_elevation_gain)}
 											</div>
 											<div class="text-orange-500/60 mt-2">{$t('adventures.total_climbed')}</div>
@@ -659,7 +612,7 @@
 
 							<!-- Elevation Loss -->
 							<div
-								class="stat-card card bg-gradient-to-br from-info/10 to-info/5 shadow-xl border border-info/20 hover:shadow-2xl transition-all duration-300"
+								class="stat-card card bg-base-200 from-info/10 to-info/5 shadow-sm border border-info/20 hover:shadow-sm transition-all duration-300"
 							>
 								<div class="card-body p-6">
 									<div class="flex items-center justify-between">
@@ -667,7 +620,7 @@
 											<div class="text-info/70 font-medium text-sm uppercase tracking-wide">
 												{$t('adventures.elevation_loss')}
 											</div>
-											<div class="text-3xl font-bold text-info">
+											<div class="text-xl font-semibold text-info">
 												{getElevation(stats.activities_overall.total_elevation_loss)}
 											</div>
 											<div class="text-info/60 mt-2">Descent recorded</div>
@@ -682,7 +635,7 @@
 							{#if stats.activities_overall.total_calories > 0}
 								<!-- Calories -->
 								<div
-									class="stat-card card bg-gradient-to-br from-warning/10 to-warning/5 shadow-xl border border-warning/20 hover:shadow-2xl transition-all duration-300"
+									class="stat-card card bg-base-200 shadow-sm border border-warning/20 hover:shadow-sm transition-all duration-300"
 								>
 									<div class="card-body p-6">
 										<div class="flex items-center justify-between">
@@ -690,7 +643,7 @@
 												<div class="text-warning/70 font-medium text-sm uppercase tracking-wide">
 													{$t('adventures.calories')}
 												</div>
-												<div class="text-3xl font-bold text-warning">
+												<div class="text-xl font-semibold text-warning">
 													{Math.round(stats.activities_overall.total_calories)}
 												</div>
 												<div class="text-warning/60 mt-2">Energy burned</div>
@@ -731,7 +684,7 @@
 
 								{@const SvelteComponent = isExpanded ? ChevronUp : ChevronDown}
 								<div
-									class="card bg-gradient-to-br {config.bgGradient} shadow-xl border {config.borderColor} hover:shadow-2xl transition-all duration-300"
+									class="card bg-base-200 {config.bgGradient} shadow-sm border {config.borderColor} hover:shadow-sm transition-all duration-300"
 								>
 									<div class="card-body p-6">
 										<!-- Category Header -->
@@ -947,14 +900,14 @@
 		{/if}
 
 		<!-- Adventures Section -->
-		<div class="content-section mb-16">
+		<div class="content-section surface p-6 mb-10">
 			<div class="flex items-center justify-between mb-8">
 				<div class="flex items-center gap-3">
 					<div class="p-2 bg-primary/10 rounded-xl">
 						<Airplane class="w-6 h-6 text-primary" />
 					</div>
 					<div>
-						<h2 class="text-3xl font-bold">{$t('auth.user_locations')}</h2>
+						<h2 class="text-xl font-semibold">{$t('auth.user_locations')}</h2>
 						<p class="text-base-content/60">{$t('profile.public_location_experiences')}</p>
 					</div>
 				</div>
@@ -967,11 +920,8 @@
 			</div>
 
 			{#if adventures && adventures.length === 0}
-				<div class="card bg-base-100 shadow-xl">
+				<div class="card bg-base-100 shadow-sm">
 					<div class="card-body text-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl w-fit mx-auto mb-6">
-							<Airplane class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-bold text-base-content/70 mb-2">
 							{$t('auth.no_public_locations')}
 						</h3>
@@ -990,14 +940,14 @@
 		</div>
 
 		<!-- Collections Section -->
-		<div class="content-section">
+		<div class="content-section surface p-6">
 			<div class="flex items-center justify-between mb-8">
 				<div class="flex items-center gap-3">
 					<div class="p-2 bg-secondary/10 rounded-xl">
 						<CollectionIcon class="w-6 h-6 text-secondary" />
 					</div>
 					<div>
-						<h2 class="text-3xl font-bold">{$t('auth.user_collections')}</h2>
+						<h2 class="text-xl font-semibold">{$t('auth.user_collections')}</h2>
 						<p class="text-base-content/60">{$t('profile.planned_trips')}</p>
 					</div>
 				</div>
@@ -1010,11 +960,8 @@
 			</div>
 
 			{#if collections && collections.length === 0}
-				<div class="card bg-base-100 shadow-xl">
+				<div class="card bg-base-100 shadow-sm">
 					<div class="card-body text-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl w-fit mx-auto mb-6">
-							<CollectionIcon class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-bold text-base-content/70 mb-2">
 							{$t('auth.no_public_collections')}
 						</h3>

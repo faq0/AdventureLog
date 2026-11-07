@@ -203,7 +203,7 @@
 						>
 							<div class="relative group z-[1000] group-hover:z-[10000] focus-within:z-[10000]">
 								<div
-									class="map-image-pin map-pin-hit grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-gradient-to-br from-rose-400 to-rose-600 text-sm shadow-lg transition-all duration-200 group-hover:scale-110"
+									class="map-image-pin map-pin-hit grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-base-200 from-rose-400 to-rose-600 text-sm shadow-sm transition-all duration-200 group-hover:scale-110"
 									class:scale-110={isRaised}
 									class:cursor-pointer={navigateOnSelect ? canNavigate(markerProps) : true}
 									class:cursor-default={navigateOnSelect && !canNavigate(markerProps)}
@@ -218,7 +218,7 @@
 									onclick={(event) => handleMarkerClick(event, markerProps)}
 									onkeydown={(event) => handleMarkerKeydown(event, markerProps)}
 								>
-									<span aria-hidden="true">📷</span>
+									<span aria-hidden="true"></span>
 								</div>
 
 								<ImageMapPinPopup props={markerProps} visible={isRaised} />
@@ -243,7 +243,7 @@
 						>
 							<div class="relative group z-[1000] group-hover:z-[10000] focus-within:z-[10000]">
 								<div
-									class="map-image-pin map-pin-hit grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-gradient-to-br from-rose-400 to-rose-600 text-sm shadow-lg transition-all duration-200 group-hover:scale-110"
+									class="map-image-pin map-pin-hit grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-base-200 from-rose-400 to-rose-600 text-sm shadow-sm transition-all duration-200 group-hover:scale-110"
 									class:scale-110={isRaised}
 									class:cursor-pointer={navigateOnSelect ? canNavigate(markerProps) : true}
 									class:cursor-default={navigateOnSelect && !canNavigate(markerProps)}
@@ -258,7 +258,7 @@
 									onclick={(event) => handleMarkerClick(event, markerProps)}
 									onkeydown={(event) => handleMarkerKeydown(event, markerProps)}
 								>
-									<span aria-hidden="true">📷</span>
+									<span aria-hidden="true"></span>
 								</div>
 
 								<ImageMapPinPopup props={markerProps} visible={isRaised} />

@@ -673,11 +673,11 @@
 {/snippet}
 
 {#if notFound}
-	<div class="hero min-h-screen bg-gradient-to-br from-base-200 to-base-300 overflow-x-hidden">
+	<div class="hero min-h-screen bg-base-200 overflow-x-hidden">
 		<div class="hero-content text-center">
 			<div class="max-w-md">
 				<img src={Lost} alt="Lost" class="w-64 mx-auto mb-8 opacity-80" />
-				<h1 class="text-5xl font-bold text-primary mb-4">{$t('collections.not_found')}</h1>
+				<h1 class="text-3xl font-bold text-base-content mb-4">{$t('collections.not_found')}</h1>
 				<button class="btn btn-primary btn-lg" onclick={() => goto('/')}>
 					{$t('adventures.homepage')}
 				</button>
@@ -845,148 +845,87 @@
 {/if}
 
 {#if collection}
-	<!-- Hero Section -->
-	<div class="relative">
-		<div
-			class="hero min-h-[60vh] relative overflow-hidden"
-			class:min-h-[30vh]={!heroImages || heroImages.length === 0}
-		>
-			<!-- Background: Images or Gradient -->
-			{#if heroImages && heroImages.length > 0}
-				<div class="hero-overlay bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-				{#each heroImages as image, i}
-					<div
-						class="absolute inset-0 transition-opacity duration-500"
-						class:opacity-100={i === currentSlide}
-						class:opacity-0={i !== currentSlide}
-					>
-						<button
-							class="w-full h-full p-0 bg-transparent border-0"
-							onclick={() => openImageModal(i)}
-							aria-label={`View full image of ${collection.name}`}
-						>
-							<ImageFrame source={image.source} className="w-full h-full">
-								<img src={image.image} class="w-full h-full object-cover" alt={collection.name} />
-							</ImageFrame>
-						</button>
-					</div>
-				{/each}
-			{:else}
-				<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20"></div>
-			{/if}
-
-			<!-- Content -->
-			<div class="hero-content relative z-10 text-center" class:text-white={heroImages?.length > 0}>
-				<div class="max-w-4xl">
-					<h1 class="text-6xl font-bold mb-4 drop-shadow-lg flex items-center justify-center gap-4">
-						{#if isFolderView}
-							<FolderMultiple class="w-16 h-16" />
-						{/if}
-						{collection.name}
-					</h1>
-
-					<!-- Quick Info Badges -->
-					<div class="flex flex-wrap justify-center gap-4 mb-6">
-						{#if collection.is_public}
-							<div class="badge badge-lg badge-success font-semibold px-4 py-3">
-								🌍 {$t('adventures.public')}
-							</div>
-						{:else}
-							<div class="badge badge-lg badge-warning font-semibold px-4 py-3">
-								🔒 {$t('adventures.private')}
-							</div>
-						{/if}
-						{#if collection.locations && collection.locations.length > 0}
-							<div class="badge badge-lg badge-primary font-semibold px-4 py-3">
-								📍 {collection.locations.length}
-								{collection.locations.length === 1
-									? $t('locations.location')
-									: $t('locations.locations')}
-							</div>
-						{/if}
-						{#if collection.start_date || collection.end_date}
-							<div class="badge badge-lg badge-accent font-semibold px-4 py-3">
-								<Calendar class="w-5 h-5 mr-1" />
-								{#if collection.start_date && collection.end_date}
-									{formatDate(collection.start_date)} - {formatDate(collection.end_date)}
-								{:else if collection.start_date}
-									From {formatDate(collection.start_date)}
-								{:else if collection.end_date}
-									Until {formatDate(collection.end_date)}
-								{/if}
-							</div>
-						{/if}
-						{#if collection.is_archived}
-							<div class="badge badge-lg badge-neutral font-semibold px-4 py-3">
-								📦 {$t('adventures.archived')}
-							</div>
-						{/if}
-					</div>
-
-					<!-- Image Navigation (only shown when multiple images exist) -->
-					{#if heroImages && heroImages.length > 1}
-						<div class="w-full max-w-md mx-auto">
-							<!-- Navigation arrows and current position -->
-							<div class="flex items-center justify-center gap-4 mb-3">
-								<button
-									onclick={() =>
-										goToSlide(currentSlide > 0 ? currentSlide - 1 : heroImages.length - 1)}
-									class="btn btn-circle btn-sm btn-primary"
-									aria-label={$t('adventures.previous_image')}
-								>
-									❮
-								</button>
-
-								<div class="text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
-									{currentSlide + 1} / {heroImages.length}
-								</div>
-
-								<button
-									onclick={() =>
-										goToSlide(currentSlide < heroImages.length - 1 ? currentSlide + 1 : 0)}
-									class="btn btn-circle btn-sm btn-primary"
-									aria-label={$t('adventures.next_image')}
-								>
-									❯
-								</button>
-							</div>
-
-							<!-- Dot navigation -->
-							{#if heroImages.length <= 12}
-								<div class="flex justify-center gap-2 flex-wrap">
-									{#each heroImages as _, i}
-										<button
-											onclick={() => goToSlide(i)}
-											class="btn btn-circle btn-xs transition-all duration-200"
-											class:btn-primary={i === currentSlide}
-											class:btn-outline={i !== currentSlide}
-											class:opacity-50={i !== currentSlide}
-										>
-											{i + 1}
-										</button>
-									{/each}
-								</div>
-							{/if}
-						</div>
-					{/if}
-				</div>
+	<div class="app-page pb-0">
+		<div class="flex items-center justify-between gap-4 mb-5">
+			<a href="/collections" class="text-link">← {$t('navbar.collections')}</a>
+			<div class="page-actions">
+				{#if canModifyCollection && !collection.is_archived}<button
+						class="btn btn-primary btn-sm"
+						onclick={() => {
+							adventureToEdit = null;
+							isLocationModalOpen = true;
+						}}>{$t('map.add_location')}</button
+					>{/if}
 			</div>
 		</div>
+		{#if heroImages?.length > 0}
+			<div class="detail-gallery">
+				{#each heroImages as image, i}
+					<div
+						class="absolute inset-0 transition-opacity duration-300"
+						class:opacity-100={i === currentSlide}
+						class:opacity-0={i !== currentSlide}
+						class:pointer-events-none={i !== currentSlide}
+						aria-hidden={i !== currentSlide}
+					>
+						<button
+							class="block w-full h-full cursor-zoom-in"
+							onclick={() => openImageModal(i)}
+							tabindex={i === currentSlide ? 0 : -1}
+							aria-label={`View image ${i + 1} of ${collection.name}`}
+							><ImageFrame source={image.source} className="w-full h-full"
+								><img
+									src={image.image}
+									alt={collection.name}
+									class="w-full h-full object-cover"
+								/></ImageFrame
+							></button
+						>
+					</div>
+				{/each}
+				{#if heroImages.length > 1}<div class="detail-gallery-controls">
+						<button
+							class="btn btn-sm btn-square"
+							onclick={() => goToSlide(currentSlide > 0 ? currentSlide - 1 : heroImages.length - 1)}
+							aria-label={$t('adventures.previous_image')}>←</button
+						><span class="text-xs tabular-nums px-1">{currentSlide + 1} / {heroImages.length}</span
+						><button
+							class="btn btn-sm btn-square"
+							onclick={() => goToSlide(currentSlide < heroImages.length - 1 ? currentSlide + 1 : 0)}
+							aria-label={$t('adventures.next_image')}>→</button
+						>
+					</div>{/if}
+			</div>
+		{/if}
+		<header class="detail-header">
+			<h1>{collection.name}</h1>
+			<div class="detail-meta">
+				<span class="badge"
+					>{collection.is_public ? $t('adventures.public') : $t('adventures.private')}</span
+				>
+				{#if collection.is_archived}<span class="badge">{$t('adventures.archived')}</span>{/if}
+				<span>{collection.locations?.length || 0} {$t('locations.locations').toLowerCase()}</span>
+				{#if collection.start_date}<span
+						>{formatDate(collection.start_date)}{collection.end_date
+							? ` – ${formatDate(collection.end_date)}`
+							: ''}</span
+					>{/if}
+			</div>
+		</header>
 	</div>
 
 	<!-- Main Content -->
-	<div class="container mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-7xl">
+	<div class="app-page pt-6">
 		<!-- View Switcher -->
-		<div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-			<div class="join">
+		<div class="flex flex-wrap items-center justify-between gap-3 mb-6 collection-view-switcher">
+			<div class="join overflow-x-auto max-w-full">
 				{#if availableViews.all}
 					<button
 						class="btn join-item"
 						class:btn-active={currentView === 'all'}
 						onclick={() => switchView('all')}
 					>
-						<FormatListBulleted class="w-5 h-5 sm:mr-2" aria-hidden="true" />
-						<span class="hidden sm:inline">{$t('collections.all_items')}</span>
+						<span class="inline">{$t('collections.all_items')}</span>
 					</button>
 				{/if}
 				{#if availableViews.itinerary}
@@ -995,8 +934,7 @@
 						class:btn-active={currentView === 'itinerary'}
 						onclick={() => switchView('itinerary')}
 					>
-						<Timeline class="w-5 h-5 sm:mr-2" aria-hidden="true" />
-						<span class="hidden sm:inline">{$t('adventures.itinerary')}</span>
+						<span class="inline">{$t('adventures.itinerary')}</span>
 					</button>
 				{/if}
 				{#if availableViews.map}
@@ -1005,8 +943,7 @@
 						class:btn-active={currentView === 'map'}
 						onclick={() => switchView('map')}
 					>
-						<Map class="w-5 h-5 sm:mr-2" aria-hidden="true" />
-						<span class="hidden sm:inline">{$t('navbar.map')}</span>
+						<span class="inline">{$t('navbar.map')}</span>
 					</button>
 				{/if}
 				{#if availableViews.calendar}
@@ -1015,8 +952,7 @@
 						class:btn-active={currentView === 'calendar'}
 						onclick={() => switchView('calendar')}
 					>
-						<Calendar class="w-5 h-5 sm:mr-2" aria-hidden="true" />
-						<span class="hidden sm:inline">{$t('navbar.calendar')}</span>
+						<span class="inline">{$t('navbar.calendar')}</span>
 					</button>
 				{/if}
 				{#if availableViews.recommendations}
@@ -1025,8 +961,7 @@
 						class:btn-active={currentView === 'recommendations'}
 						onclick={() => switchView('recommendations')}
 					>
-						<Lightbulb class="w-5 h-5 sm:mr-2" aria-hidden="true" />
-						<span class="hidden sm:inline">{$t('recomendations.recommendations')}</span>
+						<span class="inline">{$t('recomendations.recommendations')}</span>
 					</button>
 				{/if}
 				{#if availableViews.stats}
@@ -1035,8 +970,7 @@
 						class:btn-active={currentView === 'stats'}
 						onclick={() => switchView('stats')}
 					>
-						<ChartBar class="w-5 h-5 sm:mr-2" aria-hidden="true" />
-						<span class="hidden sm:inline">{$t('collections.statistics')}</span>
+						<span class="inline">{$t('collections.statistics')}</span>
 					</button>
 				{/if}
 			</div>
@@ -1067,9 +1001,9 @@
 			<div class="lg:col-span-3 space-y-8 sm:space-y-10">
 				<!-- Description Card (always visible) -->
 				{#if collection.description}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-4">📝 Description</h2>
+							<h2 class="card-title text-2xl mb-4">Description</h2>
 							<article class="prose max-w-none">
 								{@html DOMPurify.sanitize(renderMarkdown(collection.description))}
 							</article>
@@ -1103,10 +1037,10 @@
 
 				<!-- Map View -->
 				{#if currentView === 'map'}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h2 class="card-title text-2xl mb-4">🗺️ {$t('navbar.map')}</h2>
-							<div class="rounded-lg overflow-hidden shadow-lg">
+							<h2 class="card-title text-2xl mb-4">{$t('navbar.map')}</h2>
+							<div class="rounded-lg overflow-hidden shadow-sm">
 								<CollectionMap bind:collection user={data.user} canModify={canModifyCollection} />
 							</div>
 						</div>
@@ -1116,17 +1050,17 @@
 				<!-- Calendar View -->
 				{#if currentView === 'calendar'}
 					{#if collectionEvents.length === 0}
-						<div class="card bg-base-200 shadow-xl">
+						<div class="card bg-base-100">
 							<div class="card-body">
-								<h2 class="card-title text-2xl mb-4">📆 {$t('navbar.calendar')}</h2>
+								<h2 class="card-title text-2xl mb-4">{$t('navbar.calendar')}</h2>
 								<p class="text-base-content/70">{$t('collections.no_calendar_events')}</p>
 							</div>
 						</div>
 					{:else}
-						<div class="card bg-base-200 shadow-xl">
+						<div class="card bg-base-100">
 							<div class="card-body space-y-4">
 								<h2 class="card-title text-2xl flex items-center gap-2">
-									📆 {$t('navbar.calendar')}
+									{$t('navbar.calendar')}
 								</h2>
 								<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 									<div class="flex items-center gap-2 text-sm text-base-content/80">
@@ -1136,7 +1070,7 @@
 									</div>
 									<div class="flex items-center gap-2">
 										<span class="text-xs opacity-70">{$t('collections.times_shown_in')}</span>
-										<div class="join">
+										<div class="join overflow-x-auto max-w-full">
 											<button
 												class="btn btn-xs sm:btn-sm join-item"
 												class:btn-active={timezoneMode === 'event'}
@@ -1181,9 +1115,9 @@
 					{@const visitedCount = collection.locations.filter((l) => l.is_visited).length}
 					{@const totalCount = collection.locations.length}
 					{@const progressPercent = totalCount > 0 ? (visitedCount / totalCount) * 100 : 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h3 class="card-title text-lg mb-4">✅ {$t('worldtravel.progress')}</h3>
+							<h3 class="card-title text-lg mb-4">{$t('worldtravel.progress')}</h3>
 							<div class="space-y-4">
 								<div class="flex justify-between text-sm">
 									<span class="opacity-70">Visited</span>
@@ -1214,7 +1148,7 @@
 								</div>
 								{#if visitedCount === totalCount && totalCount > 0}
 									<div class="alert alert-success text-sm py-2">
-										<span>🎉 {$t('worldtravel.all_locations_visited')}</span>
+										<span> {$t('worldtravel.all_locations_visited')}</span>
 									</div>
 								{/if}
 							</div>
@@ -1223,9 +1157,9 @@
 				{/if}
 
 				<!-- Quick Info Card -->
-				<div class="card bg-base-200 shadow-xl">
+				<div class="card bg-base-100">
 					<div class="card-body">
-						<h3 class="card-title text-lg mb-4">ℹ️ {$t('adventures.basic_information')}</h3>
+						<h3 class="card-title text-lg mb-4">{$t('adventures.basic_information')}</h3>
 						<div class="space-y-3">
 							{#if collection.start_date || collection.end_date}
 								<div>
@@ -1293,10 +1227,10 @@
 				</div>
 
 				<!-- Cost Summary Card -->
-				<div class="card bg-base-200 shadow-xl">
+				<div class="card bg-base-100">
 					<div class="card-body space-y-4">
 						<div class="flex items-center justify-between">
-							<h3 class="card-title text-lg">💰 {$t('collections.trip_costs')}</h3>
+							<h3 class="card-title text-lg">{$t('collections.trip_costs')}</h3>
 							{#if currencyCount > 0}
 								<span class="badge badge-primary badge-sm">
 									{currencyCount}
@@ -1336,9 +1270,9 @@
 				</div>
 
 				<!-- Collection Stats Card -->
-				<div class="card bg-base-200 shadow-xl">
+				<div class="card bg-base-100">
 					<div class="card-body">
-						<h3 class="card-title text-lg mb-4">📊 {$t('collections.statistics')}</h3>
+						<h3 class="card-title text-lg mb-4">{$t('collections.statistics')}</h3>
 						<div class="stats stats-vertical bg-base-100 shadow-sm">
 							{#if collection.locations}
 								<div class="stat">
@@ -1376,9 +1310,9 @@
 
 				<!-- Additional Images (from locations) -->
 				{#if heroImages && heroImages.length > 0}
-					<div class="card bg-base-200 shadow-xl">
+					<div class="card bg-base-100">
 						<div class="card-body">
-							<h3 class="card-title text-lg mb-4">🖼️ {$t('adventures.images')}</h3>
+							<h3 class="card-title text-lg mb-4">{$t('adventures.images')}</h3>
 							<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
 								{#each heroImages.slice(0, 12) as image, index}
 									<ImageFrame source={image.source} className="relative group">
@@ -1424,7 +1358,7 @@
 			<div
 				tabindex="0"
 				role="button"
-				class="btn btn-primary btn-circle w-16 h-16 shadow-2xl hover:shadow-primary/25 transition-all duration-200"
+				class="btn btn-outline bg-base-100 btn-circle w-10 h-10 shadow-sm hover:shadow-primary/25 transition-all duration-200"
 			>
 				<Plus class="w-8 h-8" />
 			</div>

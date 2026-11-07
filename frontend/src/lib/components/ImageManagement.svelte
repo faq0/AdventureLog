@@ -595,7 +595,7 @@
 							{#each wikiImageResults as result, i (result.source + '-' + i)}
 								<button
 									type="button"
-									class="card bg-base-100 border border-base-300 hover:border-primary hover:shadow-lg transition-all duration-200 cursor-pointer group"
+									class="card bg-base-100 border border-base-300 hover:border-primary hover:shadow-sm transition-all duration-200 cursor-pointer group"
 									onclick={() => selectWikiImage(result.source)}
 									disabled={isLoading}
 								>
@@ -768,7 +768,7 @@
 								<div>
 									{#if image.is_primary}
 										<div
-											class="absolute top-2 left-2 bg-warning text-warning-content rounded-full p-1 shadow-lg"
+											class="absolute top-2 left-2 bg-warning text-warning-content rounded-full p-1 shadow-sm"
 										>
 											<Crown class="h-4 w-4" />
 										</div>

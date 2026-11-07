@@ -70,6 +70,14 @@
 	let is_category_modal_open: boolean = $state(false);
 	let adventureToEdit: Location | null = $state(null);
 	let isLocationModalOpen: boolean = $state(false);
+	$effect(() => {
+		if (page.url.searchParams.get('new') === '1') {
+			isLocationModalOpen = true;
+			const url = new URL(window.location.href);
+			url.searchParams.delete('new');
+			window.history.replaceState({}, '', url);
+		}
+	});
 	let locationModalInitialStep: 'visits' | null = $state(null);
 	let editingLocationId: string | null = $state(null);
 	let sidebarOpen = $state(false);
@@ -211,56 +219,41 @@
 	<CategoryModal on:close={() => (is_category_modal_open = false)} />
 {/if}
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+<div class="min-h-screen bg-base-200">
 	<div class="drawer lg:drawer-open">
 		<input id="my-drawer" type="checkbox" class="drawer-toggle" bind:checked={sidebarOpen} />
 
 		<div class="drawer-content">
 			<!-- Header Section -->
-			<div class="sticky top-0 z-30 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
-				<div class="container mx-auto px-6 py-4">
-					<div class="flex items-center justify-between">
+			<div class="app-page-toolbar relative z-30">
+				<div class="container mx-auto px-6 py-6">
+					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 						<div class="flex items-center gap-4">
 							<button class="btn btn-ghost btn-square lg:hidden" onclick={toggleSidebar}>
 								<Filter class="w-5 h-5" />
 							</button>
 							<div class="flex items-center gap-3">
-								<div class="p-2 bg-primary/10 rounded-xl">
-									<Compass class="w-8 h-8 text-primary" />
-								</div>
 								<div>
-									<h1 class="text-3xl font-bold bg-clip-text text-primary">
+									<h1 class="text-3xl font-semibold text-base-content">
 										{$t('locations.my_locations')}
 									</h1>
 									<p class="text-sm text-base-content/60">
 										{count}
-										{$t('locations.locations')} • {getVisitedCount()}
-										{$t('adventures.visited')} • {getPlannedCount()}
-										{$t('adventures.planned')}
+										{$t('locations.locations')}
 									</p>
 								</div>
 							</div>
 						</div>
 
 						<!-- Quick Stats -->
-						<div class="hidden md:flex items-center gap-3">
-							<div class="stats stats-horizontal bg-base-200/50 border border-base-300/50">
-								<div class="stat py-2 px-4">
-									<div class="stat-figure text-primary">
-										<Eye class="w-5 h-5" />
-									</div>
-									<div class="stat-title text-xs">{$t('adventures.visited')}</div>
-									<div class="stat-value text-lg">{getVisitedCount()}</div>
-								</div>
-								<div class="stat py-2 px-4">
-									<div class="stat-figure text-secondary">
-										<Calendar class="w-5 h-5" />
-									</div>
-									<div class="stat-title text-xs">{$t('adventures.planned')}</div>
-									<div class="stat-value text-lg">{getPlannedCount()}</div>
-								</div>
-							</div>
-						</div>
+						<button
+							class="btn btn-primary btn-sm gap-2 self-start shrink-0"
+							onclick={() => {
+								adventureToEdit = null;
+								locationModalInitialStep = null;
+								isLocationModalOpen = true;
+							}}><Plus class="w-4 h-4" />{$t('map.add_location')}</button
+						>
 					</div>
 				</div>
 			</div>
@@ -269,9 +262,6 @@
 			<div class="container mx-auto px-6 py-8">
 				{#if adventures.length === 0}
 					<div class="flex flex-col items-center justify-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-							<Compass class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 							{$t('adventures.no_locations_found')}
 						</h3>
@@ -314,7 +304,7 @@
 					<!-- Pagination -->
 					{#if totalPages > 1}
 						<div class="flex justify-center mt-12">
-							<div class="join bg-base-100 shadow-lg rounded-2xl p-2">
+							<div class="join bg-base-100 shadow-sm rounded-2xl p-2">
 								{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
 									<button
 										class="join-item btn btn-sm {currentPage === page
@@ -340,7 +330,7 @@
 				class:pointer-events-none={!sidebarOpen}
 				aria-hidden={!sidebarOpen}
 			></label>
-			<div class="w-80 min-h-full bg-base-100 shadow-2xl">
+			<div class="w-64 min-h-full bg-base-100 shadow-sm">
 				<div class="p-6">
 					<div class="flex items-center gap-3 mb-8">
 						<div class="p-2 bg-primary/10 rounded-lg">
@@ -511,13 +501,13 @@
 			<div
 				tabindex="0"
 				role="button"
-				class="btn btn-primary btn-circle w-16 h-16 shadow-2xl hover:shadow-primary/25 transition-all duration-200"
+				class="btn btn-primary btn-circle w-16 h-16 shadow-sm hover:shadow-primary/25 transition-all duration-200"
 			>
 				<Plus class="w-8 h-8" />
 			</div>
 			<ul
 				tabindex="-1"
-				class="dropdown-content z-[40] menu p-4 shadow-2xl bg-base-100 rounded-2xl w-64 border border-base-300"
+				class="dropdown-content z-[40] menu p-4 shadow-sm bg-base-100 rounded-2xl w-64 border border-base-300"
 			>
 				<div class="text-center mb-4">
 					<h3 class="font-bold text-lg">{$t('adventures.create_new')}</h3>

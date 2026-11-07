@@ -5,7 +5,6 @@
 	import { t } from 'svelte-i18n';
 	import { Marker } from 'svelte-maplibre';
 	import type { Recommendation } from '#lib/types.js';
-	import { osmTagToEmoji } from '#lib';
 
 	interface Props {
 		recommendations?: Recommendation[];
@@ -19,16 +18,6 @@
 	}>();
 
 	let hoveredId: string | null = $state(null);
-
-	function normalizeTag(tag: string): string {
-		return tag.trim().toLowerCase().replace(/-/g, '_').replace(/\s+/g, '_');
-	}
-
-	function recommendationEmoji(rec: Recommendation): string {
-		const raw = rec.primary_type || rec.types?.[0] || '';
-		if (!raw) return '📍';
-		return osmTagToEmoji(normalizeTag(raw));
-	}
 
 	function recMarkerClass(rec: Recommendation, isSelected: boolean, isHovered: boolean): string {
 		const base =
@@ -68,14 +57,14 @@
 					}}
 					onclick={stopPropagation(() => dispatch('select', { item: rec }))}
 				>
-					{recommendationEmoji(rec)}
+					<span aria-hidden="true">•</span>
 				</button>
 
 				<div
 					class="map-rec-popup absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-200"
 					class:opacity-100={isRaised}
 				>
-					<div class="card card-sm bg-base-100 shadow-xl border border-base-300 min-w-48 max-w-72">
+					<div class="card card-sm bg-base-100 shadow-sm border border-base-300 min-w-48 max-w-72">
 						<div class="card-body gap-2 p-3">
 							<h3 class="font-semibold text-sm leading-tight">{rec.name}</h3>
 							{#if rec.address}
@@ -83,7 +72,7 @@
 							{/if}
 							<div class="flex flex-wrap items-center gap-1.5">
 								{#if rec.rating != null}
-									<span class="badge badge-sm badge-warning">{rec.rating.toFixed(1)} ★</span>
+									<span class="badge badge-sm badge-warning">{rec.rating.toFixed(1)} </span>
 								{/if}
 								{#if rec.distance_km != null}
 									<span class="badge badge-ghost badge-sm">{formatDistance(rec.distance_km)}</span>

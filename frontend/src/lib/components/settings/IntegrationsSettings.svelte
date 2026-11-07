@@ -357,7 +357,7 @@
 
 <div class="space-y-8">
 	<!-- Your integrations -->
-	<section class="bg-base-100 rounded-2xl shadow-xl p-8">
+	<section class="bg-base-100 rounded-2xl shadow-sm p-8">
 		<div class="flex items-center gap-4 mb-6">
 			<div class="p-3 bg-primary/10 rounded-xl text-primary">
 				<LinkVariant class="w-6 h-6" />
@@ -828,7 +828,7 @@
 	</section>
 
 	<!-- Instance services -->
-	<section class="bg-base-100 rounded-2xl shadow-xl p-8">
+	<section class="bg-base-100 rounded-2xl shadow-sm p-8">
 		<div class="flex items-center gap-4 mb-6">
 			<div class="p-3 bg-accent/10 rounded-xl text-accent">
 				<ServerIcon class="w-6 h-6" />
@@ -944,7 +944,7 @@
 	</section>
 
 	<!-- Built-in services -->
-	<section class="bg-base-100 rounded-2xl shadow-xl p-8">
+	<section class="bg-base-100 rounded-2xl shadow-sm p-8">
 		<div class="flex items-center gap-4 mb-6">
 			<div class="p-3 bg-success/10 rounded-xl text-success">
 				<Sparkles class="w-6 h-6" />

@@ -14,13 +14,13 @@ import { DateTime } from 'luxon';
 import type { Collection, Lodging, Transportation } from '#lib/types.js';
 
 export const CALENDAR_EVENT_COLORS: Record<CalendarEventType, string> = {
-	visit: '#3b82f6',
-	location: '#3b82f6',
-	transportation: '#f97316',
-	lodging: '#8b5cf6',
-	collection: '#10b981',
-	note: '#6366f1',
-	checklist: '#14b8a6'
+	visit: '#486855',
+	location: '#486855',
+	transportation: '#826343',
+	lodging: '#6b5f7a',
+	collection: '#4a6d66',
+	note: '#596879',
+	checklist: '#756b51'
 };
 
 export const CALENDAR_EVENT_TYPES: CalendarEventType[] = [
@@ -35,13 +35,13 @@ export const CALENDAR_EVENT_TYPES: CalendarEventType[] = [
 export function getTransportIcon(type?: string | null): string {
 	const normalized = (type || '').toLowerCase();
 	if (normalized.includes('flight') || normalized.includes('plane') || normalized.includes('air'))
-		return '✈️';
-	if (normalized.includes('train') || normalized.includes('rail')) return '🚆';
-	if (normalized.includes('bus')) return '🚌';
-	if (normalized.includes('car') || normalized.includes('drive')) return '🚗';
+		return '';
+	if (normalized.includes('train') || normalized.includes('rail')) return '';
+	if (normalized.includes('bus')) return '';
+	if (normalized.includes('car') || normalized.includes('drive')) return '';
 	if (normalized.includes('boat') || normalized.includes('ferry') || normalized.includes('ship'))
-		return '🚢';
-	return '🛣️';
+		return '';
+	return '';
 }
 
 export function getLodgingCalendarEndDate(stay: Lodging): string | null {
@@ -149,21 +149,21 @@ export function apiEventToDisplayEvent(
 	});
 	if (!times) return null;
 
-	const title = `${event.icon} ${event.title}`.trim();
+	const title = event.title.trim();
 
 	return {
 		id: event.id,
 		start: times.start,
 		end: times.end,
 		title,
-		backgroundColor: event.color || CALENDAR_EVENT_COLORS[normalizedType],
-		borderColor: event.color || CALENDAR_EVENT_COLORS[normalizedType],
+		backgroundColor: CALENDAR_EVENT_COLORS[normalizedType] || event.color,
+		borderColor: CALENDAR_EVENT_COLORS[normalizedType] || event.color,
 		extendedProps: {
 			type: normalizedType,
 			adventureId: normalizedType === 'visit' ? event.resource_id : undefined,
 			adventureName: event.title,
 			category: event.category,
-			icon: event.icon,
+			icon: '',
 			timezone: event.timezone || userTimezone,
 			timezoneUsed: times.timezoneUsed,
 			timezoneLabel: times.timezoneLabel,
@@ -297,7 +297,7 @@ export function buildCollectionCalendarEvents(
 
 			events.push({
 				id: `location-${loc.id}-${visit.id}`,
-				title: `${loc.category?.icon || '📍'} ${loc.name}`,
+				title: loc.name,
 				start: times.start,
 				end: times.end,
 				backgroundColor: CALENDAR_EVENT_COLORS.visit,
@@ -307,7 +307,7 @@ export function buildCollectionCalendarEvents(
 					adventureId: loc.id,
 					adventureName: loc.name,
 					category: loc.category?.display_name || loc.category?.name || 'Adventure',
-					icon: loc.category?.icon || '🗺️',
+					icon: '',
 					timezone: visit.timezone || userTimezone,
 					timezoneUsed: times.timezoneUsed,
 					timezoneLabel: times.timezoneLabel,
@@ -396,7 +396,7 @@ export function buildCollectionCalendarEvents(
 
 		events.push({
 			id: `lodging-${stay.id}`,
-			title: `🏨 ${stay.name}`,
+			title: ` ${stay.name}`,
 			start: times.start,
 			end: times.end,
 			backgroundColor: CALENDAR_EVENT_COLORS.lodging,
@@ -405,7 +405,7 @@ export function buildCollectionCalendarEvents(
 				type: 'lodging',
 				adventureName: stay.name,
 				category: stay.type || 'Lodging',
-				icon: '🏨',
+				icon: '',
 				timezone: stay.timezone || userTimezone,
 				timezoneUsed: times.timezoneUsed,
 				timezoneLabel: times.timezoneLabel,

@@ -221,7 +221,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
-		class="modal-box w-11/12 max-w-6xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl"
+		class="modal-box w-11/12 max-w-6xl bg-base-200 border border-base-300 shadow-sm"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -236,7 +236,7 @@
 						<Adventures class="w-8 h-8 text-primary" />
 					</div>
 					<div>
-						<h1 class="text-3xl font-bold text-primary bg-clip-text">
+						<h1 class="text-3xl font-bold text-base-content bg-clip-text">
 							{$t('adventures.my_locations')}
 						</h1>
 						<p class="text-sm text-base-content/60">
@@ -356,9 +356,6 @@
 			<div class="px-2" use:setupLazyLoading>
 				{#if filteredPins.length === 0}
 					<div class="flex flex-col items-center justify-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-							<Adventures class="w-16 h-16 text-base-content/30" />
-						</div>
 						{#if searchQuery || filterOption !== 'all'}
 							<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 								{$t('adventures.no_locations_found')}

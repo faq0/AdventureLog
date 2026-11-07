@@ -271,7 +271,7 @@
 	{@attach capturePopover}
 	popover
 	id={popoverId}
-	class="dropdown bg-base-100 rounded-box shadow-lg"
+	class="dropdown bg-base-100 rounded-box shadow-sm"
 	style:position-anchor={anchorName}
 >
 	{#if callyReady}
@@ -312,7 +312,7 @@
 		{@attach scrollTimeSelection}
 		popover
 		id={timePopoverId}
-		class="dropdown time-popover bg-base-100 rounded-box shadow-lg"
+		class="dropdown time-popover bg-base-100 rounded-box shadow-sm"
 		style:position-anchor={timeAnchorName}
 	>
 		<p class="mb-2 text-center text-base font-semibold tabular-nums">{displayTime}</p>

@@ -80,7 +80,6 @@
 						checked={types_arr.includes(type.name)}
 					/>
 					<span class="text-sm leading-snug min-w-0">
-						{type.icon}
 						{type.display_name}
 						<span class="text-base-content/50">({type.num_locations})</span>
 					</span>

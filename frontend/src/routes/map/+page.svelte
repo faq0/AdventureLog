@@ -259,7 +259,7 @@
 				longitude: lon,
 				kind: 'location',
 				visitStatus: pin.is_visited ? 'visited' : 'planned',
-				categoryIcon: pin.category?.icon || '📍',
+				categoryIcon: '',
 				categoryName: pin.category?.display_name || pin.category?.name || ''
 			});
 		}
@@ -406,9 +406,9 @@
 	function getVisitStatusClass(status: VisitStatus): string {
 		switch (status) {
 			case 'visited':
-				return 'bg-gradient-to-br from-emerald-400 to-emerald-600';
+				return 'bg-base-200 from-emerald-400 to-emerald-600';
 			case 'planned':
-				return 'bg-gradient-to-br from-blue-400 to-blue-600';
+				return 'bg-base-200 from-blue-400 to-blue-600';
 			default:
 				return 'bg-gray-200';
 		}
@@ -421,18 +421,18 @@
 		const kind = clusteredPinKind(props);
 		const fill =
 			kind === 'region'
-				? 'bg-gradient-to-br from-teal-400 to-teal-600'
+				? 'bg-base-200 from-teal-400 to-teal-600'
 				: kind === 'city'
-					? 'bg-gradient-to-br from-amber-400 to-amber-600'
+					? 'bg-base-200 from-amber-400 to-amber-600'
 					: kind === 'image'
-						? 'bg-gradient-to-br from-rose-400 to-rose-600'
+						? 'bg-base-200 from-rose-400 to-rose-600'
 						: getVisitStatusClass((props?.visitStatus as VisitStatus) || 'planned');
 		if (isSelected) return 'ring-2 ring-primary ring-offset-2 ' + fill;
 		return fill;
 	}
 
 	function markerLabelResolver(props: { categoryIcon?: string } | null): string {
-		return props?.categoryIcon || '📍';
+		return '•';
 	}
 
 	function getVisitStatusLabel(status: unknown): string {
@@ -1140,7 +1140,7 @@
 							>
 								<div class="relative group z-[1000] group-hover:z-[10000] focus-within:z-[10000]">
 									<div
-										class="map-pin-hit grid place-items-center w-8 h-8 rounded-full border-2 border-white shadow-lg text-base text-white cursor-pointer transition-all duration-200 group-hover:scale-110 {markerClassResolver(
+										class="map-pin-hit grid place-items-center w-8 h-8 rounded-full border-2 border-white shadow-sm text-base text-white cursor-pointer transition-all duration-200 group-hover:scale-110 {markerClassResolver(
 											markerProps,
 											isSelected
 										)}"
@@ -1186,7 +1186,7 @@
 											class:opacity-100={isActive || isSelected}
 										>
 											<div
-												class="card card-sm bg-base-100 shadow-xl border border-base-300 min-w-48 max-w-72"
+												class="card card-sm bg-base-100 shadow-sm border border-base-300 min-w-48 max-w-72"
 											>
 												<div class="card-body gap-2 p-3">
 													<h3 class="font-semibold text-sm leading-tight truncate">
@@ -1283,7 +1283,7 @@
 				>
 					{#if recLoading}
 						<div
-							class="bg-base-100/95 backdrop-blur-md rounded-full px-5 py-2.5 shadow-lg border border-base-300/80 flex items-center gap-3"
+							class="bg-base-100/95 backdrop-blur-md rounded-full px-5 py-2.5 shadow-sm border border-base-300/80 flex items-center gap-3"
 						>
 							<span class="loading loading-spinner loading-sm text-primary"></span>
 							<span class="text-sm font-medium text-base-content">{$t('map.searching_nearby')}</span
@@ -1292,7 +1292,7 @@
 					{:else if showSearchThisArea}
 						<button
 							type="button"
-							class="btn btn-primary btn-sm shadow-lg pointer-events-auto gap-2"
+							class="btn btn-primary btn-sm shadow-sm pointer-events-auto gap-2"
 							onclick={searchThisArea}
 						>
 							<Compass class="w-4 h-4" />
@@ -1410,7 +1410,6 @@
 								imagePin={previewImagePin}
 								pinName={selectedPin?.name ?? ''}
 								pinVisitStatus={selectedPin?.is_visited ? 'visited' : 'planned'}
-								pinCategoryIcon={selectedPin?.category?.icon ?? ''}
 								loading={previewLoading}
 								error={previewError}
 								{isQuickAdding}
@@ -1488,9 +1487,9 @@
 												class="select select-sm w-full"
 												bind:value={recCategory}
 											>
-												<option value="tourism">🏛️ {$t('recomendations.tourism')}</option>
-												<option value="food">🍴 {$t('recomendations.food')}</option>
-												<option value="lodging">🏨 {$t('recomendations.lodging')}</option>
+												<option value="tourism"> {$t('recomendations.tourism')}</option>
+												<option value="food"> {$t('recomendations.food')}</option>
+												<option value="lodging"> {$t('recomendations.lodging')}</option>
 											</select>
 										</div>
 										<div class="flex flex-col">

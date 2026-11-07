@@ -97,37 +97,42 @@
 {#await localeLoaded}
 	<!-- You can add a loading indicator here if needed -->
 {:then}
+	<a href="#main-content" class="skip-link">Skip to content</a>
 	<Navbar {data} />
 	{#if data.user}
 		<CommandPalette />
 	{/if}
 	<Toast />
-	{@render children?.()}
+	<div id="main-content" tabindex="-1">{@render children?.()}</div>
 {/await}
 
 <UmamiAnalyticsEnv />
 
 <svelte:head>
 	<title>AdventureLog</title>
-	<meta
-		name="description"
-		content="Embark, explore, remember with AdventureLog. AdventureLog is the ultimate travel companion."
-	/>
+	<meta name="description" content="Your places, trips, and travel journal." />
 </svelte:head>
 
 <style>
-	/* Prevent unwanted horizontal scroll and ensure single scrollbar */
 	:global(html) {
-		overflow-x: hidden;
-		overflow-y: auto;
+		overflow-x: clip;
 	}
-
 	:global(body) {
-		overflow: hidden;
+		min-width: 320px;
 	}
-
-	/* Ensure slot content doesn't create nested scrollbars */
-	:global(body > div) {
-		overflow: visible;
+	.skip-link {
+		position: fixed;
+		top: 0.75rem;
+		left: 1rem;
+		z-index: 2000;
+		transform: translateY(-200%);
+		background: var(--color-base-100);
+		color: var(--color-base-content);
+		border: 1px solid var(--color-base-300);
+		border-radius: 0.5rem;
+		padding: 0.5rem 1rem;
+	}
+	.skip-link:focus {
+		transform: translateY(0);
 	}
 </style>

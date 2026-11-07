@@ -178,11 +178,11 @@
 	 between cards via a wrapper. -->
 <div class="space-y-6">
 	{#if collection.locations && collection.locations.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
 					<h2 class="card-title text-2xl">
-						📍 {$t('locations.locations') || 'Locations'} ({sortedLocations.length}/{collection
+						{$t('locations.locations') || 'Locations'} ({sortedLocations.length}/{collection
 							.locations.length})
 					</h2>
 
@@ -237,11 +237,11 @@
 
 	<!-- Transportations Section -->
 	{#if collection.transportations && collection.transportations.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
 					<h2 class="card-title text-2xl">
-						✈️ {$t('adventures.transportation') || 'Transportation'} ({filteredTransportations.length}/{collection
+						{$t('adventures.transportation') || 'Transportation'} ({filteredTransportations.length}/{collection
 							.transportations.length})
 					</h2>
 
@@ -285,11 +285,11 @@
 
 	<!-- Lodging Section -->
 	{#if collection.lodging && collection.lodging.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
 					<h2 class="card-title text-2xl">
-						🏨 {$t('adventures.lodging') || 'Lodging'} ({filteredLodging.length}/{collection.lodging
+						{$t('adventures.lodging') || 'Lodging'} ({filteredLodging.length}/{collection.lodging
 							.length})
 					</h2>
 
@@ -333,11 +333,11 @@
 
 	<!-- Notes Section -->
 	{#if collection.notes && collection.notes.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
 					<h2 class="card-title text-2xl">
-						📝 Notes ({filteredNotes.length}/{collection.notes.length})
+						Notes ({filteredNotes.length}/{collection.notes.length})
 					</h2>
 
 					{#if isFolderView}
@@ -380,7 +380,7 @@
 
 	<!-- Checklists Section -->
 	{#if collection.checklists && collection.checklists.length > 0}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
 				<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
 					<h2 class="card-title text-2xl">

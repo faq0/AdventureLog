@@ -70,12 +70,10 @@
 	<div>
 		{#if visitStatus === 'complete'}
 			<span class="badge badge-success badge-sm gap-1">
-				<Check class="w-3.5 h-3.5" />
-				<span class="hidden lg:inline">{$t('adventures.visited')}</span>
+				<span class="inline">{$t('adventures.visited')}</span>
 			</span>
 		{:else if visitStatus === 'partial'}
 			<span class="badge badge-warning badge-sm gap-1">
-				<ProgressIcon class="w-3.5 h-3.5" />
 				{progressPct}%
 			</span>
 		{:else}

@@ -26,7 +26,7 @@
 
 <SettingsCard>
 	<SettingsSectionHeader
-		icon="📧"
+		icon=""
 		iconBgClass="bg-secondary/10"
 		title={$t('settings.email_management')}
 		description={$t('settings.email_management_desc')}
@@ -41,12 +41,12 @@
 							<span class="font-medium truncate">{email.email}</span>
 							<div class="flex gap-2 shrink-0">
 								{#if email.verified}
-									<span class="badge badge-success">✅ {$t('settings.verified')}</span>
+									<span class="badge badge-success"> {$t('settings.verified')}</span>
 								{:else}
-									<span class="badge badge-error">❌ {$t('settings.not_verified')}</span>
+									<span class="badge badge-error"> {$t('settings.not_verified')}</span>
 								{/if}
 								{#if email.primary}
-									<span class="badge badge-primary">⭐ {$t('settings.primary')}</span>
+									<span class="badge badge-primary"> {$t('settings.primary')}</span>
 								{/if}
 							</div>
 						</div>
@@ -75,7 +75,7 @@
 		</div>
 	{:else}
 		<div class="text-center py-8 mb-8">
-			<div class="text-6xl mb-4">📧</div>
+			<div class="text-6xl mb-4"></div>
 			<p class="text-lg text-base-content/80">{$t('settings.no_email_set')}</p>
 		</div>
 	{/if}
@@ -95,6 +95,6 @@
 				required
 			/>
 		</div>
-		<button class="btn btn-primary">➕ {$t('settings.add_email')}</button>
+		<button class="btn btn-primary"> {$t('settings.add_email')}</button>
 	</form>
 </SettingsCard>

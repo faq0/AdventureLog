@@ -264,13 +264,13 @@
 	/>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+<div class="min-h-screen bg-base-200">
 	<div class="drawer lg:drawer-open">
 		<input id="regions-drawer" type="checkbox" class="drawer-toggle" bind:checked={sidebarOpen} />
 
 		<div class="drawer-content">
 			<!-- Header Section -->
-			<div class="sticky top-0 z-40 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
+			<div class="app-page-toolbar relative z-30">
 				<div class="container mx-auto px-6 py-4">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center gap-4">
@@ -286,7 +286,7 @@
 									{/if}
 								</div>
 								<div>
-									<h1 class="text-3xl font-bold bg-clip-text text-primary">
+									<h1 class="text-3xl font-semibold text-base-content">
 										{$t('worldtravel.regions_in')}
 										{country?.name}
 									</h1>
@@ -408,7 +408,7 @@
 			<!-- Map Section -->
 			{#if showMap && hasMappableRegions}
 				<div class="container mx-auto px-6 py-4">
-					<div class="card bg-base-100 shadow-xl overflow-hidden">
+					<div class="card bg-base-100 shadow-sm overflow-hidden">
 						<div
 							class="flex items-center justify-between px-4 py-3 bg-base-200/50 border-b border-base-300"
 						>
@@ -447,9 +447,6 @@
 			<div class="container mx-auto px-6 py-6">
 				{#if filteredRegions.length === 0}
 					<div class="flex flex-col items-center justify-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-							<MapMarker class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 							{$t('worldtravel.no_regions_found')}
 						</h3>
@@ -462,7 +459,7 @@
 						</button>
 					</div>
 				{:else}
-					<div class="card bg-base-100 shadow-xl overflow-hidden">
+					<div class="card bg-base-100 shadow-sm overflow-hidden">
 						<div
 							class="hidden sm:grid items-center gap-3 px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-base-content/50 bg-base-200/50 border-b border-base-300"
 							style="grid-template-columns: 2.5rem 1fr 7rem 5rem 8rem"
@@ -501,7 +498,7 @@
 		<!-- Sidebar -->
 		<div class="drawer-side z-50">
 			<label for="regions-drawer" class="drawer-overlay"></label>
-			<div class="w-80 min-h-full bg-base-100 shadow-2xl">
+			<div class="w-80 min-h-full bg-base-100 shadow-sm">
 				<div class="p-6">
 					<div class="flex items-center gap-3 mb-8">
 						<div class="p-2 bg-primary/10 rounded-lg">

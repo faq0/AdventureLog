@@ -126,7 +126,7 @@
 {/if}
 
 <div
-	class={`relative w-full ${heightClass} rounded-t-2xl bg-gradient-to-r from-success via-base to-primary overflow-hidden`}
+	class={`relative w-full ${heightClass} rounded-t-2xl bg-base-200    overflow-hidden`}
 	aria-label="route-preview"
 >
 	<svg viewBox="0 0 100 100" class="w-full h-full" role="img" aria-label="Route preview">

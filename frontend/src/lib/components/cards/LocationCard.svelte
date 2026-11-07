@@ -304,49 +304,22 @@
 {/if}
 
 <div
-	class="card w-full max-w-md bg-base-300 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
+	class="card content-card bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
 	aria-label="location-card"
 >
 	<!-- Image Section with Overlay -->
 	<div class="relative overflow-hidden rounded-t-2xl">
-		<CardCarousel images={adventure.images} icon={adventure.category?.icon} name={adventure.name} />
+		<CardCarousel images={adventure.images} icon="" name={adventure.name} />
 
-		<!-- Status Overlay (icon-only) -->
-		<div class="absolute top-2 left-4 flex items-center gap-3">
-			<div
-				class="tooltip tooltip-right"
-				data-tip={adventure.is_visited ? $t('adventures.visited') : $t('adventures.not_visited')}
+		<div class="absolute top-3 left-3 flex items-center gap-2">
+			<span class="badge badge-sm" class:badge-success={adventure.is_visited}
+				>{adventure.is_visited ? $t('adventures.visited') : $t('adventures.planned')}</span
 			>
-				{#if adventure.is_visited}
-					<div class="badge badge-sm badge-success p-1 rounded-full shadow-xs">
-						<Calendar class="w-4 h-4" />
-					</div>
-				{:else}
-					<div class="badge badge-sm badge-warning p-1 rounded-full shadow-xs">
-						<Clock class="w-4 h-4" />
-					</div>
-				{/if}
-			</div>
 		</div>
-
-		<!-- Privacy Indicator -->
-		<div class="absolute top-2 right-4">
-			<div
-				class="tooltip tooltip-left"
-				data-tip={adventure.is_public ? $t('adventures.public') : $t('adventures.private')}
+		<div class="absolute top-3 right-3">
+			<span class="badge badge-sm"
+				>{adventure.is_public ? $t('adventures.public') : $t('adventures.private')}</span
 			>
-				<div
-					class="badge badge-sm p-1 rounded-full text-base-content shadow-xs"
-					role="img"
-					aria-label={adventure.is_public ? $t('adventures.public') : $t('adventures.private')}
-				>
-					{#if adventure.is_public}
-						<Eye class="w-4 h-4" />
-					{:else}
-						<EyeOff class="w-4 h-4" />
-					{/if}
-				</div>
-			</div>
 		</div>
 
 		<!-- Category Badge -->
@@ -354,10 +327,9 @@
 			<div class="absolute bottom-4 left-4">
 				<a
 					href="/locations?types={adventure.category.name}"
-					class="badge badge-primary shadow-lg font-medium cursor-pointer hover:brightness-110 transition-all"
+					class="badge badge-primary shadow-sm font-medium cursor-pointer hover:brightness-110 transition-all"
 				>
 					{adventure.category.display_name}
-					{adventure.category.icon}
 				</a>
 			</div>
 		{/if}
@@ -441,7 +413,7 @@
 							</button>
 							<ul
 								tabindex="-1"
-								class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-lg border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
+								class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-sm border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
 							>
 								<li>
 									<button
@@ -665,7 +637,7 @@
 			{/if}
 
 			{#if adventurePriceLabel}
-				<span class="badge badge-ghost badge-sm whitespace-nowrap">💰 {adventurePriceLabel}</span>
+				<span class="badge badge-ghost badge-sm whitespace-nowrap"> {adventurePriceLabel}</span>
 			{/if}
 		</div>
 

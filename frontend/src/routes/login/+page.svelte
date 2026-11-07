@@ -46,28 +46,21 @@
 {/if}
 
 <div class="min-h-screen bg-base-200">
-	<!-- Background image if provided -->
-	{#if background.url}
-		<div
-			class="fixed inset-0 bg-cover bg-center bg-no-repeat opacity-90"
-			style="background-image: url('{background.url}')"
-		></div>
-	{/if}
-
-	<div class="main-container relative z-10 min-h-screen flex items-center justify-center p-4">
-		<div class="w-full max-w-5xl">
-			<div class="card bg-base-100 shadow-2xl">
+	<div
+		class="main-container relative z-10 min-h-[calc(100dvh-64px)] flex items-center justify-center px-4 py-12"
+	>
+		<div class="w-full max-w-md">
+			<div class="card bg-base-100 shadow-sm">
 				<div class="card-body p-0">
-					<div class="grid lg:grid-cols-2 min-h-[600px]">
+					<div class="grid">
 						<!-- Login Section -->
-						<div class="p-8 lg:p-12 flex flex-col justify-center">
+						<div class="p-7 sm:p-10 flex flex-col justify-center">
 							<!-- Header -->
-							<div class="text-center mb-8">
+							<div class="mb-8">
 								<div class="mb-4">
-									<h1 class="text-3xl font-bold text-primary mb-1">AdventureLog</h1>
-									<div class="w-12 h-1 bg-primary mx-auto rounded-sm"></div>
+									<h1 class="text-sm font-medium text-base-content/50 mb-4">AdventureLog</h1>
 								</div>
-								<h2 class="text-4xl font-bold text-base-content mb-2">{$t('auth.login')}</h2>
+								<h2 class="text-3xl font-semibold text-base-content mb-2">{$t('auth.login')}</h2>
 							</div>
 
 							<!-- Form / Social Only -->
@@ -200,25 +193,6 @@
 								{/if}
 							</div>
 						</div>
-
-						<!-- Quote/Info Section -->
-						<div
-							class="bg-primary/5 p-8 lg:p-12 flex items-center justify-center border-l border-base-300"
-						>
-							<div class="text-center max-w-md">
-								{#if quote && quote.quote}
-									<div class="space-y-4">
-										<div class="text-6xl text-primary/30 mb-2">"</div>
-										<blockquote class="text-lg font-medium text-base-content leading-relaxed">
-											{quote.quote}
-										</blockquote>
-										<footer class="text-base-content/70 font-medium">
-											— {quote.author}
-										</footer>
-									</div>
-								{/if}
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -236,10 +210,7 @@
 
 <svelte:head>
 	<title>Login | AdventureLog</title>
-	<meta
-		name="description"
-		content="Login to your AdventureLog account to start logging your adventures!"
-	/>
+	<meta name="description" content="Sign in to your travel journal." />
 </svelte:head>
 
 <style>

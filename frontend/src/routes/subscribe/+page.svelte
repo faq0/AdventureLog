@@ -222,8 +222,8 @@
 	});
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 to-base-300">
-	<div class="bg-base-100 shadow-lg border-b border-base-300">
+<div class="min-h-screen bg-base-200">
+	<div class="bg-base-100 shadow-sm border-b border-base-300">
 		<div class="container mx-auto px-6 py-8 max-w-5xl">
 			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div>
@@ -231,7 +231,7 @@
 						<CloudOutline class="w-3.5 h-3.5" />
 						{$t('billing.cloud_badge')}
 					</div>
-					<h1 class="text-4xl font-bold text-primary pb-1">{$t('billing.page_title')}</h1>
+					<h1 class="text-4xl font-bold text-base-content pb-1">{$t('billing.page_title')}</h1>
 					<p class="text-base-content/70 mt-2 max-w-2xl">{$t('billing.page_description')}</p>
 				</div>
 				{#if subscription && cloudMode}
@@ -251,7 +251,7 @@
 	<div class="container mx-auto px-6 py-8 max-w-5xl">
 		<div class="space-y-8">
 			{#if !cloudMode}
-				<div role="alert" class="alert alert-info shadow-lg">
+				<div role="alert" class="alert alert-info shadow-sm">
 					<HelpCircleOutline class="w-6 h-6 shrink-0" />
 					<div>
 						<p class="font-semibold">{$t('billing.self_hosted_title')}</p>
@@ -259,7 +259,7 @@
 					</div>
 				</div>
 			{:else if !hasAccess}
-				<div role="alert" class="alert alert-warning shadow-lg">
+				<div role="alert" class="alert alert-warning shadow-sm">
 					<AlertCircle class="w-6 h-6 shrink-0" />
 					<div>
 						{#if isPastDue}
@@ -275,7 +275,7 @@
 					</div>
 				</div>
 			{:else if hasScheduledSubscription}
-				<div role="alert" class="alert alert-success shadow-lg">
+				<div role="alert" class="alert alert-success shadow-sm">
 					<CheckCircle class="w-6 h-6 shrink-0" />
 					<div>
 						<p class="font-semibold">{$t('billing.alert_scheduled_title')}</p>
@@ -291,7 +291,7 @@
 					</div>
 				</div>
 			{:else if isActive && subscription?.cancel_at_period_end}
-				<div role="alert" class="alert alert-warning shadow-lg">
+				<div role="alert" class="alert alert-warning shadow-sm">
 					<AlertCircle class="w-6 h-6 shrink-0" />
 					<div>
 						<p class="font-semibold">{$t('billing.alert_cancel_scheduled_title')}</p>
@@ -310,7 +310,7 @@
 
 			<div class="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
 				<div class="space-y-8">
-					<div class="bg-base-100 rounded-2xl shadow-xl p-8">
+					<div class="bg-base-100 rounded-2xl shadow-sm p-8">
 						<div class="flex items-center gap-4 mb-6">
 							<div class="p-3 bg-primary/10 rounded-xl">
 								<CreditCardOutline class="w-7 h-7 text-primary" />
@@ -321,9 +321,7 @@
 							</div>
 						</div>
 
-						<div
-							class="p-6 bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-primary/10 mb-6"
-						>
+						<div class="p-6 bg-base-200 rounded-2xl border border-primary/10 mb-6">
 							<div class="flex flex-wrap items-end gap-3 mb-4">
 								<div>
 									<p class="text-sm text-base-content/60 uppercase tracking-wide font-medium">
@@ -416,7 +414,7 @@
 					</div>
 
 					{#if cloudMode}
-						<div class="bg-base-100 rounded-2xl shadow-xl p-8">
+						<div class="bg-base-100 rounded-2xl shadow-sm p-8">
 							<div class="flex items-center gap-4 mb-6">
 								<div class="p-3 bg-secondary/10 rounded-xl">
 									<DatabaseOutline class="w-7 h-7 text-secondary" />
@@ -495,7 +493,7 @@
 				</div>
 
 				<div class="space-y-8">
-					<div class="bg-base-100 rounded-2xl shadow-xl p-8">
+					<div class="bg-base-100 rounded-2xl shadow-sm p-8">
 						<div class="flex items-center gap-4 mb-6">
 							<div class="p-3 bg-accent/10 rounded-xl">
 								<CalendarClock class="w-7 h-7 text-accent" />
@@ -571,7 +569,7 @@
 						</div>
 					</div>
 
-					<div class="bg-base-100 rounded-2xl shadow-xl p-8">
+					<div class="bg-base-100 rounded-2xl shadow-sm p-8">
 						<h2 class="text-xl font-bold mb-4">{$t('billing.help_title')}</h2>
 						<div class="space-y-4">
 							<div class="collapse collapse-arrow bg-base-200">

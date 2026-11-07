@@ -39,9 +39,7 @@
 </script>
 
 {#if displayName || hasCoords}
-	<div
-		class={`rounded-lg p-3 bg-gradient-to-br from-primary/10 to-secondary/10 border border-base-300/60 shadow-xs ${className}`}
-	>
+	<div class={`rounded-lg p-3 bg-base-200   border border-base-300/60 shadow-xs ${className}`}>
 		<div class="flex flex-wrap items-center justify-between gap-2 mb-3">
 			<div class="flex items-center gap-2">
 				<span class="badge badge-primary badge-outline">Open in maps</span>
@@ -60,7 +58,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				🍎 Apple
+				Apple
 			</a>
 			<a
 				class="btn btn-sm btn-outline hover:btn-accent"
@@ -68,7 +66,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				🌍 Google
+				Google
 			</a>
 			<a
 				class="btn btn-sm btn-outline hover:btn-primary"
@@ -76,7 +74,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				🗺️ OSM
+				OSM
 			</a>
 		</div>
 	</div>

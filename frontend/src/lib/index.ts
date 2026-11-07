@@ -384,79 +384,79 @@ export function continentCodeToString(code: string) {
 }
 
 export let ADVENTURE_TYPES = [
-	{ type: 'general', label: 'General 🌍' },
-	{ type: 'outdoor', label: 'Outdoor 🏞️' },
-	{ type: 'lodging', label: 'Lodging 🛌' },
-	{ type: 'dining', label: 'Dining 🍽️' },
-	{ type: 'activity', label: 'Activity 🏄' },
-	{ type: 'attraction', label: 'Attraction 🎢' },
-	{ type: 'shopping', label: 'Shopping 🛍️' },
-	{ type: 'nightlife', label: 'Nightlife 🌃' },
-	{ type: 'event', label: 'Event 🎉' },
-	{ type: 'transportation', label: 'Transportation 🚗' },
-	{ type: 'culture', label: 'Culture 🎭' },
-	{ type: 'water_sports', label: 'Water Sports 🚤' },
-	{ type: 'hiking', label: 'Hiking 🥾' },
-	{ type: 'wildlife', label: 'Wildlife 🦒' },
-	{ type: 'historical_sites', label: 'Historical Sites 🏛️' },
-	{ type: 'music_concerts', label: 'Music & Concerts 🎶' },
-	{ type: 'fitness', label: 'Fitness 🏋️' },
-	{ type: 'art_museums', label: 'Art & Museums 🎨' },
-	{ type: 'festivals', label: 'Festivals 🎪' },
-	{ type: 'spiritual_journeys', label: 'Spiritual Journeys 🧘‍♀️' },
-	{ type: 'volunteer_work', label: 'Volunteer Work 🤝' },
+	{ type: 'general', label: 'General ' },
+	{ type: 'outdoor', label: 'Outdoor ' },
+	{ type: 'lodging', label: 'Lodging ' },
+	{ type: 'dining', label: 'Dining ' },
+	{ type: 'activity', label: 'Activity ' },
+	{ type: 'attraction', label: 'Attraction ' },
+	{ type: 'shopping', label: 'Shopping ' },
+	{ type: 'nightlife', label: 'Nightlife ' },
+	{ type: 'event', label: 'Event ' },
+	{ type: 'transportation', label: 'Transportation ' },
+	{ type: 'culture', label: 'Culture ' },
+	{ type: 'water_sports', label: 'Water Sports ' },
+	{ type: 'hiking', label: 'Hiking ' },
+	{ type: 'wildlife', label: 'Wildlife ' },
+	{ type: 'historical_sites', label: 'Historical Sites ' },
+	{ type: 'music_concerts', label: 'Music & Concerts ' },
+	{ type: 'fitness', label: 'Fitness ' },
+	{ type: 'art_museums', label: 'Art & Museums ' },
+	{ type: 'festivals', label: 'Festivals ' },
+	{ type: 'spiritual_journeys', label: 'Spiritual Journeys ' },
+	{ type: 'volunteer_work', label: 'Volunteer Work ' },
 	{ type: 'other', label: 'Other' }
 ];
 
 // adventure type to icon mapping
 export let ADVENTURE_TYPE_ICONS = {
-	general: '🌍',
-	outdoor: '🏞️',
-	lodging: '🛌',
-	dining: '🍽️',
-	activity: '🏄',
-	attraction: '🎢',
-	shopping: '🛍️',
-	nightlife: '🌃',
-	event: '🎉',
-	transportation: '🚗',
-	culture: '🎭',
-	water_sports: '🚤',
-	hiking: '🥾',
-	wildlife: '🦒',
-	historical_sites: '🏛️',
-	music_concerts: '🎶',
-	fitness: '🏋️',
-	art_museums: '🎨',
-	festivals: '🎪',
-	spiritual_journeys: '🧘‍♀️',
-	volunteer_work: '🤝',
-	other: '❓'
+	general: '',
+	outdoor: '',
+	lodging: '',
+	dining: '',
+	activity: '',
+	attraction: '',
+	shopping: '',
+	nightlife: '',
+	event: '',
+	transportation: '',
+	culture: '',
+	water_sports: '',
+	hiking: '',
+	wildlife: '',
+	historical_sites: '',
+	music_concerts: '',
+	fitness: '',
+	art_museums: '',
+	festivals: '',
+	spiritual_journeys: '',
+	volunteer_work: '',
+	other: ''
 };
 
 export let LODGING_TYPES_ICONS = {
-	hotel: '🏨',
-	hostel: '🛏️',
-	resort: '🏝️',
-	bnb: '🍳',
-	campground: '🏕️',
-	cabin: '🏚️',
-	apartment: '🏢',
-	house: '🏠',
-	villa: '🏡',
-	motel: '🏨',
-	other: '❓'
+	hotel: '',
+	hostel: '',
+	resort: '',
+	bnb: '',
+	campground: '',
+	cabin: '',
+	apartment: '',
+	house: '',
+	villa: '',
+	motel: '',
+	other: ''
 };
 
 export let TRANSPORTATION_TYPES_ICONS = {
-	car: '🚗',
-	plane: '✈️',
-	train: '🚆',
-	bus: '🚌',
-	boat: '⛵',
-	bike: '🚲',
-	walking: '🚶',
-	other: '❓'
+	car: '',
+	plane: '',
+	train: '',
+	bus: '',
+	boat: '',
+	bike: '',
+	walking: '',
+	other: ''
 };
 
 export function getRandomBackground() {
@@ -510,130 +510,123 @@ export function findFirstValue(obj: any): any {
 
 export let themes = [
 	{ name: 'light', label: 'Light' },
-	{ name: 'dark', label: 'Dark' },
-	{ name: 'dim', label: 'Dim' },
-	{ name: 'night', label: 'Night' },
-	{ name: 'forest', label: 'Forest' },
-	{ name: 'aqua', label: 'Aqua' },
-	{ name: 'aestheticLight', label: 'Aesthetic Light' },
-	{ name: 'aestheticDark', label: 'Aesthetic Dark' },
-	{ name: 'northernLights', label: 'Northern Lights' }
+	{ name: 'dark', label: 'Dark' }
 ];
 
 export function osmTagToEmoji(tag: string) {
 	switch (tag) {
 		case 'camp_site':
-			return '🏕️';
+			return '';
 		case 'slipway':
-			return '🛳️';
+			return '';
 		case 'playground':
-			return '🛝';
+			return '';
 		case 'viewpoint':
-			return '👀';
+			return '';
 		case 'cape':
-			return '🏞️';
+			return '';
 		case 'beach':
-			return '🏖️';
+			return '';
 		case 'park':
-			return '🌳';
+			return '';
 		case 'museum':
-			return '🏛️';
+			return '';
 		case 'theme_park':
-			return '🎢';
+			return '';
 		case 'nature_reserve':
-			return '🌲';
+			return '';
 		case 'memorial':
-			return '🕊️';
+			return '';
 		case 'monument':
-			return '🗿';
+			return '';
 		case 'wood':
-			return '🌲';
+			return '';
 		case 'zoo':
-			return '🦁';
+			return '';
 		case 'attraction':
-			return '🎡';
+			return '';
 		case 'ruins':
-			return '🏚️';
+			return '';
 		case 'bay':
-			return '🌊';
+			return '';
 		case 'hotel':
-			return '🏨';
+			return '';
 		case 'motel':
-			return '🏨';
+			return '';
 		case 'pub':
-			return '🍺';
+			return '';
 		case 'restaurant':
-			return '🍽️';
+			return '';
 		case 'cafe':
-			return '☕';
+			return '';
 		case 'bakery':
-			return '🥐';
+			return '';
 		case 'archaeological_site':
-			return '🏺';
+			return '';
 		case 'lighthouse':
-			return '🗼';
+			return '';
 		case 'tree':
-			return '🌳';
+			return '';
 		case 'cliff':
-			return '⛰️';
+			return '';
 		case 'water':
-			return '💧';
+			return '';
 		case 'fishing':
-			return '🎣';
+			return '';
 		case 'golf_course':
-			return '⛳';
+			return '';
 		case 'swimming_pool':
-			return '🏊';
+			return '';
 		case 'stadium':
-			return '🏟️';
+			return '';
 		case 'cave_entrance':
-			return '🕳️';
+			return '';
 		case 'anchor':
-			return '⚓';
+			return '';
 		case 'garden':
-			return '🌼';
+			return '';
 		case 'disc_golf_course':
-			return '🥏';
+			return '';
 		case 'natural':
-			return '🌿';
+			return '';
 		case 'ice_rink':
-			return '⛸️';
+			return '';
 		case 'horse_riding':
-			return '🐎';
+			return '';
 		case 'wreck':
-			return '🚢';
+			return '';
 		case 'water_park':
-			return '💦';
+			return '';
 		case 'picnic_site':
-			return '🧺';
+			return '';
 		case 'axe_throwing':
-			return '🪓';
+			return '';
 		case 'fort':
-			return '🏰';
+			return '';
 		case 'amusement_arcade':
-			return '🕹️';
+			return '';
 		case 'tepee':
-			return '🏕️';
+			return '';
 		case 'track':
-			return '🏃';
+			return '';
 		case 'trampoline_park':
-			return '🤸';
+			return '';
 		case 'dojo':
-			return '🥋';
+			return '';
 		case 'tree_stump':
-			return '🪵';
+			return '';
 		case 'peak':
-			return '🏔️';
+			return '';
 		case 'fitness_centre':
-			return '🏋️';
+			return '';
 		case 'artwork':
-			return '🎨';
+			return '';
 		case 'fast_food':
-			return '🍔';
+			return '';
 		case 'ice_cream':
-			return '🍦';
+			return '';
 		default:
-			return '📍';
+			return '';
 	}
 	// Default placeholder emoji for unknown tags
 }
@@ -1078,53 +1071,53 @@ export type BasemapOption = {
 
 // Enhanced basemap options array
 const allBasemapOptions: BasemapOption[] = [
-	{ value: 'default', label: 'Default', icon: '🗺️', category: 'Standard' },
+	{ value: 'default', label: 'Default', icon: '', category: 'Standard' },
 
 	// 3D Terrain Maps (New Category)
 	{
 		value: 'terrain-3d',
 		label: '3D Terrain',
-		icon: '🏔️',
+		icon: '',
 		category: '3D Terrain'
 	},
 
 	{
 		value: 'satellite-terrain-3d',
 		label: '3D Satellite Terrain',
-		icon: '🛰️',
+		icon: '',
 		category: '3D Terrain'
 	},
-	{ value: 'topo-terrain-3d', label: '3D Topographic', icon: '🗻', category: '3D Terrain' },
+	{ value: 'topo-terrain-3d', label: '3D Topographic', icon: '', category: '3D Terrain' },
 
 	// Standard & Vector
-	{ value: 'osm-standard', label: 'OpenStreetMap', icon: '🌍', category: 'Standard' },
+	{ value: 'osm-standard', label: 'OpenStreetMap', icon: '', category: 'Standard' },
 
 	// Satellite & Imagery
 	{
 		value: 'satellite',
 		label: 'Satellite',
-		icon: '🛰️',
+		icon: '',
 		category: 'Satellite'
 	},
 
 	{
 		value: 'satellite-labels',
 		label: 'Satellite + Labels',
-		icon: '🏷️',
+		icon: '',
 		category: 'Satellite'
 	},
 
 	{
 		value: 'usgs-imagery',
 		label: 'USGS Imagery',
-		icon: '📸',
+		icon: '',
 		category: 'Satellite'
 	},
 
 	{
 		value: 'usgs-imagery-topo',
 		label: 'USGS Imagery + Topo',
-		icon: '🗻',
+		icon: '',
 		category: 'Satellite'
 	},
 
@@ -1132,28 +1125,28 @@ const allBasemapOptions: BasemapOption[] = [
 	{
 		value: 'elevation',
 		label: 'Elevation',
-		icon: '🏔️',
+		icon: '',
 		category: 'Topographic'
 	},
 
 	{
 		value: 'usgs-topo',
 		label: 'USGS Topo',
-		icon: '📊',
+		icon: '',
 		category: 'Topographic'
 	},
 
 	{
 		value: 'esri-topo',
 		label: 'Esri Topo',
-		icon: '🗾',
+		icon: '',
 		category: 'Topographic'
 	},
 
 	{
 		value: 'opentopomap',
 		label: 'OpenTopoMap',
-		icon: '🧭',
+		icon: '',
 		category: 'Topographic'
 	},
 
@@ -1161,35 +1154,35 @@ const allBasemapOptions: BasemapOption[] = [
 	{
 		value: 'carto-light',
 		label: 'Light',
-		icon: '☀️',
+		icon: '',
 		category: 'Clean'
 	},
 
 	{
 		value: 'carto-dark',
 		label: 'Dark',
-		icon: '🌙',
+		icon: '',
 		category: 'Clean'
 	},
 
 	{
 		value: 'carto-positron',
 		label: 'Positron',
-		icon: '⚡',
+		icon: '',
 		category: 'Clean'
 	},
 
 	{
 		value: 'carto-positron-labels',
 		label: 'Positron + Labels',
-		icon: '🏷️',
+		icon: '',
 		category: 'Clean'
 	},
 
 	{
 		value: 'esri-gray',
 		label: 'Gray Canvas',
-		icon: '⬜',
+		icon: '',
 		category: 'Clean'
 	},
 
@@ -1197,53 +1190,53 @@ const allBasemapOptions: BasemapOption[] = [
 	{
 		value: 'carto-voyager',
 		label: 'Voyager',
-		icon: '🚢',
+		icon: '',
 		category: 'Specialized'
 	},
 
 	{
 		value: 'osm-humanitarian',
 		label: 'Humanitarian',
-		icon: '🏥',
+		icon: '',
 		category: 'Specialized'
 	},
 
 	{
 		value: 'openfreemap-bright',
 		label: 'OpenFreeMap Bright',
-		icon: '☀️',
+		icon: '',
 		category: 'Specialized'
 	},
 
 	{
 		value: 'openfreemap-dark',
 		label: 'OpenFreeMap Dark',
-		icon: '🌙',
+		icon: '',
 		category: 'Specialized'
 	},
 
 	{
 		value: 'openfreemap-liberty',
 		label: 'OpenFreeMap Liberty',
-		icon: '🗽',
+		icon: '',
 		category: 'Specialized'
 	},
 
 	{
 		value: 'esri-streets',
 		label: 'Streets',
-		icon: '🛣️',
+		icon: '',
 		category: 'Specialized'
 	},
 
 	{
 		value: 'esri-national-geographic',
 		label: 'National Geographic',
-		icon: '🌎',
+		icon: '',
 		category: 'Specialized'
 	},
-	{ value: 'esri-oceans', label: 'Oceans', icon: '🌊', category: 'Specialized' },
-	{ value: 'osm-france', label: 'France Style', icon: '🇫🇷', category: 'Specialized' }
+	{ value: 'esri-oceans', label: 'Oceans', icon: '', category: 'Specialized' },
+	{ value: 'osm-france', label: 'France Style', icon: '', category: 'Specialized' }
 ];
 
 export function getBasemapOptions(): BasemapOption[] {
@@ -1290,102 +1283,102 @@ export function getElevation(measurementSystem: 'metric' | 'imperial', elevation
 
 export let SPORT_TYPE_CHOICES = [
 	// General Sports
-	{ key: 'General', label: 'General', icon: '🏃', color: '#6B7280' },
+	{ key: 'General', label: 'General', icon: '', color: '#6B7280' },
 
 	// Foot Sports
-	{ key: 'Run', label: 'Run', icon: '🏃‍♂️', color: '#F59E0B' },
-	{ key: 'TrailRun', label: 'Trail Run', icon: '🏃‍♀️', color: '#F59E0B' },
-	{ key: 'Walk', label: 'Walk', icon: '🚶', color: '#8B5CF6' },
-	{ key: 'Hike', label: 'Hike', icon: '🥾', color: '#10B981' },
-	{ key: 'VirtualRun', label: 'Virtual Run', icon: '💻', color: '#F59E0B' },
+	{ key: 'Run', label: 'Run', icon: '', color: '#F59E0B' },
+	{ key: 'TrailRun', label: 'Trail Run', icon: '', color: '#F59E0B' },
+	{ key: 'Walk', label: 'Walk', icon: '', color: '#8B5CF6' },
+	{ key: 'Hike', label: 'Hike', icon: '', color: '#10B981' },
+	{ key: 'VirtualRun', label: 'Virtual Run', icon: '', color: '#F59E0B' },
 
 	// Cycle Sports
-	{ key: 'Ride', label: 'Ride', icon: '🚴', color: '#3B82F6' },
-	{ key: 'MountainBikeRide', label: 'Mountain Bike Ride', icon: '🚵', color: '#3B82F6' },
-	{ key: 'GravelRide', label: 'Gravel Ride', icon: '🚴‍♀️', color: '#3B82F6' },
-	{ key: 'EBikeRide', label: 'E-Bike Ride', icon: '🔋', color: '#3B82F6' },
-	{ key: 'EMountainBikeRide', label: 'E-Mountain Bike Ride', icon: '⚡', color: '#3B82F6' },
-	{ key: 'Velomobile', label: 'Velomobile', icon: '🚲', color: '#3B82F6' },
-	{ key: 'VirtualRide', label: 'Virtual Ride', icon: '🖥️', color: '#3B82F6' },
+	{ key: 'Ride', label: 'Ride', icon: '', color: '#3B82F6' },
+	{ key: 'MountainBikeRide', label: 'Mountain Bike Ride', icon: '', color: '#3B82F6' },
+	{ key: 'GravelRide', label: 'Gravel Ride', icon: '', color: '#3B82F6' },
+	{ key: 'EBikeRide', label: 'E-Bike Ride', icon: '', color: '#3B82F6' },
+	{ key: 'EMountainBikeRide', label: 'E-Mountain Bike Ride', icon: '', color: '#3B82F6' },
+	{ key: 'Velomobile', label: 'Velomobile', icon: '', color: '#3B82F6' },
+	{ key: 'VirtualRide', label: 'Virtual Ride', icon: '', color: '#3B82F6' },
 
 	// Water Sports
-	{ key: 'Canoeing', label: 'Canoe', icon: '🛶', color: '#06B6D4' },
-	{ key: 'Kayaking', label: 'Kayak', icon: '🛶', color: '#06B6D4' },
-	{ key: 'Kitesurfing', label: 'Kitesurf', icon: '🪁', color: '#06B6D4' },
-	{ key: 'Rowing', label: 'Rowing', icon: '🚣', color: '#06B6D4' },
-	{ key: 'StandUpPaddling', label: 'Stand Up Paddling', icon: '🏄', color: '#3B82F6' },
-	{ key: 'Surfing', label: 'Surf', icon: '🏄‍♂️', color: '#06B6D4' },
-	{ key: 'Swim', label: 'Swim', icon: '🏊', color: '#06B6D4' },
-	{ key: 'Windsurfing', label: 'Windsurf', icon: '🏄‍♀️', color: '#06B6D4' },
-	{ key: 'Sailing', label: 'Sail', icon: '⛵', color: '#06B6D4' },
+	{ key: 'Canoeing', label: 'Canoe', icon: '', color: '#06B6D4' },
+	{ key: 'Kayaking', label: 'Kayak', icon: '', color: '#06B6D4' },
+	{ key: 'Kitesurfing', label: 'Kitesurf', icon: '', color: '#06B6D4' },
+	{ key: 'Rowing', label: 'Rowing', icon: '', color: '#06B6D4' },
+	{ key: 'StandUpPaddling', label: 'Stand Up Paddling', icon: '', color: '#3B82F6' },
+	{ key: 'Surfing', label: 'Surf', icon: '', color: '#06B6D4' },
+	{ key: 'Swim', label: 'Swim', icon: '', color: '#06B6D4' },
+	{ key: 'Windsurfing', label: 'Windsurf', icon: '', color: '#06B6D4' },
+	{ key: 'Sailing', label: 'Sail', icon: '', color: '#06B6D4' },
 
 	// Winter Sports
 	{
 		key: 'IceSkate',
 		label: 'Ice Skate',
-		icon: '⛸️',
+		icon: '',
 		color: '#0EA5E9'
 	},
 
 	{
 		key: 'AlpineSki',
 		label: 'Alpine Ski',
-		icon: '⛷️',
+		icon: '',
 		color: '#0EA5E9'
 	},
 
 	{
 		key: 'BackcountrySki',
 		label: 'Backcountry Ski',
-		icon: '🎿',
+		icon: '',
 		color: '#0EA5E9'
 	},
 
 	{
 		key: 'NordicSki',
 		label: 'Nordic Ski',
-		icon: '🎿',
+		icon: '',
 		color: '#0EA5E9'
 	},
 
 	{
 		key: 'Snowboard',
 		label: 'Snowboard',
-		icon: '🏂',
+		icon: '',
 		color: '#0EA5E9'
 	},
 
 	{
 		key: 'Snowshoe',
 		label: 'Snowshoe',
-		icon: '🥾',
+		icon: '',
 		color: '#0EA5E9'
 	},
 
 	// Other Sports
-	{ key: 'Handcycle', label: 'Handcycle', icon: '🚴‍♂️', color: '#EF4444' },
-	{ key: 'InlineSkate', label: 'Inline Skate', icon: '🛼', color: '#8B5CF6' },
-	{ key: 'RockClimbing', label: 'Rock Climb', icon: '🧗', color: '#DC2626' },
-	{ key: 'RollerSki', label: 'Roller Ski', icon: '🎿', color: '#F97316' },
-	{ key: 'Golf', label: 'Golf', icon: '⛳', color: '#22C55E' },
-	{ key: 'Skateboard', label: 'Skateboard', icon: '🛹', color: '#F59E0B' },
-	{ key: 'Soccer', label: 'Football (Soccer)', icon: '⚽', color: '#10B981' },
-	{ key: 'Wheelchair', label: 'Wheelchair', icon: '♿', color: '#3B82F6' },
-	{ key: 'Badminton', label: 'Badminton', icon: '🏸', color: '#F59E0B' },
-	{ key: 'Tennis', label: 'Tennis', icon: '🎾', color: '#10B981' },
-	{ key: 'Pickleball', label: 'Pickleball', icon: '🏓', color: '#F59E0B' },
-	{ key: 'Crossfit', label: 'Crossfit', icon: '💪', color: '#DC2626' },
-	{ key: 'Elliptical', label: 'Elliptical', icon: '🏃‍♀️', color: '#8B5CF6' },
-	{ key: 'StairStepper', label: 'Stair Stepper', icon: '🪜', color: '#6B7280' },
-	{ key: 'WeightTraining', label: 'Weight Training', icon: '🏋️', color: '#DC2626' },
-	{ key: 'Yoga', label: 'Yoga', icon: '🧘', color: '#8B5CF6' },
-	{ key: 'Workout', label: 'Workout', icon: '💪', color: '#EF4444' },
-	{ key: 'HIIT', label: 'HIIT', icon: '⚡', color: '#F59E0B' },
-	{ key: 'Pilates', label: 'Pilates', icon: '🧘‍♀️', color: '#8B5CF6' },
-	{ key: 'TableTennis', label: 'Table Tennis', icon: '🏓', color: '#F59E0B' },
-	{ key: 'Squash', label: 'Squash', icon: '🎾', color: '#F59E0B' },
-	{ key: 'Racquetball', label: 'Racquetball', icon: '🎾', color: '#F59E0B' },
-	{ key: 'VirtualRow', label: 'Virtual Rowing', icon: '🚣‍♂️', color: '#06B6D4' }
+	{ key: 'Handcycle', label: 'Handcycle', icon: '', color: '#EF4444' },
+	{ key: 'InlineSkate', label: 'Inline Skate', icon: '', color: '#8B5CF6' },
+	{ key: 'RockClimbing', label: 'Rock Climb', icon: '', color: '#DC2626' },
+	{ key: 'RollerSki', label: 'Roller Ski', icon: '', color: '#F97316' },
+	{ key: 'Golf', label: 'Golf', icon: '', color: '#22C55E' },
+	{ key: 'Skateboard', label: 'Skateboard', icon: '', color: '#F59E0B' },
+	{ key: 'Soccer', label: 'Football (Soccer)', icon: '', color: '#10B981' },
+	{ key: 'Wheelchair', label: 'Wheelchair', icon: '', color: '#3B82F6' },
+	{ key: 'Badminton', label: 'Badminton', icon: '', color: '#F59E0B' },
+	{ key: 'Tennis', label: 'Tennis', icon: '', color: '#10B981' },
+	{ key: 'Pickleball', label: 'Pickleball', icon: '', color: '#F59E0B' },
+	{ key: 'Crossfit', label: 'Crossfit', icon: '', color: '#DC2626' },
+	{ key: 'Elliptical', label: 'Elliptical', icon: '', color: '#8B5CF6' },
+	{ key: 'StairStepper', label: 'Stair Stepper', icon: '', color: '#6B7280' },
+	{ key: 'WeightTraining', label: 'Weight Training', icon: '', color: '#DC2626' },
+	{ key: 'Yoga', label: 'Yoga', icon: '', color: '#8B5CF6' },
+	{ key: 'Workout', label: 'Workout', icon: '', color: '#EF4444' },
+	{ key: 'HIIT', label: 'HIIT', icon: '', color: '#F59E0B' },
+	{ key: 'Pilates', label: 'Pilates', icon: '', color: '#8B5CF6' },
+	{ key: 'TableTennis', label: 'Table Tennis', icon: '', color: '#F59E0B' },
+	{ key: 'Squash', label: 'Squash', icon: '', color: '#F59E0B' },
+	{ key: 'Racquetball', label: 'Racquetball', icon: '', color: '#F59E0B' },
+	{ key: 'VirtualRow', label: 'Virtual Rowing', icon: '', color: '#06B6D4' }
 ];
 
 export function getActivityColor(activityType: string) {
@@ -1395,7 +1388,7 @@ export function getActivityColor(activityType: string) {
 
 export function getActivityIcon(activityType: string) {
 	const activity = SPORT_TYPE_CHOICES.find((a) => a.key === activityType);
-	return activity ? activity.icon : '🏅'; // Default medal if not found
+	return activity ? activity.icon : ''; // Default medal if not found
 }
 
 /**

@@ -525,7 +525,6 @@
 												disabled={isSearching}
 												title="Clear search"
 											>
-												✕
 											</button>
 										{/if}
 										<button
@@ -535,7 +534,7 @@
 											disabled={isSearching}
 											title="Search"
 										>
-											{#if !isSearching}🔍{/if}
+											{#if !isSearching}{/if}
 										</button>
 									</div>
 								</div>
