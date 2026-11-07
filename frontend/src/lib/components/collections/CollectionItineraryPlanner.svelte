@@ -1896,7 +1896,7 @@
 							{$t('itinerary.trip_context') || 'Trip Context'}
 						</h3>
 						<!-- Info bubble explaining trip context -->
-						<div class="ml-2 tooltip tooltip-right" data-tip={$t('itinerary.trip_context_info')}>
+						<div class="ml-2" title={$t('itinerary.trip_context_info')}>
 							<button
 								type="button"
 								class="btn btn-ghost btn-sm btn-square p-1"

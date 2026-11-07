@@ -435,8 +435,8 @@
 
 						<div class="flex items-center gap-2 text-xs text-base-content/70">
 							<div
-								class="tooltip"
-								data-tip={getTimezoneTip(transportation.start_timezone) ?? undefined}
+								class="inline-block"
+								title={getTimezoneTip(transportation.start_timezone) ?? undefined}
 							>
 								<span class="badge badge-ghost badge-sm">
 									{getTimezoneLabel(transportation.start_timezone)}
@@ -479,8 +479,8 @@
 
 									<div class="flex items-center gap-2 text-xs text-base-content/70">
 										<div
-											class="tooltip"
-											data-tip={getTimezoneTip(
+											class="inline-block"
+											title={getTimezoneTip(
 												transportation.end_timezone ?? transportation.start_timezone
 											) ?? undefined}
 										>

@@ -440,8 +440,7 @@
 												{#if lodging.check_in && !isAllDay(lodging.check_in)}
 													<span
 														class="badge badge-ghost badge-xs"
-														class:tooltip={Boolean(getTimezoneTip(lodging.timezone))}
-														data-tip={getTimezoneTip(lodging.timezone) ?? undefined}
+														title={getTimezoneTip(lodging.timezone) ?? undefined}
 													>
 														{#if shouldShowStayBadge(lodging.timezone)}
 															{getTimezoneLabel(lodging.timezone)}
@@ -474,8 +473,7 @@
 												{#if lodging.check_out && !isAllDay(lodging.check_out)}
 													<span
 														class="badge badge-ghost badge-xs"
-														class:tooltip={Boolean(getTimezoneTip(lodging.timezone))}
-														data-tip={getTimezoneTip(lodging.timezone) ?? undefined}
+														title={getTimezoneTip(lodging.timezone) ?? undefined}
 													>
 														{#if shouldShowStayBadge(lodging.timezone)}
 															{getTimezoneLabel(lodging.timezone)}

@@ -377,7 +377,7 @@
 
 								{#if hasTimePortion(lodging.check_in) && shouldShowTzBadge(lodging.timezone)}
 									<div class="flex items-center gap-2 text-xs text-base-content/70">
-										<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+										<div class="inline-block" title={getTimezoneTip(lodging.timezone) ?? undefined}>
 											<span class="badge badge-ghost badge-sm">
 												{getTimezoneLabel(lodging.timezone)}
 											</span>
@@ -419,7 +419,10 @@
 
 									{#if hasTimePortion(lodging.check_out) && shouldShowTzBadge(lodging.timezone)}
 										<div class="flex items-center gap-2 text-xs text-base-content/70">
-											<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+											<div
+												class="inline-block"
+												title={getTimezoneTip(lodging.timezone) ?? undefined}
+											>
 												<span class="badge badge-ghost badge-sm">
 													{getTimezoneLabel(lodging.timezone)}
 												</span>
@@ -448,7 +451,7 @@
 
 						{#if hasTimePortion(lodging.check_in) && shouldShowTzBadge(lodging.timezone)}
 							<div class="flex items-center gap-2 text-xs text-base-content/70">
-								<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+								<div class="inline-block" title={getTimezoneTip(lodging.timezone) ?? undefined}>
 									<span class="badge badge-ghost badge-sm">
 										{getTimezoneLabel(lodging.timezone)}
 									</span>
@@ -474,7 +477,7 @@
 
 						{#if hasTimePortion(lodging.check_out) && shouldShowTzBadge(lodging.timezone)}
 							<div class="flex items-center gap-2 text-xs text-base-content/70">
-								<div class="tooltip" data-tip={getTimezoneTip(lodging.timezone) ?? undefined}>
+								<div class="inline-block" title={getTimezoneTip(lodging.timezone) ?? undefined}>
 									<span class="badge badge-ghost badge-sm">
 										{getTimezoneLabel(lodging.timezone)}
 									</span>

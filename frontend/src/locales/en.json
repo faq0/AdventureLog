@@ -548,7 +548,8 @@
 		"collection_duplicate_success": "Collection duplicated successfully! Redirecting...",
 		"collection_duplicate_error": "Failed to duplicate collection.",
 		"add_details": "Add details",
-		"sun_times": "Sun Times"
+		"sun_times": "Sun Times",
+		"local_time": "Your time"
 	},
 	"worldtravel": {
 		"country_list": "Country List",

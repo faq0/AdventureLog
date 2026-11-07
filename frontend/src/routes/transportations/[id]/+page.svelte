@@ -663,8 +663,7 @@
 													{#if transportation.date && !isAllDay(transportation.date)}
 														<span
 															class="badge badge-ghost badge-xs"
-															class:tooltip={Boolean(getTimezoneTip(transportation.start_timezone))}
-															data-tip={getTimezoneTip(transportation.start_timezone) ?? undefined}
+															title={getTimezoneTip(transportation.start_timezone) ?? undefined}
 														>
 															{#if shouldShowTzBadge(transportation.start_timezone)}
 																{getTimezoneLabel(transportation.start_timezone)}
@@ -697,12 +696,7 @@
 													{#if transportation.end_date && !isAllDay(transportation.end_date)}
 														<span
 															class="badge badge-ghost badge-xs"
-															class:tooltip={Boolean(
-																getTimezoneTip(
-																	transportation.end_timezone ?? transportation.start_timezone
-																)
-															)}
-															data-tip={getTimezoneTip(
+															title={getTimezoneTip(
 																transportation.end_timezone ?? transportation.start_timezone
 															) ?? undefined}
 														>
