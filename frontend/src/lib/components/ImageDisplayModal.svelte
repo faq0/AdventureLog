@@ -92,7 +92,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
-		class="modal-box w-11/12 max-w-6xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl"
+		class="modal-box w-11/12 max-w-6xl bg-base-200 border border-base-300 shadow-sm"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -120,7 +120,7 @@
 							</svg>
 						</div>
 						<div>
-							<h1 class="text-2xl font-bold text-primary">
+							<h1 class="text-2xl font-bold text-base-content">
 								{name}
 							</h1>
 							{#if images.length > 1}
@@ -197,7 +197,7 @@
 					<img
 						src={currentImage}
 						alt={name}
-						class="max-h-[75vh] max-w-full rounded-lg object-contain shadow-lg"
+						class="max-h-[75vh] max-w-full rounded-lg object-contain shadow-sm"
 						style="max-width: 100%; max-height: 75vh; object-fit: contain;"
 					/>
 					<ImageSourceBadge source={currentImageSource} />
@@ -232,7 +232,7 @@
 							<button
 								class="shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all {index ===
 								currentIndex
-									? 'border-primary shadow-lg'
+									? 'border-primary shadow-sm'
 									: 'border-base-300 hover:border-base-400'}"
 								onclick={() => goToSlide(index)}
 							>

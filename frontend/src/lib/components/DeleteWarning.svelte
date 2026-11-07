@@ -100,7 +100,7 @@
 	{#if isVisible}
 		{@const SvelteComponent = iconComponent}
 		<div
-			class="modal-box max-w-md relative overflow-hidden border-2 {colorScheme.border} bg-base-100/95 backdrop-blur-lg shadow-2xl"
+			class="modal-box max-w-md relative overflow-hidden border-2 {colorScheme.border} bg-base-100/95 backdrop-blur-lg shadow-sm"
 			transition:scale={{ duration: 150, easing: quintOut, start: 0.1 }}
 			role="dialog"
 			aria-labelledby="modal-title"
@@ -138,7 +138,7 @@
 			<!-- Action Buttons -->
 			<div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
 				<button
-					class="btn {colorScheme.button} flex-1 gap-2 shadow-lg hover:shadow-xl transition-all duration-200"
+					class="btn {colorScheme.button} flex-1 gap-2 shadow-sm hover:shadow-sm transition-all duration-200"
 					onclick={confirm}
 				>
 					<Check class="w-4 h-4" />
@@ -155,7 +155,7 @@
 
 			<!-- Subtle gradient overlay for depth -->
 			<div
-				class="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/5 pointer-events-none"
+				class="absolute inset-0 bg-base-200 from-white/5 via-transparent to-black/5 pointer-events-none"
 			></div>
 
 			<!-- Decorative elements -->

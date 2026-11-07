@@ -56,17 +56,14 @@
 <div class="grid items-center gap-3 px-4 py-3 hover:bg-base-200/60 transition-colors city-row">
 	<button
 		type="button"
-		class="btn btn-ghost btn-sm btn-square {isVisited
+		class="btn btn-ghost btn-xs {isVisited
 			? 'text-success'
 			: 'text-base-content/30 hover:text-success'}"
 		title={isVisited ? $t('adventures.remove') : $t('adventures.mark_visited')}
+		aria-pressed={isVisited}
 		onclick={isVisited ? removeVisit : markVisited}
 	>
-		{#if isVisited}
-			<CheckFilled class="w-5 h-5" />
-		{:else}
-			<Check class="w-5 h-5" />
-		{/if}
+		{isVisited ? $t('adventures.visited') : $t('adventures.mark_visited')}
 	</button>
 
 	<span class="font-semibold truncate min-w-0">{city.name}</span>
@@ -82,12 +79,12 @@
 
 <style>
 	.city-row {
-		grid-template-columns: 2.5rem 1fr 9rem 7rem;
+		grid-template-columns: 7rem 1fr 9rem 7rem;
 	}
 
 	@media (max-width: 768px) {
 		.city-row {
-			grid-template-columns: 2.5rem 1fr;
+			grid-template-columns: 7rem 1fr;
 		}
 	}
 </style>

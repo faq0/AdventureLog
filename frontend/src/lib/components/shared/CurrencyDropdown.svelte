@@ -148,7 +148,7 @@
 		tabindex="-1"
 		class="dropdown-content z-50 w-80 max-w-[calc(100vw-2rem)] [--join-ss:var(--radius-field)] [--join-se:var(--radius-field)] [--join-es:var(--radius-field)] [--join-ee:var(--radius-field)]"
 	>
-		<div class="card rounded-box border border-base-300 bg-base-100 shadow-xl">
+		<div class="card rounded-box border border-base-300 bg-base-100 shadow-sm">
 			<div class="space-y-3 p-3">
 				{#if defaultCurrency}
 					<p class="text-xs text-base-content/70">

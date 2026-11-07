@@ -37,7 +37,7 @@
 	"about": {
 		"about": "Névjegy",
 		"license": "GPL-3.0 licenc alatt terjesztve.",
-		"message": "Készült ❤️-el az Egyesült Államokban.",
+		"message": "Készült -el az Egyesült Államokban.",
 		"nominatim_1": "A helykeresést és geokódolást a következő biztosítja:",
 		"other_attributions": "További hivatkozások a README fájlban találhatók.",
 		"generic_attributions": "Jelentkezz be az AdventureLog-ba, hogy megtekinthesd az engedélyezett integrációk és szolgáltatások hivatkozásait.",

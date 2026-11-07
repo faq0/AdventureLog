@@ -18,13 +18,11 @@
 	aria-label={title}
 >
 	<div
-		class="card card-sm overflow-hidden border border-base-300 bg-base-100 shadow-xl ring-1 ring-base-content/5"
+		class="card card-sm overflow-hidden border border-base-300 bg-base-100 shadow-sm ring-1 ring-base-content/5"
 	>
 		<figure class="relative aspect-[4/3] bg-base-200">
 			<img src={props.imageUrl} alt="" class="h-full w-full object-cover" loading="lazy" />
-			<div
-				class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/45 to-transparent"
-			></div>
+			<div class="absolute inset-x-0 bottom-0 h-12 bg-base-200 from-black/45 to-transparent"></div>
 			<div class="absolute bottom-2 left-2">
 				<span class="badge badge-sm border-0 bg-black/55 text-white gap-1">
 					<CameraIcon class="h-3.5 w-3.5" aria-hidden="true" />

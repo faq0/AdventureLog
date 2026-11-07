@@ -54,19 +54,21 @@
 		></div>
 	{/if}
 
-	<div class="main-container relative z-10 min-h-screen flex items-center justify-center p-4">
+	<div
+		class="main-container relative z-10 min-h-[calc(100dvh-64px)] flex items-center justify-center px-4 py-12"
+	>
 		<div class="w-full max-w-5xl">
-			<div class="card bg-base-100 shadow-2xl">
+			<div class="card bg-base-100 shadow-sm">
 				<div class="card-body p-0">
 					<div class="grid lg:grid-cols-2 min-h-[600px]">
 						<div class="p-8 lg:p-12 flex flex-col justify-center">
 							{#if !is_disabled}
 								<div class="text-center mb-8">
 									<div class="mb-4">
-										<h1 class="text-3xl font-bold text-primary mb-1">AdventureLog</h1>
+										<h1 class="text-3xl font-bold text-base-content mb-1">AdventureLog</h1>
 										<div class="w-12 h-1 bg-primary mx-auto rounded-sm"></div>
 									</div>
-									<h2 class="text-4xl font-bold text-base-content mb-2">
+									<h2 class="text-3xl font-semibold text-base-content mb-2">
 										{inviteSignup?.valid ? $t('auth.invite_signup_title') : $t('auth.signup')}
 									</h2>
 									{#if inviteSignup?.valid}
@@ -258,7 +260,7 @@
 												></path>
 											</svg>
 										</div>
-										<h1 class="text-4xl font-bold text-base-content mb-4">
+										<h1 class="text-3xl font-semibold text-base-content mb-4">
 											{$t('auth.invite_invalid_title')}
 										</h1>
 										<p class="text-lg text-base-content/70 max-w-md mx-auto">
@@ -298,7 +300,7 @@
 												></path>
 											</svg>
 										</div>
-										<h1 class="text-4xl font-bold text-base-content mb-4">
+										<h1 class="text-3xl font-semibold text-base-content mb-4">
 											{$t('auth.registration_disabled')}
 										</h1>
 										<p class="text-lg text-base-content/70 max-w-md mx-auto">

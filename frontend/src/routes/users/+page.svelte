@@ -63,25 +63,22 @@
 	<meta name="description" content={$t('users.page_description')} />
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+<div class="min-h-screen bg-base-200">
 	<div class="drawer lg:drawer-open">
 		<input id="users-drawer" type="checkbox" class="drawer-toggle" bind:checked={sidebarOpen} />
 
 		<div class="drawer-content">
 			<!-- Header -->
-			<div class="sticky top-0 z-30 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
-				<div class="container mx-auto px-6 py-4">
+			<div class="app-page-toolbar relative z-30">
+				<div class="container mx-auto px-6 py-6">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center gap-4 min-w-0">
 							<button class="btn btn-ghost btn-square lg:hidden shrink-0" onclick={toggleSidebar}>
 								<FilterIcon class="w-5 h-5" />
 							</button>
 							<div class="flex items-center gap-3 min-w-0">
-								<div class="p-2 bg-primary/10 rounded-xl shrink-0">
-									<AccountGroup class="w-8 h-8 text-primary" />
-								</div>
 								<div class="min-w-0">
-									<h1 class="text-3xl font-bold text-primary bg-clip-text truncate">
+									<h1 class="text-3xl font-semibold text-base-content truncate">
 										{$t('navbar.users')}
 									</h1>
 									<p class="text-sm text-base-content/60">
@@ -170,9 +167,6 @@
 			<div class="container mx-auto px-6 py-8">
 				{#if users.length === 0}
 					<div class="flex flex-col items-center justify-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-							<AccountGroup class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 							{$t('users.no_users_found')}
 						</h3>
@@ -180,9 +174,6 @@
 					</div>
 				{:else if filteredUsers.length === 0}
 					<div class="flex flex-col items-center justify-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-							<SearchIcon class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 							{$t('users.no_match')}
 						</h3>
@@ -207,7 +198,7 @@
 		<!-- Sidebar -->
 		<div class="drawer-side z-40">
 			<label for="users-drawer" class="drawer-overlay"></label>
-			<div class="w-80 min-h-full bg-base-100 shadow-2xl">
+			<div class="w-64 min-h-full bg-base-100 shadow-sm">
 				<div class="p-6">
 					<div class="flex items-center gap-3 mb-8">
 						<div class="p-2 bg-primary/10 rounded-lg">

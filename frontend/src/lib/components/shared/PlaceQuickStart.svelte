@@ -531,7 +531,7 @@
 				payload.category = {
 					name: selectedQuickAddCategory.name,
 					display_name: selectedQuickAddCategory.display_name,
-					icon: selectedQuickAddCategory.icon || '🌍'
+					icon: selectedQuickAddCategory.icon || ''
 				};
 			}
 
@@ -774,7 +774,7 @@
 					{#if selectedMarker}
 						<Marker
 							lngLat={[selectedMarker.lng, selectedMarker.lat]}
-							class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-primary shadow-lg cursor-pointer"
+							class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-primary shadow-sm cursor-pointer"
 						>
 							<PinIcon class="w-5 h-5 text-primary-content" />
 						</Marker>

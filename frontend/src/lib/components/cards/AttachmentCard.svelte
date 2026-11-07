@@ -34,7 +34,7 @@
 	}
 </script>
 
-<div class="relative rounded-lg shadow-lg group hover:shadow-xl transition-shadow overflow-hidden">
+<div class="relative rounded-lg shadow-sm group hover:shadow-sm transition-shadow overflow-hidden">
 	<!-- Card Image or Placeholder -->
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
@@ -47,7 +47,7 @@
 	>
 		{#if !['.jpg', '.jpeg', '.png', '.gif', '.webp'].some((ext) => attachment.file.endsWith(ext))}
 			<div
-				class="flex justify-center items-center w-full h-full text-white text-lg font-bold bg-gradient-to-r from-secondary via-base to-primary text-center"
+				class="flex justify-center items-center w-full h-full text-white text-lg font-bold bg-base-200 text-center"
 			>
 				<p>
 					{attachment.name} <br />
@@ -72,7 +72,7 @@
 
 	<!-- Action Bar -->
 	<div
-		class="absolute bottom-0 w-full bg-gradient-to-t from-black/50 to-transparent p-3 rounded-b-lg flex justify-between items-center"
+		class="absolute bottom-0 w-full bg-base-200 from-black/50 to-transparent p-3 rounded-b-lg flex justify-between items-center"
 	>
 		<span class="text-white text-sm font-medium truncate">
 			{attachment.name}

@@ -188,7 +188,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div
-		class="modal-box w-11/12 max-w-4xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl"
+		class="modal-box w-11/12 max-w-4xl bg-base-200 border border-base-300 shadow-sm"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"

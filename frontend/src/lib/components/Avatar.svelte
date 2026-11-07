@@ -118,7 +118,7 @@
 
 	<ul
 		tabindex="-1"
-		class="dropdown-content z-[999] menu p-4 shadow-2xl bg-base-100 border border-base-300 rounded-2xl w-72 mt-2"
+		class="dropdown-content z-[999] menu p-4 shadow-sm bg-base-100 border border-base-300 rounded-2xl w-72 mt-2"
 	>
 		<!-- User Info Header -->
 		<div class="px-2 py-3 mb-3 border-b border-base-300">

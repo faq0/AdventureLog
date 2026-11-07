@@ -268,7 +268,7 @@
 {#if $commandPaletteOpen}
 	<dialog class="modal modal-open backdrop-blur-md" aria-modal="true">
 		<div
-			class="modal-box max-w-3xl p-0 overflow-hidden rounded-2xl border border-base-content/10 bg-base-100/88 backdrop-blur-xl shadow-2xl shadow-base-content/10"
+			class="modal-box max-w-3xl p-0 overflow-hidden rounded-2xl border border-base-content/10 bg-base-100/88 backdrop-blur-xl shadow-sm shadow-base-content/10"
 		>
 			<div class="border-b border-base-content/10 px-5 py-4 bg-base-100/40">
 				<div class="flex items-center gap-3">

@@ -83,7 +83,7 @@
 		<div
 			class="absolute {openUpward
 				? 'bottom-full mb-1'
-				: 'top-full mt-1'} right-0 z-[100] shadow-xl bg-base-100 rounded-xl border border-base-300 w-56 sm:w-60 p-0"
+				: 'top-full mt-1'} right-0 z-[100] shadow-sm bg-base-100 rounded-xl border border-base-300 w-56 sm:w-60 p-0"
 			role="menu"
 			tabindex="-1"
 		>
@@ -115,9 +115,6 @@
 											role="menuitemradio"
 											aria-checked={basemapType === option.value}
 										>
-											<span class="text-sm shrink-0 w-5 text-center" aria-hidden="true"
-												>{option.icon}</span
-											>
 											<span class="truncate flex-1 min-w-0">{option.label}</span>
 											{#if basemapType === option.value}
 												<CheckIcon class="w-3.5 h-3.5 shrink-0" />

@@ -187,7 +187,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
-		class="modal-box checklist-modal-box w-11/12 max-w-6xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl flex flex-col p-0 overflow-hidden rounded-none md:rounded-2xl"
+		class="modal-box checklist-modal-box w-11/12 max-w-6xl bg-base-200 border border-base-300 shadow-sm flex flex-col p-0 overflow-hidden rounded-none md:rounded-2xl"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -202,7 +202,7 @@
 						<CheckboxIcon class="w-8 h-8 text-primary" />
 					</div>
 					<div>
-						<h1 class="text-3xl font-bold text-primary bg-clip-text">
+						<h1 class="text-3xl font-bold text-base-content bg-clip-text">
 							{#if checklist?.id && !isReadOnly}
 								{$t('checklist.editing_checklist')}
 							{:else if !isReadOnly}
@@ -243,11 +243,9 @@
 				method="post"
 				onsubmit={preventDefault(bubble('submit'))}
 			>
-				<div
-					class="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-4 md:py-5 bg-gradient-to-br from-base-200/30 via-base-100 to-primary/5"
-				>
+				<div class="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-4 md:py-5 bg-base-200">
 					<div class="max-w-full mx-auto space-y-6">
-						<div class="card bg-base-100 border border-base-300 shadow-lg">
+						<div class="card bg-base-100 border border-base-300 shadow-sm">
 							<div class="card-body p-6">
 								<div class="flex items-center gap-3 mb-6">
 									<div class="p-2 bg-primary/10 rounded-lg">
@@ -321,7 +319,7 @@
 							</div>
 						</div>
 
-						<div class="card bg-base-100 border border-base-300 shadow-lg">
+						<div class="card bg-base-100 border border-base-300 shadow-sm">
 							<div class="card-body p-6">
 								<div class="flex items-center gap-3 mb-6">
 									<div class="p-2 bg-primary/10 rounded-lg">

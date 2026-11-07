@@ -197,25 +197,22 @@
 	<meta name="description" content="View your travel calendar and upcoming adventures." />
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+<div class="min-h-screen bg-base-200">
 	<div class="drawer lg:drawer-open">
 		<input id="calendar-drawer" type="checkbox" class="drawer-toggle" bind:checked={sidebarOpen} />
 
 		<div class="drawer-content">
 			<!-- Header -->
-			<div class="sticky top-0 z-40 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
-				<div class="container mx-auto px-6 py-4">
+			<div class="app-page-toolbar relative z-30">
+				<div class="container mx-auto px-6 py-6">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center gap-4 min-w-0">
 							<button class="btn btn-ghost btn-square lg:hidden shrink-0" onclick={toggleSidebar}>
 								<FilterIcon class="w-5 h-5" />
 							</button>
 							<div class="flex items-center gap-3 min-w-0">
-								<div class="p-2 bg-primary/10 rounded-xl shrink-0">
-									<CalendarIcon class="w-8 h-8 text-primary" />
-								</div>
 								<div class="min-w-0">
-									<h1 class="text-3xl font-bold text-primary bg-clip-text truncate">
+									<h1 class="text-3xl font-semibold text-base-content truncate">
 										{$t('navbar.calendar')}
 									</h1>
 									<p class="text-sm text-base-content/60">
@@ -333,7 +330,7 @@
 					</div>
 				{/if}
 
-				<div class="card bg-base-100 shadow-2xl border border-base-300/50">
+				<div class="card bg-base-100 shadow-sm border border-base-300/50">
 					<div class="card-body p-0 sm:p-2">
 						{#if viewMode === 'agenda'}
 							<div class="p-4 sm:p-6">
@@ -365,7 +362,7 @@
 		<!-- Sidebar -->
 		<div class="drawer-side z-50">
 			<label for="calendar-drawer" class="drawer-overlay"></label>
-			<div class="w-80 min-h-full bg-base-100 shadow-2xl">
+			<div class="w-64 min-h-full bg-base-100 shadow-sm">
 				<div class="p-6">
 					<CalendarSidebar
 						{stats}

@@ -288,25 +288,22 @@
 	<meta name="description" content="Explore the world and add countries to your visited list!" />
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+<div class="min-h-screen bg-base-200">
 	<div class="drawer lg:drawer-open">
 		<input id="travel-drawer" type="checkbox" class="drawer-toggle" bind:checked={sidebarOpen} />
 
 		<div class="drawer-content">
 			<!-- Header Section -->
-			<div class="sticky top-0 z-40 bg-base-100/80 backdrop-blur-lg border-b border-base-300">
-				<div class="container mx-auto px-6 py-4">
+			<div class="app-page-toolbar relative z-30">
+				<div class="container mx-auto px-6 py-6">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center gap-4">
 							<button class="btn btn-ghost btn-square lg:hidden" onclick={toggleSidebar}>
 								<Filter class="w-5 h-5" />
 							</button>
 							<div class="flex items-center gap-3">
-								<div class="p-2 bg-primary/10 rounded-xl">
-									<Globe class="w-8 h-8 text-primary" />
-								</div>
 								<div>
-									<h1 class="text-3xl font-bold text-primary bg-clip-text">
+									<h1 class="text-3xl font-semibold text-base-content">
 										{$t('worldtravel.country_list')}
 									</h1>
 									<p class="text-sm text-base-content/60">
@@ -408,14 +405,12 @@
 								class="tab tab-sm gap-2 {filterOption === 'complete' ? 'tab-active' : ''}"
 								onclick={() => (filterOption = 'complete')}
 							>
-								<Check class="w-3 h-3" />
 								{$t('worldtravel.complete')}
 							</button>
 							<button
 								class="tab tab-sm gap-2 {filterOption === 'partial' ? 'tab-active' : ''}"
 								onclick={() => (filterOption = 'partial')}
 							>
-								<Progress class="w-3 h-3" />
 								{$t('worldtravel.partial')}
 							</button>
 							<button
@@ -448,8 +443,8 @@
 
 			<!-- Map Section -->
 			{#if showMap}
-				<div class="container mx-auto px-6 py-4">
-					<div class="card bg-base-100 shadow-xl">
+				<div class="container mx-auto px-6 py-6">
+					<div class="card bg-base-100 shadow-sm">
 						<div class="card-body p-4">
 							<ClusterMap
 								geoJson={countriesGeoJson}
@@ -470,7 +465,7 @@
 			<!-- Globe Spin Section -->
 			{#if showGlobeSpin}
 				<div class="container mx-auto px-6 py-2">
-					<div class="card bg-base-100 shadow-xl overflow-hidden">
+					<div class="card bg-base-100 shadow-sm overflow-hidden">
 						<div class="card-body p-3 sm:p-4">
 							{#if isLoadingGlobeSpin}
 								<div class="flex items-center gap-3">
@@ -499,7 +494,7 @@
 
 									<div class="min-w-0 flex-1 space-y-1.5">
 										<div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-											<h2 class="text-lg sm:text-xl font-bold text-primary leading-tight">
+											<h2 class="text-lg sm:text-xl font-bold text-base-content leading-tight">
 												{globeSpinData.country.name}
 											</h2>
 											<div class="badge badge-primary badge-sm">
@@ -507,7 +502,6 @@
 											</div>
 											{#if globeSpinData.country.num_visits > 0}
 												<div class="badge badge-success badge-sm gap-1">
-													<Check class="w-3 h-3" />
 													{$t('adventures.visited')}
 												</div>
 											{/if}
@@ -599,9 +593,6 @@
 			<div class="container mx-auto px-6 py-6">
 				{#if filteredCountries.length === 0}
 					<div class="flex flex-col items-center justify-center py-16">
-						<div class="p-6 bg-base-200/50 rounded-2xl mb-6">
-							<Globe class="w-16 h-16 text-base-content/30" />
-						</div>
 						<h3 class="text-xl font-semibold text-base-content/70 mb-2">
 							{$t('worldtravel.no_countries_found')}
 						</h3>
@@ -632,7 +623,7 @@
 						{/if}
 					</div>
 				{:else}
-					<div class="card bg-base-100 shadow-xl overflow-hidden">
+					<div class="card bg-base-100 shadow-sm overflow-hidden">
 						<div
 							class="hidden md:grid items-center gap-4 px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-base-content/50 bg-base-200/50 border-b border-base-300"
 							style="grid-template-columns: 3rem 1fr 9rem 8rem 8rem 6rem 1.5rem"
@@ -658,7 +649,7 @@
 		<!-- Sidebar -->
 		<div class="drawer-side z-50">
 			<label for="travel-drawer" class="drawer-overlay"></label>
-			<div class="w-80 min-h-full bg-base-100 shadow-2xl">
+			<div class="w-64 min-h-full bg-base-100 shadow-sm">
 				<div class="p-6">
 					<div class="flex items-center gap-3 mb-8">
 						<div class="p-2 bg-primary/10 rounded-lg">

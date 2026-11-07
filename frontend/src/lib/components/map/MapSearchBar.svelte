@@ -205,7 +205,7 @@
 
 				{#if showDropdown}
 					<ul
-						class="absolute top-full left-0 right-0 z-50 mt-1 menu bg-base-100 rounded-box shadow-xl border border-base-300 max-h-64 overflow-y-auto p-1"
+						class="absolute top-full left-0 right-0 z-50 mt-1 menu bg-base-100 rounded-box shadow-sm border border-base-300 max-h-64 overflow-y-auto p-1"
 						role="listbox"
 					>
 						{#if mode === 'my'}
@@ -213,9 +213,6 @@
 								<li>
 									<button type="button" onclick={() => selectPin(pin)}>
 										<span class="truncate">{pin.name}</span>
-										{#if pin.category?.icon}
-											<span class="badge badge-ghost badge-xs">{pin.category.icon}</span>
-										{/if}
 									</button>
 								</li>
 							{/each}

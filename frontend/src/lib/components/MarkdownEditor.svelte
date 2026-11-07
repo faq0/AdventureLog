@@ -126,7 +126,7 @@
 					</button>
 					<ul
 						tabindex="-1"
-						class="dropdown-content menu bg-base-100 rounded-box z-30 w-44 p-1 shadow-lg border border-base-300"
+						class="dropdown-content menu bg-base-100 rounded-box z-30 w-44 p-1 shadow-sm border border-base-300"
 					>
 						<li>
 							<button type="button" onclick={() => fetchDescription('wikipedia')}>

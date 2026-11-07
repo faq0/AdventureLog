@@ -1018,9 +1018,7 @@
 	let isDateValid = $derived(validateDateRange(utcStartDate ?? '', utcEndDate ?? '').valid);
 </script>
 
-<div
-	class="h-full min-h-0 flex flex-col bg-gradient-to-br from-base-200/30 via-base-100 to-primary/5"
->
+<div class="h-full min-h-0 flex flex-col bg-base-200">
 	<div class="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-4 md:py-5">
 		<div class="max-w-full mx-auto space-y-6">
 			{#snippet visitEditor()}
@@ -1175,7 +1173,7 @@
 
 			<!-- Add Visit Section -->
 			{#if !visitIdEditing}
-				<div class="card bg-base-100 border border-base-300 shadow-lg">
+				<div class="card bg-base-100 border border-base-300 shadow-sm">
 					<div class="card-body p-6">
 						<div class="flex flex-wrap items-center justify-between gap-3 mb-6">
 							<div class="flex items-center gap-3">
@@ -1210,7 +1208,7 @@
 			{/if}
 
 			<!-- Visits List -->
-			<div class="card bg-base-100 border border-base-300 shadow-lg">
+			<div class="card bg-base-100 border border-base-300 shadow-sm">
 				<div class="card-body p-6">
 					<div class="flex items-center gap-3 mb-6">
 						<div class="p-2 bg-info/10 rounded-lg">
@@ -1436,9 +1434,7 @@
 															required
 														>
 															{#each SPORT_TYPE_CHOICES as sportType (sportType.key)}
-																<option value={sportType.key}
-																	>{sportType.icon} {sportType.label}</option
-																>
+																<option value={sportType.key}>{sportType.label}</option>
 															{/each}
 														</select>
 													</div>
@@ -1842,7 +1838,7 @@
 												</div>
 											{:else}
 												<div class="text-center py-4 text-base-content/60">
-													<div class="text-2xl mb-2">🏃‍♂️</div>
+													<div class="text-2xl mb-2"></div>
 													<p class="text-xs">{$t('adventures.no_strava_activities')}</p>
 												</div>
 											{/if}
@@ -1885,7 +1881,7 @@
 												</div>
 											{:else}
 												<div class="text-center py-4 text-base-content/60">
-													<div class="text-2xl mb-2">🏃‍♂️</div>
+													<div class="text-2xl mb-2"></div>
 													<p class="text-xs">{$t('adventures.no_endurain_activities')}</p>
 												</div>
 											{/if}

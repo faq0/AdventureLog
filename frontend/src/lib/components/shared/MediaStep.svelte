@@ -88,9 +88,7 @@
 	});
 </script>
 
-<div
-	class="h-full min-h-0 flex flex-col bg-gradient-to-br from-base-200/30 via-base-100 to-primary/5"
->
+<div class="h-full min-h-0 flex flex-col bg-base-200">
 	<div class="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-4 md:py-5">
 		<div class="max-w-full mx-auto space-y-6">
 			<!-- Image Management Section -->

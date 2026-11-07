@@ -399,7 +399,7 @@
 
 <div class="space-y-6">
 	<!-- Search & Filter Card -->
-	<div class="card bg-base-200 shadow-xl">
+	<div class="card bg-base-200 shadow-sm">
 		<div class="card-body">
 			<h2 class="card-title text-2xl mb-4">
 				<Compass class="w-8 h-8" />
@@ -447,9 +447,9 @@
 				<div class="flex flex-col">
 					<label class="field-label" for="search-category">{$t('adventures.category')}</label>
 					<select id="search-category" class="select w-full" bind:value={selectedCategory}>
-						<option value="tourism">🏛️ {$t('recomendations.tourism')}</option>
-						<option value="lodging">🏨 {$t('recomendations.lodging')}</option>
-						<option value="food">🍴 {$t('recomendations.food')}</option>
+						<option value="tourism"> {$t('recomendations.tourism')}</option>
+						<option value="lodging"> {$t('recomendations.lodging')}</option>
+						<option value="food"> {$t('recomendations.food')}</option>
 					</select>
 				</div>
 
@@ -494,10 +494,10 @@
 						>
 						<select id="minimum-rating" class="select select-sm" bind:value={minRating}>
 							<option value={0}>{$t('recomendations.any')}</option>
-							<option value={3}>3+ ⭐</option>
-							<option value={3.5}>3.5+ ⭐</option>
-							<option value={4}>4+ ⭐</option>
-							<option value={4.5}>4.5+ ⭐</option>
+							<option value={3}>3+ </option>
+							<option value={3.5}>3.5+ </option>
+							<option value={4}>4+ </option>
+							<option value={4.5}>4.5+ </option>
 						</select>
 					</div>
 
@@ -554,7 +554,6 @@
 						filteredResults.filter((r) => r.rating).reduce((sum, r) => sum + (r.rating || 0), 0) /
 						filteredResults.filter((r) => r.rating).length
 					).toFixed(1)}
-					⭐
 				</div>
 			</div>
 			<div class="stat">
@@ -564,10 +563,10 @@
 		</div>
 
 		<!-- Map View -->
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body">
-				<h3 class="card-title text-xl mb-4">📍 {$t('recomendations.map_view')}</h3>
-				<div class="rounded-lg overflow-hidden shadow-lg">
+				<h3 class="card-title text-xl mb-4">{$t('recomendations.map_view')}</h3>
+				<div class="rounded-lg overflow-hidden shadow-sm">
 					<FullMap
 						basemapType={normalizeBasemapType(user?.map_style)}
 						mapClass="w-full h-[500px]"
@@ -623,10 +622,10 @@
 											</div>
 										{/if}
 										{#if result.address}
-											<p class="text-xs text-black opacity-70 mb-2">📍 {result.address}</p>
+											<p class="text-xs text-black opacity-70 mb-2">{result.address}</p>
 										{/if}
 										<p class="text-xs text-black font-semibold">
-											🚶 {formatDistance(result.distance_km)}
+											{formatDistance(result.distance_km)}
 											{$t('recomendations.away')}
 										</p>
 									</div>
@@ -641,7 +640,7 @@
 		<!-- Results Grid -->
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 			{#each filteredResults as result}
-				<div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+				<div class="card bg-base-100 shadow-sm hover:shadow-sm transition-shadow">
 					<!-- Photo Carousel -->
 					{#if result.photos && result.photos.length > 0}
 						<figure class="relative h-48 cursor-pointer">
@@ -656,14 +655,12 @@
 								<div
 									class="badge badge-neutral badge-sm absolute bottom-2 right-2 bg-black/70 text-white border-none"
 								>
-									📷 {result.photos.length}
+									{result.photos.length}
 								</div>
 							{/if}
 						</figure>
 					{:else}
-						<div
-							class="bg-gradient-to-br from-primary/20 to-secondary/20 h-48 flex items-center justify-center"
-						>
+						<div class="bg-base-200 h-48 flex items-center justify-center">
 							<MapMarker class="w-16 h-16 opacity-30" />
 						</div>
 					{/if}
@@ -717,7 +714,7 @@
 						<!-- Distance & Price -->
 						<div class="flex gap-2 flex-wrap mt-2">
 							<div class="badge badge-outline badge-sm">
-								🚶 {formatDistance(result.distance_km)}
+								{formatDistance(result.distance_km)}
 							</div>
 							{#if result.price_level}
 								<div class="badge badge-outline badge-sm">
@@ -726,7 +723,7 @@
 								</div>
 							{/if}
 							<div class="badge badge-ghost badge-sm">
-								{result.source === 'google' ? '🔍 Google' : '🗺️ OSM'}
+								{result.source === 'google' ? ' Google' : ' OSM'}
 							</div>
 						</div>
 
@@ -801,7 +798,7 @@
 			{/each}
 		</div>
 	{:else if !loading && results.length === 0 && !error}
-		<div class="card bg-base-200 shadow-xl">
+		<div class="card bg-base-200 shadow-sm">
 			<div class="card-body text-center py-12">
 				<MagnifyIcon class="w-24 h-24 mx-auto opacity-30 mb-4" />
 				<h3 class="text-2xl font-bold mb-2">{$t('recomendations.no_results_yet')}</h3>

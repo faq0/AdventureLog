@@ -535,17 +535,17 @@
 	/>
 {/if}
 
-<div class="min-h-screen bg-gradient-to-br from-base-200 to-base-300">
-	<div class="bg-base-100 shadow-lg border-b border-base-300">
+<div class="min-h-screen bg-base-200">
+	<div class="bg-base-100 shadow-sm border-b border-base-300">
 		<div class="container mx-auto px-6 py-8 max-w-7xl">
-			<h1 class="text-4xl font-bold text-primary">{$t('settings.settings_page')}</h1>
-			<p class="mt-1 font-medium text-base-content/80">{$t('settings.account_settings')}</p>
+			<h1 class="text-3xl font-semibold text-base-content">{$t('settings.settings_page')}</h1>
+			<p class="mt-2 text-sm text-base-content/60">{$t('settings.account_settings')}</p>
 		</div>
 	</div>
 
 	<div class="container mx-auto px-6 py-8 max-w-7xl">
 		<div class="flex flex-col lg:flex-row gap-8">
-			<aside class="lg:w-64 shrink-0">
+			<aside class="lg:w-52 shrink-0">
 				<SettingsNav {activeSection} isStaff={user.is_staff} onSelect={setActiveSection} />
 			</aside>
 
@@ -640,8 +640,8 @@
 					{#if user.is_staff}
 						<AdminSettingsPanel publicUrl={public_url} onUpdateRegions={checkVisitedRegions} />
 					{:else}
-						<div class="bg-base-100 rounded-2xl shadow-xl p-12 text-center">
-							<div class="text-6xl mb-4">🔒</div>
+						<div class="bg-base-100 rounded-2xl shadow-sm p-12 text-center">
+							<div class="text-6xl mb-4"></div>
 							<h2 class="text-2xl font-bold mb-2">{$t('settings.access_restricted')}</h2>
 							<p class="text-base-content/70">{$t('settings.access_restricted_desc')}</p>
 						</div>

@@ -5,9 +5,11 @@
 </script>
 
 <section class="flex flex-col items-center justify-center min-h-screen px-4 py-8 bg-base-100">
-	<h1 class="text-4xl font-bold text-center mb-6 text-primary">{$t('settings.reset_password')}</h1>
+	<h1 class="text-3xl font-semibold text-center mb-6 text-base-content">
+		{$t('settings.reset_password')}
+	</h1>
 
-	<div class="w-full max-w-md p-6 shadow-lg rounded-lg bg-base-200">
+	<div class="w-full max-w-md p-6 shadow-sm rounded-lg bg-base-200">
 		<form method="post" action="?/forgotPassword" class="flex flex-col space-y-4" use:enhance>
 			<div class="flex flex-col">
 				<label class="field-label" for="email">{$t('auth.email')}</label>

@@ -73,7 +73,7 @@
 		>
 	</div>
 	{#if inputVal && filteredItems.length > 0}
-		<ul class="absolute z-10 w-full bg-base-100 shadow-lg max-h-60 overflow-auto">
+		<ul class="absolute z-10 w-full bg-base-100 shadow-sm max-h-60 overflow-auto">
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			{#each filteredItems as item}
 				<!-- svelte-ignore a11y_click_events_have_key_events -->

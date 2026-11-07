@@ -29,7 +29,7 @@
 
 <SettingsCard className="border border-error/30">
 	<SettingsSectionHeader
-		icon="⚠️"
+		icon=""
 		iconBgClass="bg-error/10"
 		title={$t('settings.danger_zone')}
 		description={$t('settings.danger_zone_desc')}

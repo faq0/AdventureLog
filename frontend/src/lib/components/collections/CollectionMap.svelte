@@ -223,25 +223,25 @@
 	}
 
 	function getLodgingIcon(type?: string | null): string {
-		if (!type) return '🏨';
+		if (!type) return '';
 		const key = String(type).toLowerCase().trim();
 		if (key in LODGING_TYPES_ICONS) {
 			return LODGING_TYPES_ICONS[key as keyof typeof LODGING_TYPES_ICONS];
 		}
-		return '🏨';
+		return '';
 	}
 
 	function getTransportIcon(type?: string | null): string {
-		if (!type) return '✈️';
+		if (!type) return '';
 		const normalized = String(type).toLowerCase();
 		if (normalized.includes('flight') || normalized.includes('plane') || normalized.includes('air'))
-			return '✈️';
-		if (normalized.includes('train')) return '🚆';
-		if (normalized.includes('bus')) return '🚌';
+			return '';
+		if (normalized.includes('train')) return '';
+		if (normalized.includes('bus')) return '';
 		if (normalized.includes('car') || normalized.includes('drive') || normalized.includes('taxi'))
-			return '🚗';
-		if (normalized.includes('boat') || normalized.includes('ferry')) return '⛴️';
-		return '🚐';
+			return '';
+		if (normalized.includes('boat') || normalized.includes('ferry')) return '';
+		return '';
 	}
 
 	function locationToFeature(loc: any): MarkerFeature | null {
@@ -255,7 +255,7 @@
 				id: String(loc.id),
 				name: loc.name,
 				visitStatus: loc.is_visited ? 'visited' : 'planned',
-				categoryIcon: loc.category?.icon || '📍',
+				categoryIcon: '',
 				categoryName: loc.category?.display_name || null,
 				type: 'location',
 				date: getLocationPrimaryDate(loc)
@@ -622,10 +622,10 @@
 	}
 
 	function getMarkerColorClass(props: MarkerProperties) {
-		if (props.type === 'lodging') return 'bg-gradient-to-br from-purple-400 to-purple-600';
-		if (props.type === 'transportation') return 'bg-gradient-to-br from-amber-400 to-amber-600';
-		if (props.visitStatus === 'visited') return 'bg-gradient-to-br from-emerald-400 to-emerald-600';
-		if (props.visitStatus === 'planned') return 'bg-gradient-to-br from-blue-400 to-blue-600';
+		if (props.type === 'lodging') return 'bg-base-200 from-purple-400 to-purple-600';
+		if (props.type === 'transportation') return 'bg-base-200 from-amber-400 to-amber-600';
+		if (props.visitStatus === 'visited') return 'bg-base-200 from-emerald-400 to-emerald-600';
+		if (props.visitStatus === 'planned') return 'bg-base-200 from-blue-400 to-blue-600';
 		return 'bg-gray-200';
 	}
 
@@ -869,7 +869,7 @@
 {/if}
 
 <!-- Filter Header -->
-<div class="card bg-base-100 shadow-lg mb-4">
+<div class="card bg-base-100 shadow-sm mb-4">
 	<div class="card-body p-3 gap-2">
 		<!-- Toggle filter visibility -->
 		<div class="flex items-center justify-between gap-3">
@@ -922,7 +922,6 @@
 							onclick={() => (searchQuery = '')}
 							aria-label={$t('adventures.clear_search')}
 						>
-							✕
 						</button>
 					{/if}
 				</label>
@@ -938,7 +937,7 @@
 								class={filterChipClass(showVisited, 'btn-success')}
 								onclick={() => (showVisited = !showVisited)}
 							>
-								✓ {$t('adventures.visited')}
+								{$t('adventures.visited')}
 								<span class="opacity-80">({filteredVisitedCount})</span>
 							</button>
 							<button
@@ -962,7 +961,7 @@
 								class={filterChipClass(showLocations, 'btn-primary')}
 								onclick={() => (showLocations = !showLocations)}
 							>
-								📍 {$t('locations.locations')}
+								{$t('locations.locations')}
 								<span class="opacity-80">({locationFeatures.length})</span>
 							</button>
 							{#if lodgingFeatures.length}
@@ -971,7 +970,7 @@
 									class={filterChipClass(showLodging, 'btn-secondary')}
 									onclick={() => (showLodging = !showLodging)}
 								>
-									🏨 {$t('adventures.lodging')}
+									{$t('adventures.lodging')}
 									<span class="opacity-80">({lodgingFeatures.length})</span>
 								</button>
 							{/if}
@@ -981,7 +980,7 @@
 									class={filterChipClass(showTransportation, 'btn-accent')}
 									onclick={() => (showTransportation = !showTransportation)}
 								>
-									✈️ {$t('adventures.transportation')}
+									{$t('adventures.transportation')}
 									<span class="opacity-80">({transportationFeatures.length / 2})</span>
 								</button>
 							{/if}
@@ -1056,7 +1055,7 @@
 								class={filterChipClass(showLines, 'btn-neutral')}
 								onclick={() => (showLines = !showLines)}
 							>
-								🗺️ {$t('adventures.gpx_routes')}
+								{$t('adventures.gpx_routes')}
 							</button>
 							{#if trailCount > 0}
 								<button
@@ -1067,7 +1066,7 @@
 									)}
 									onclick={() => (showTrails = !showTrails)}
 								>
-									🥾 {$t('adventures.trails')}
+									{$t('adventures.trails')}
 									<span class="opacity-80">({trailCount})</span>
 								</button>
 							{/if}
@@ -1080,7 +1079,7 @@
 									)}
 									onclick={() => (showImagePins = !showImagePins)}
 								>
-									📷 {$t('map.photos')}
+									{$t('map.photos')}
 									<span class="opacity-80">({imagePinCount})</span>
 								</button>
 							{/if}
@@ -1110,7 +1109,7 @@
 				<Marker lngLat={markerLngLat} class={isActive ? 'map-pin-active' : 'map-pin'}>
 					<div class="relative group z-[1000] group-hover:z-[10000] focus-within:z-[10000]">
 						<div
-							class="map-pin-hit grid place-items-center w-8 h-8 rounded-full border-2 border-white shadow-lg text-base group-hover:scale-110 transition-all duration-200 {getMarkerColorClass(
+							class="map-pin-hit grid place-items-center w-8 h-8 rounded-full border-2 border-white shadow-sm text-base group-hover:scale-110 transition-all duration-200 {getMarkerColorClass(
 								markerProps
 							)}"
 							class:scale-110={isActive}
@@ -1134,7 +1133,7 @@
 								}
 							}}
 						>
-							{markerProps.categoryIcon || '📍'}
+							<span aria-hidden="true">•</span>
 						</div>
 
 						<!-- Marker Popup -->
@@ -1144,7 +1143,7 @@
 							class:pointer-events-auto={isActive}
 						>
 							<div
-								class="card card-sm bg-base-100 shadow-xl border border-base-300 min-w-56 max-w-80"
+								class="card card-sm bg-base-100 shadow-sm border border-base-300 min-w-56 max-w-80"
 							>
 								<div class="card-body gap-3">
 									<div class="space-y-2">
@@ -1239,7 +1238,7 @@
 			{#if canModify && newMarker}
 				<Marker lngLat={[newMarker.lngLat.lng, newMarker.lngLat.lat]} class="map-pin">
 					<div
-						class="map-pin-hit grid place-items-center w-10 h-10 rounded-full bg-primary text-primary-content border-2 border-base-100 shadow-lg"
+						class="map-pin-hit grid place-items-center w-10 h-10 rounded-full bg-primary text-primary-content border-2 border-base-100 shadow-sm"
 					>
 						<Plus class="w-5 h-5" />
 					</div>

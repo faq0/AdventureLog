@@ -269,7 +269,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
-		class="modal-box w-11/12 max-w-6xl bg-gradient-to-br from-base-100 via-base-100 to-base-200 border border-base-300 shadow-2xl max-h-[85vh] flex flex-col"
+		class="modal-box w-11/12 max-w-6xl bg-base-200 border border-base-300 shadow-sm max-h-[85vh] flex flex-col"
 		role="dialog"
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -284,7 +284,7 @@
 						<CollectionIcon class="w-8 h-8 text-primary" />
 					</div>
 					<div>
-						<h1 class="text-3xl font-bold text-primary bg-clip-text">
+						<h1 class="text-3xl font-bold text-base-content bg-clip-text">
 							{collectionToEdit
 								? $t('adventures.edit_collection')
 								: $t('collection.new_collection')}
@@ -308,7 +308,7 @@
 		<div class="p-6 overflow-auto max-h-[70vh]">
 			<form method="post" onsubmit={handleSubmit} class="space-y-6">
 				<!-- Basic Information Section -->
-				<div class="card bg-base-100 border border-base-300 shadow-lg">
+				<div class="card bg-base-100 border border-base-300 shadow-sm">
 					<div class="card-body p-6">
 						<div class="flex items-center gap-3 mb-6">
 							<div class="p-2 bg-primary/10 rounded-lg">
@@ -415,7 +415,7 @@
 
 				<!-- Date Warning Alert -->
 				{#if !collection.start_date && !collection.end_date}
-					<div role="alert" class="alert alert-info shadow-lg">
+					<div role="alert" class="alert alert-info shadow-sm">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -432,7 +432,7 @@
 						<span>{$t('adventures.collection_no_start_end_date')}</span>
 					</div>
 				{:else if collection.id && collectionToEdit?.start_date && collectionToEdit?.end_date && (collection.start_date !== collectionToEdit.start_date || collection.end_date !== collectionToEdit.end_date)}
-					<div role="alert" class="alert alert-warning shadow-lg">
+					<div role="alert" class="alert alert-warning shadow-sm">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="stroke-current shrink-0 h-6 w-6"
@@ -457,7 +457,7 @@
 
 				<!-- Cover Image Selection -->
 				{#if collection.id}
-					<div class="card bg-base-100 border border-base-300 shadow-lg">
+					<div class="card bg-base-100 border border-base-300 shadow-sm">
 						<div class="card-body p-6 space-y-4">
 							<div class="flex items-center gap-3">
 								<div class="p-2 bg-primary/10 rounded-lg">
@@ -499,7 +499,7 @@
 												class="w-full h-32 object-cover"
 											/>
 											<div
-												class="absolute inset-0 bg-gradient-to-t from-base-300/60 to-transparent opacity-0 group-hover:opacity-100 transition"
+												class="absolute inset-0 bg-base-200 to-transparent opacity-0 group-hover:opacity-100 transition"
 											></div>
 											{#if coverImageId === image.id}
 												<div class="absolute top-2 left-2 badge badge-primary gap-2 shadow-sm">
@@ -537,7 +537,7 @@
 
 				<!-- Share Link Section (only if public and has ID) -->
 				{#if collection.is_public && collection.id}
-					<div class="card bg-base-100 border border-base-300 shadow-lg">
+					<div class="card bg-base-100 border border-base-300 shadow-sm">
 						<div class="card-body p-6">
 							<h3 class="font-semibold text-lg mb-3">{$t('adventures.share_collection')}</h3>
 							<div class="flex items-center gap-3">

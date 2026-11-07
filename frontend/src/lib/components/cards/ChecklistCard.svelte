@@ -230,7 +230,7 @@
 								class="flex w-full items-center gap-3 rounded-lg bg-base-200/60 p-2 text-left transition-colors hover:bg-base-200 disabled:opacity-70"
 							>
 								{#if updatingItemId === item.id}
-									<span class="loading loading-spinner loading-xs text-primary shrink-0"></span>
+									<span class="loading loading-spinner loading-xs"></span>
 								{:else if item.is_checked}
 									<CheckCircle class="w-5 h-5 text-success shrink-0" />
 								{:else}
@@ -276,7 +276,7 @@
 	</dialog>
 {/if}
 <div
-	class="card w-full max-w-md bg-base-300 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
+	class="card content-card bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
 	aria-label="checklist-card"
 >
 	<div class="card-body p-4 space-y-3">
@@ -324,7 +324,7 @@
 						</button>
 						<ul
 							tabindex="-1"
-							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-lg border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
+							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-sm border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
 						>
 							<li>
 								<button
@@ -414,7 +414,7 @@
 							class="flex w-full items-center gap-1.5 rounded-lg px-2 py-0.5 text-left text-sm text-base-content/80 transition-colors hover:bg-base-200/80 disabled:opacity-60"
 						>
 							{#if updatingItemId === item.id}
-								<span class="loading loading-spinner loading-xs text-primary"></span>
+								<span class="loading loading-spinner loading-xs"></span>
 							{:else if item.is_checked}
 								<CheckCircle class="w-4 h-4 text-success shrink-0" />
 							{:else}

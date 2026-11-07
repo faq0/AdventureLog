@@ -120,7 +120,7 @@
 						{#if currentSlide > 0}
 							<button
 								onclick={stopPropagation(() => changeSlide('prev'))}
-								class="btn btn-circle btn-sm mr-2 pointer-events-auto bg-neutral border-none text-neutral-content shadow-lg"
+								class="btn btn-circle btn-sm mr-2 pointer-events-auto bg-neutral border-none text-neutral-content shadow-sm"
 								aria-label="Previous image"
 							>
 								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +139,7 @@
 						{#if currentSlide < sortedImages.length - 1}
 							<button
 								onclick={stopPropagation(() => changeSlide('next'))}
-								class="btn btn-circle btn-sm mr-2 pointer-events-auto bg-neutral border-none text-neutral-content shadow-lg"
+								class="btn btn-circle btn-sm mr-2 pointer-events-auto bg-neutral border-none text-neutral-content shadow-sm"
 								aria-label="Next image"
 							>
 								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,7 +164,7 @@
 									on:click|stopPropagation={() => (currentSlide = index)}
 									class="w-2 h-2 rounded-full transition-all pointer-events-auto {index ===
  currentSlide
- ? 'bg-white shadow-lg'
+ ? 'bg-white shadow-sm'
  : 'bg-white/50 hover:bg-white/80'}"
 									aria-label="Go to image {index + 1}"
 								/>
@@ -175,21 +175,37 @@
 			</div>
 		</div>
 	{:else}
-		<!-- Fallback with emoji icon as main image -->
-		<div class="w-full h-48 relative flex items-center justify-center">
-			{#if icon}
-				<!-- Clean background with emoji as the focal point -->
-				<div
-					class="w-full h-full bg-gradient-to-r from-success via-base to-primary flex items-center justify-center"
-				>
-					<div class="text-8xl select-none">
-						{icon}
-					</div>
-				</div>
-			{:else}
-				<!-- Original gradient fallback when no icon -->
-				<div class="w-full h-full bg-gradient-to-r from-success via-base to-primary"></div>
-			{/if}
+		<div class="photo-placeholder" aria-label="No photos">
+			<span>{name}</span><span class="photo-placeholder-caption">{$t('adventures.images')}</span>
 		</div>
 	{/if}
 </figure>
+
+<style>
+	.photo-placeholder {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-end;
+		gap: 0.3rem;
+		height: 12rem;
+		width: 100%;
+		padding: 1.5rem;
+		background: var(--color-base-200);
+		color: color-mix(in srgb, var(--color-base-content) 50%, transparent);
+		border-bottom: 1px solid var(--color-base-300);
+	}
+	.photo-placeholder > span:first-child {
+		font-size: 1.3rem;
+		font-weight: 500;
+		letter-spacing: -0.035em;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.photo-placeholder-caption {
+		font-size: 0.7rem;
+		opacity: 0.6;
+	}
+</style>

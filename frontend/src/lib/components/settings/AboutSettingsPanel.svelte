@@ -16,7 +16,7 @@
 
 <SettingsCard>
 	<SettingsSectionHeader
-		icon="ℹ️"
+		icon=""
 		iconBgClass="bg-info/10"
 		title={$t('settings.about')}
 		description={$t('settings.about_desc')}

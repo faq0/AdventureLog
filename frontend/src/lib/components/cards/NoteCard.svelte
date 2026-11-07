@@ -198,7 +198,7 @@
 {/if}
 
 <div
-	class="card w-full max-w-md bg-base-300 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
+	class="card content-card bg-base-100 shadow-sm hover:shadow-md transition-all duration-200 border border-base-300 group"
 	aria-label="note-card"
 >
 	<div class="card-body p-4 space-y-3">
@@ -246,7 +246,7 @@
 						</button>
 						<ul
 							tabindex="-1"
-							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-lg border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
+							class="dropdown-content menu bg-base-100 rounded-box z-[9999] w-52 p-2 shadow-sm border border-base-300 max-h-[min(24rem,calc(100vh-2rem))] overflow-y-auto"
 						>
 							<li>
 								<button

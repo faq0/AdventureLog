@@ -43,7 +43,6 @@
 		imagePin?: ImagePinProperties | null;
 		pinName?: string;
 		pinVisitStatus?: 'visited' | 'planned' | null;
-		pinCategoryIcon?: string;
 		loading?: boolean;
 		error?: string | null;
 		isQuickAdding?: boolean;
@@ -62,7 +61,6 @@
 		imagePin = null,
 		pinName = '',
 		pinVisitStatus = null,
-		pinCategoryIcon = '',
 		loading = false,
 		error = null,
 		isQuickAdding = false,
@@ -338,9 +336,7 @@
 							{pinVisitStatus === 'visited' ? $t('adventures.visited') : $t('adventures.planned')}
 						</div>
 					{/if}
-					{#if pinCategoryIcon}
-						<div class="badge badge-ghost badge-sm text-base">{pinCategoryIcon}</div>
-					{/if}
+
 					{#if location?.category?.display_name}
 						<div class="badge badge-outline badge-sm">{location.category.display_name}</div>
 					{/if}

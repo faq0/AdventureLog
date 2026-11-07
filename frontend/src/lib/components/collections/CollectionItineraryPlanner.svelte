@@ -120,13 +120,6 @@
 		return null;
 	}
 
-	function getLocationCategoryIcon(obj: ResolvedObject | null): string | undefined {
-		if (obj && 'category' in obj) {
-			return obj.category?.icon;
-		}
-		return undefined;
-	}
-
 	// Group itinerary items by day
 	type DayGroup = {
 		date: string;
@@ -1850,14 +1843,14 @@
 {/if}
 
 {#if canAutoGenerate}
-	<div class="alert alert-info shadow-lg mb-6">
+	<div class="itinerary-suggestion surface p-4 mb-6">
 		<div class="flex-1 flex items-center gap-3 min-w-0">
 			<Info class="w-6 h-6 stroke-current shrink-0" />
 			<div class="min-w-0">
-				<div class="flex items-baseline gap-3">
+				<div class="flex items-baseline gap-3 min-w-0">
 					<h3 class="font-bold truncate">{$t('itinerary.auto_generate_itinerary')}</h3>
 				</div>
-				<div class="text-sm opacity-90 truncate">
+				<div class="text-sm text-base-content/60 whitespace-normal">
 					{$t('itinerary.auto_generate_itinerary_desc')}
 				</div>
 			</div>
@@ -1880,7 +1873,7 @@
 {/if}
 
 {#if days.length === 0 && unscheduledItems.length === 0}
-	<div class="card bg-base-200 shadow-xl">
+	<div class="card bg-base-200 shadow-sm">
 		<div class="card-body text-center py-12">
 			<CalendarBlank class="w-16 h-16 mx-auto mb-4 opacity-50" />
 			<h3 class="text-2xl font-bold mb-2">{$t('itinerary.no_itinerary_yet')}</h3>
@@ -1891,7 +1884,7 @@
 	<div class="space-y-6">
 		<!-- Trip-wide (Global) Items -->
 		{#if globalItems.length > 0 || canModify}
-			<div class="card bg-base-200 shadow-xl">
+			<div class="card bg-base-200 shadow-sm">
 				<div class="card-body">
 					<div class="flex items-center gap-3 mb-4 pb-4 border-b border-base-300">
 						<div
@@ -2034,7 +2027,7 @@
 										{/if}
 									{:else}
 										<div class="alert alert-warning">
-											<span>⚠️ {$t('itinerary.item_not_found')} (ID: {item.object_id})</span>
+											<span> {$t('itinerary.item_not_found')} (ID: {item.object_id})</span>
 										</div>
 									{/if}
 								</div>
@@ -2052,7 +2045,7 @@
 			{@const dayOfMonth = DateTime.fromISO(day.date).toFormat('d')}
 			{@const monthAbbrev = DateTime.fromISO(day.date).toFormat('LLL')}
 
-			<div class="card bg-base-200 shadow-xl">
+			<div class="card bg-base-200 shadow-sm">
 				<div class="card-body">
 					<!-- Day Header (compact, shows date pill + Day X of Y + items + add/save) -->
 
@@ -2468,7 +2461,7 @@
 										{:else}
 											<!-- Fallback for unresolved items -->
 											<div class="alert alert-warning">
-												<span>⚠️ {$t('itinerary.item_not_found')} (ID: {item.object_id})</span>
+												<span> {$t('itinerary.item_not_found')} (ID: {item.object_id})</span>
 											</div>
 										{/if}
 									</div>
@@ -2536,8 +2529,7 @@
 												{@const obj = globalItem.resolvedObject}
 												{@const name = getResolvedName(obj) || type || 'Item'}
 												{@const secondary = getGlobalItemSecondary(type, obj)}
-												{@const categoryIcon =
-													type === 'location' ? getLocationCategoryIcon(obj) : undefined}
+
 												<div
 													class="flex items-center gap-3 bg-base-100 rounded-lg px-4 py-3 border border-base-300"
 												>
@@ -2547,11 +2539,7 @@
 														{#if type === 'lodging'}
 															<Bed class="w-4 h-4" />
 														{:else if type === 'location'}
-															{#if categoryIcon}
-																<span class="text-lg">{categoryIcon}</span>
-															{:else}
-																<LocationMarker class="w-4 h-4" />
-															{/if}
+															<LocationMarker class="w-4 h-4" />
 														{:else if type === 'transportation'}
 															<Car class="w-4 h-4" />
 														{:else}
@@ -2598,7 +2586,7 @@
 
 		<!-- Unscheduled Items -->
 		{#if unscheduledItems.length > 0}
-			<div class="card bg-base-200 shadow-xl border-2 border-dashed border-base-300">
+			<div class="card bg-base-200 shadow-sm border-2 border-dashed border-base-300">
 				<div class="card-body">
 					<!-- Unscheduled Header -->
 					<div class="flex items-center gap-3 mb-4 pb-4 border-b border-base-300">

@@ -8,7 +8,7 @@
 </svelte:head>
 
 <div class="min-h-screen bg-base-200 flex items-center justify-center p-6">
-	<div class="card bg-base-100 shadow-xl max-w-lg w-full">
+	<div class="card bg-base-100 shadow-sm max-w-lg w-full">
 		<div class="card-body space-y-4 text-center">
 			<h1 class="text-2xl font-bold text-error">{$t('auth.social_login_error_title')}</h1>
 			<p class="text-base-content/70">{$t('auth.social_login_error_desc')}</p>

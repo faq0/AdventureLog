@@ -6,9 +6,9 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let { padding = 'p-8', className = '', id = undefined, children }: Props = $props();
+	let { padding = 'p-6', className = '', id = undefined, children }: Props = $props();
 </script>
 
-<div {id} class="bg-base-100 rounded-2xl shadow-xl {padding} {className}">
+<div {id} class="surface {padding} {className}">
 	{@render children?.()}
 </div>

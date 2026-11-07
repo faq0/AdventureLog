@@ -1100,17 +1100,17 @@
 									<div class="flex flex-wrap gap-2 mt-3">
 										{#if locationData.city}
 											<div class="badge badge-info badge-sm gap-1">
-												🏙️ {locationData.city.name}
+												{locationData.city.name}
 											</div>
 										{/if}
 										{#if locationData.region}
 											<div class="badge badge-warning badge-sm gap-1">
-												🗺️ {locationData.region.name}
+												{locationData.region.name}
 											</div>
 										{/if}
 										{#if locationData.country}
 											<div class="badge badge-success badge-sm gap-1">
-												🌎 {locationData.country.name}
+												{locationData.country.name}
 											</div>
 										{/if}
 									</div>
@@ -1152,7 +1152,7 @@
 					{#if startMarker && Number.isFinite(startMarker.lng) && Number.isFinite(startMarker.lat)}
 						<Marker
 							lngLat={[startMarker.lng, startMarker.lat]}
-							class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-success shadow-lg cursor-pointer"
+							class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-success shadow-sm cursor-pointer"
 						>
 							<PinIcon class="w-5 h-5 text-success-content" />
 						</Marker>
@@ -1160,7 +1160,7 @@
 					{#if endMarker && Number.isFinite(endMarker.lng) && Number.isFinite(endMarker.lat)}
 						<Marker
 							lngLat={[endMarker.lng, endMarker.lat]}
-							class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-error shadow-lg cursor-pointer"
+							class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-error shadow-sm cursor-pointer"
 						>
 							<PinIcon class="w-5 h-5 text-error-content" />
 						</Marker>
@@ -1168,7 +1168,7 @@
 				{:else if selectedMarker && Number.isFinite(selectedMarker.lng) && Number.isFinite(selectedMarker.lat)}
 					<Marker
 						lngLat={[selectedMarker.lng, selectedMarker.lat]}
-						class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-primary shadow-lg cursor-pointer"
+						class="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-primary shadow-sm cursor-pointer"
 					>
 						<PinIcon class="w-5 h-5 text-primary-content" />
 					</Marker>

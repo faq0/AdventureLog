@@ -156,7 +156,7 @@
 					rel="noopener noreferrer"
 					class="btn btn-sm btn-primary"
 				>
-					🔗 {$t('adventures.view_trail')}
+					{$t('adventures.view_trail')}
 				</a>
 			{/if}
 		</div>

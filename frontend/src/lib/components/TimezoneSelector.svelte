@@ -119,7 +119,7 @@
 	{@attach managePopover}
 	popover
 	id={popoverId}
-	class="dropdown tz-popover bg-base-100 rounded-box shadow-lg"
+	class="dropdown tz-popover bg-base-100 rounded-box shadow-sm"
 	style:position-anchor={anchorName}
 >
 	<div class="tz-search">

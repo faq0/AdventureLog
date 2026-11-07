@@ -4,13 +4,14 @@
 	"start_url": "/dashboard",
 	"icons": [
 		{
-			"src": "adventurelog.svg",
+			"src": "favicon.svg",
 			"type": "image/svg+xml",
 			"sizes": "any"
 		}
 	],
-	"background_color": "#2a323c",
+	"background_color": "#f6f7f5",
 	"display": "standalone",
 	"scope": "/",
-	"description": "Self-hostable travel tracker and trip planner."
+	"description": "Self-hostable travel tracker and trip planner.",
+	"theme_color": "#334b40"
 }

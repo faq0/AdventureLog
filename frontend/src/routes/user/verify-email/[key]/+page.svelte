@@ -10,9 +10,9 @@
 </script>
 
 <section class="flex flex-col items-center justify-center min-h-screen px-4 py-8 bg-base-100">
-	<div class="w-full max-w-lg p-6 shadow-lg rounded-lg bg-base-200 text-center">
+	<div class="w-full max-w-lg p-6 shadow-sm rounded-lg bg-base-200 text-center">
 		{#if data.verified}
-			<h1 class="text-4xl font-bold text-success mb-4">
+			<h1 class="text-3xl font-semibold text-success mb-4">
 				{$t('settings.email_verified')}
 			</h1>
 			<p class="text-lg text-base-content mb-6">
@@ -20,7 +20,7 @@
 			</p>
 			<a href="/login" class="btn btn-primary">{$t('auth.login')}</a>
 		{:else}
-			<h1 class="text-4xl font-bold text-error mb-4">
+			<h1 class="text-3xl font-semibold text-error mb-4">
 				{$t('settings.email_verified_error')}
 			</h1>
 			<p class="text-lg text-base-content mb-6">

@@ -27,7 +27,7 @@
 <div class="toast toast-top toast-end z-[9999] mt-16 gap-3 max-w-md px-4">
 	{#each toastList as { type, message, id }}
 		<div
-			class="alert alert-{type} shadow-2xl backdrop-blur-xs rounded-2xl border-0 min-w-80 max-w-md animate-in slide-in-from-right-5 fade-in duration-300"
+			class="alert alert-{type} shadow-sm backdrop-blur-xs rounded-2xl border-0 min-w-80 max-w-md animate-in slide-in-from-right-5 fade-in duration-300"
 			role="alert"
 		>
 			<div class="flex items-center gap-4 w-full py-1">
