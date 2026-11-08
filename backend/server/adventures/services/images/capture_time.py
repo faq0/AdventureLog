@@ -101,7 +101,8 @@ def sync_photo_visit(image):
     with transaction.atomic():
         location = Location.objects.select_for_update().get(pk=image.object_id)
         visits = location.visits.all()
-        if visits.filter(photo_derived=False).exists():
+        anchored = list(visits.filter(itinerary_date__isnull=False))
+        if not anchored and visits.filter(photo_derived=False).exists():
             return
         # Resolve at the LOCATION (photo GPS may be just across a zone boundary).
         candidates = []
@@ -122,15 +123,63 @@ def sync_photo_visit(image):
             candidates.append((order, metadata))
         if not candidates:
             return
-        _, earliest = min(candidates, key=lambda item: item[0])
-        value = earliest['captured_at']
-        date_only = value is None
-        if date_only:
-            value = datetime.fromisoformat(earliest['captured_local'][:10]).replace(tzinfo=timezone.utc)
-        inferred = visits.filter(photo_derived=True).first()
-        if inferred is None:
-            inferred = Visit(location=location, photo_derived=True)
-        inferred.start_date = inferred.end_date = value
-        inferred.timezone = earliest['captured_timezone']
-        inferred.date_only = date_only
-        inferred.save()
+        targets = anchored or [visits.filter(photo_derived=True, itinerary_date__isnull=True).first()]
+        for inferred in targets:
+            matching = candidates
+            if inferred and inferred.itinerary_date:
+                matching = [item for item in candidates
+                    if datetime.fromisoformat(item[1]['captured_local']).date() == inferred.itinerary_date]
+            if not matching:
+                continue
+            _, earliest = min(matching, key=lambda item: item[0])
+            value = earliest['captured_at']
+            date_only = value is None
+            if date_only:
+                value = datetime.fromisoformat(earliest['captured_local'][:10]).replace(tzinfo=timezone.utc)
+            if inferred is None:
+                inferred = Visit(location=location)
+            inferred.start_date = inferred.end_date = value
+            inferred.timezone = earliest['captured_timezone']
+            inferred.date_only = date_only
+            inferred.photo_derived = True
+            inferred.save()
+
+
+def ensure_itinerary_visit(location, target_date):
+    """Keep the explicitly chosen local day, filling time only from matching photos."""
+    from datetime import date
+    from adventures.models import Location, Visit
+    from adventures.utils.datetime_utils import is_all_day_bound
+    if isinstance(target_date, str):
+        target_date = date.fromisoformat(target_date)
+    with transaction.atomic():
+        location = Location.objects.select_for_update().get(pk=location.pk)
+        zone_name = geographic_timezone(location.coordinates)
+        zone = ZoneInfo(zone_name or 'UTC')
+        visit = location.visits.filter(itinerary_date=target_date).first()
+        if visit is None:
+            for existing in location.visits.all():
+                if not existing.start_date:
+                    continue
+                end = existing.end_date or existing.start_date
+                all_day = existing.date_only if existing.date_only is not None else (
+                    is_all_day_bound(existing.start_date) and is_all_day_bound(end))
+                start_day = existing.start_date.date() if all_day else existing.start_date.astimezone(ZoneInfo(existing.timezone or zone.key)).date()
+                end_day = end.date() if all_day else end.astimezone(ZoneInfo(existing.timezone or zone.key)).date()
+                if start_day <= target_date <= end_day:
+                    if not existing.photo_derived:
+                        return existing
+                    # This is already an inferred visit on the chosen local day.
+                    existing.itinerary_date = target_date
+                    existing.save(update_fields=['itinerary_date'])
+                    visit = existing
+                    break
+        if visit is None:
+            value = datetime.combine(target_date, datetime.min.time(), tzinfo=timezone.utc)
+            visit = Visit.objects.create(location=location, start_date=value, end_date=value,
+                date_only=True, timezone=zone_name, itinerary_date=target_date)
+        photo = location.images.filter(source__in=['upload', 'immich']).first()
+        if photo:
+            sync_photo_visit(photo)
+            visit.refresh_from_db()
+        return visit

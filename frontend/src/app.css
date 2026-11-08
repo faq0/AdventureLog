@@ -724,3 +724,10 @@
 		height: 52px;
 	}
 }
+
+/* Action menus must extend beyond their rounded cards; image wrappers still clip. */
+.content-card:has(.dropdown-open) {
+	position: relative;
+	overflow: visible;
+	z-index: 60;
+}

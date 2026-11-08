@@ -134,6 +134,7 @@ class Visit(models.Model):
     timezone = models.CharField(max_length=50, choices=[(tz, tz) for tz in TIMEZONES], null=True, blank=True)
     date_only = models.BooleanField(null=True, blank=True, default=None)
     photo_derived = models.BooleanField(default=False)
+    itinerary_date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

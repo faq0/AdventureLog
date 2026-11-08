@@ -134,3 +134,76 @@ class PhotoVisitTests(TestCase):
         serializer = VisitSerializer(data={'location': str(self.location.pk), 'start_date':'2024-07-10T00:00:00Z', 'date_only':False, 'timezone':'America/New_York'})
         self.assertTrue(serializer.is_valid(),serializer.errors)
         self.assertFalse(serializer.save().date_only)
+
+class ItineraryPhotoTimeTests(TestCase):
+    setUp = PhotoVisitTests.setUp
+    attach = PhotoVisitTests.attach
+    """The chosen itinerary day is interpreted in the place's timezone."""
+    def ensure(self, day):
+        from adventures.services.images.capture_time import ensure_itinerary_visit
+        return ensure_itinerary_visit(self.location, day)
+
+    def test_matching_photo_fills_time_on_chosen_day(self):
+        visit = self.ensure('2024-07-10')
+        self.attach('2024-07-09T08:00:00')
+        visit.refresh_from_db()
+        self.assertTrue(visit.date_only)
+        self.assertEqual(visit.start_date.day, 10)
+        self.attach('2024-07-10T12:00:00')
+        self.attach('2024-07-10T10:00:00')
+        visit.refresh_from_db()
+        self.assertFalse(visit.date_only)
+        self.assertEqual(visit.start_date, datetime(2024, 7, 10, 14, tzinfo=timezone.utc))
+        self.assertEqual(visit.itinerary_date.isoformat(), '2024-07-10')
+        self.assertEqual(self.location.visits.count(), 1)
+
+    def test_match_uses_local_day_instead_of_utc_day(self):
+        visit = self.ensure('2024-07-09')
+        self.attach('2024-07-09T23:30:00', offset='-04:00')
+        visit.refresh_from_db()
+        self.assertEqual(visit.start_date, datetime(2024, 7, 10, 3, 30, tzinfo=timezone.utc))
+        self.assertFalse(visit.date_only)
+        self.assertEqual(visit.itinerary_date.isoformat(), '2024-07-09')
+
+    def test_existing_photo_fills_time_when_added_to_itinerary(self):
+        self.attach('2024-07-10T10:00:00')
+        visit = self.ensure('2024-07-10')
+        self.assertEqual(self.location.visits.count(), 1)
+        self.assertEqual(visit.start_date.hour, 14)
+        self.assertIsNotNone(visit.itinerary_date)
+
+    def test_manual_override_clears_anchor_and_remains_protected(self):
+        visit = self.ensure('2024-07-10')
+        serializer = VisitSerializer(visit, data={'start_date':'2024-07-10T18:00:00Z','end_date':'2024-07-10T18:00:00Z','date_only':False}, partial=True)
+        self.assertTrue(serializer.is_valid(), serializer.errors);serializer.save()
+        self.attach('2024-07-10T08:00:00')
+        visit.refresh_from_db()
+        self.assertIsNone(visit.itinerary_date)
+        self.assertFalse(visit.photo_derived)
+        self.assertEqual(visit.start_date.hour, 18)
+
+    def test_missing_or_other_day_exif_keeps_only_requested_day(self):
+        visit = self.ensure('2024-07-10')
+        self.attach('2024-07-11T10:00:00')
+        visit.refresh_from_db()
+        self.assertTrue(visit.date_only)
+        self.assertEqual(visit.start_date, datetime(2024, 7, 10, tzinfo=timezone.utc))
+        self.assertEqual(self.location.visits.count(), 1)
+
+    def test_manual_visit_on_day_is_reused_without_rewriting(self):
+        manual = Visit.objects.create(location=self.location,start_date=datetime(2024,7,10,18,tzinfo=timezone.utc),end_date=datetime(2024,7,10,18,tzinfo=timezone.utc),timezone='America/New_York',date_only=False,notes='Manual')
+        self.attach('2024-07-10T08:00:00')
+        visit = self.ensure('2024-07-10')
+        self.assertEqual(visit.pk,manual.pk)
+        self.assertEqual(visit.start_date.hour,18)
+        self.assertIsNone(visit.itinerary_date)
+        self.assertEqual(visit.notes,'Manual')
+
+    def test_location_creation_anchors_day_before_media_upload(self):
+        request = APIRequestFactory().post('/');request.user=self.user
+        serializer = LocationSerializer(data={'name':'Scheduled place','latitude':40.7128,'longitude':-74.006,'itinerary_date':'2024-07-10'},context={'request':request})
+        self.assertTrue(serializer.is_valid(),serializer.errors)
+        location=serializer.save(user=self.user)
+        visit=location.visits.get()
+        self.assertEqual(visit.itinerary_date.isoformat(),'2024-07-10')
+        self.assertTrue(visit.date_only)

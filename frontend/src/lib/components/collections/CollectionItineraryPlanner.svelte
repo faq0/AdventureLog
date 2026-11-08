@@ -1408,7 +1408,11 @@
 
 			// If we updated the item's date, sync the updated object from server response
 			if (updateItemDate && created.updated_object) {
-				if (objectType === 'transportation') {
+				if (objectType === 'location') {
+					collection.locations = (collection.locations || []).map((location) =>
+						location.id === objectId ? { ...location, ...created.updated_object } : location
+					);
+				} else if (objectType === 'transportation') {
 					if (collection.transportations) {
 						collection.transportations = collection.transportations.map((t) =>
 							t.id === objectId ? { ...t, ...created.updated_object } : t

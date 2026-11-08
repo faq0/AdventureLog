@@ -214,8 +214,16 @@
 
 	function visitCoversDate(visit: Visit, targetDate: string): boolean {
 		if (!visit?.start_date) return false;
-		const visitStart = visit.start_date.split('T')[0];
-		const visitEnd = (visit.end_date || visit.start_date).split('T')[0];
+		const visitStart = visitIsDateOnly(visit)
+			? visit.start_date.split('T')[0]
+			: DateTime.fromISO(visit.start_date)
+					.setZone(visit.timezone || 'UTC')
+					.toISODate() || '';
+		const visitEnd = visitIsDateOnly(visit)
+			? (visit.end_date || visit.start_date).split('T')[0]
+			: DateTime.fromISO(visit.end_date || visit.start_date)
+					.setZone(visit.timezone || 'UTC')
+					.toISODate() || '';
 		return targetDate >= visitStart && targetDate <= visitEnd;
 	}
 
@@ -259,7 +267,7 @@
 
 	// Update local display dates whenever timezone or UTC dates change
 	run(() => {
-		if (!isEditing) {
+		if (!isEditing && !nonexistentTime) {
 			if (allDay) {
 				localStartDate = utcStartDate?.substring(0, 10) ?? '';
 				localEndDate = utcEndDate?.substring(0, 10) ?? '';
@@ -373,6 +381,7 @@
 					},
 					body: JSON.stringify({
 						object_id: objectId,
+						itinerary_date: isAuto ? initialVisitDate?.split('T')[0] : undefined,
 						start_date: utcStartDate,
 						end_date: utcStartDate,
 						date_only: allDay,
@@ -942,7 +951,11 @@
 			if (response.ok) {
 				const latest = await response.json();
 				visits = latest.visits ?? visits;
-				const inferred = visits?.find((visit) => visit.photo_derived);
+				const inferred = visits?.find((visit) =>
+					initialVisitDate
+						? visit.itinerary_date === initialVisitDate.split('T')[0]
+						: visit.photo_derived
+				);
 				if (inferred) editVisit(inferred);
 			}
 		} catch {

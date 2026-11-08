@@ -556,6 +556,7 @@ export type Visit = {
 	id: string;
 	date_only?: boolean | null;
 	photo_derived?: boolean;
+	itinerary_date?: string | null;
 	start_date: string;
 	end_date: string;
 	notes: string;

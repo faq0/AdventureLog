@@ -421,6 +421,7 @@
 				<LocationDetails
 					currentUser={user}
 					initialLocation={location}
+					initialVisitDate={storedInitialVisitDate}
 					{collection}
 					bind:editingLocation={location}
 					on:back={handleDetailsBack}

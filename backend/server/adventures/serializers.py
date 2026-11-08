@@ -472,12 +472,13 @@ class VisitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Visit
-        fields = ['id', 'start_date', 'end_date', 'timezone', 'notes', 'activities','location', 'created_at', 'updated_at', 'date_only', 'photo_derived']
+        fields = ['id', 'start_date', 'end_date', 'timezone', 'notes', 'activities','location', 'created_at', 'updated_at', 'date_only', 'photo_derived', 'itinerary_date']
         read_only_fields = ['id', 'created_at', 'updated_at', 'photo_derived']
 
     def update(self, instance, validated_data):
-        if any(k in validated_data for k in ('start_date', 'end_date', 'timezone', 'date_only')):
+        if any(k in self.initial_data for k in ('start_date', 'end_date', 'timezone', 'date_only')):
             validated_data['photo_derived'] = False
+            validated_data['itinerary_date'] = None
         return super().update(instance, validated_data)
 
     def validate(self, attrs):
@@ -498,6 +499,9 @@ class VisitSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        if validated_data.get('itinerary_date'):
+            from adventures.services.images.capture_time import ensure_itinerary_visit
+            return ensure_itinerary_visit(validated_data['location'], validated_data['itinerary_date'])
         if not validated_data.get('end_date') and validated_data.get('start_date'):
             validated_data['end_date'] = validated_data['start_date']
         return super().create(validated_data)
@@ -588,6 +592,7 @@ class LocationListSerializer(CoordinateSerializerMixin, serializers.ModelSeriali
 
                                    
 class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
+    itinerary_date = serializers.DateField(write_only=True, required=False, allow_null=True)
     images = serializers.SerializerMethodField()
     visits = VisitSerializer(many=True, read_only=False, required=False)
     attachments = AttachmentSerializer(many=True, read_only=True)
@@ -609,7 +614,7 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
             'id', 'name', 'description', 'rating', 'tags', 'location', 
             'is_public', 'collections', 'created_at', 'updated_at', 'images', 'link', 'longitude', 
             'latitude', 'visits', 'is_visited', 'category', 'attachments', 'user', 'city', 'country', 'region', 'trails',
-            'price', 'price_currency'
+            'price', 'price_currency', 'itinerary_date'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'user', 'is_visited']
 
@@ -748,6 +753,7 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
 
     def create(self, validated_data):
         validated_data = self._pop_lat_lon(validated_data)
+        itinerary_date = validated_data.pop('itinerary_date', None)
         if 'rating' in validated_data:
             validated_data['rating_is_manual'] = validated_data['rating'] is not None
         category_data = validated_data.pop('category', None)
@@ -765,11 +771,14 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
             location.collections.set(collections_data)
             
         location.save()
-
+        if itinerary_date:
+            from adventures.services.images.capture_time import ensure_itinerary_visit
+            ensure_itinerary_visit(location, itinerary_date)
         return location
 
     def update(self, instance, validated_data):
         validated_data = self._pop_lat_lon(validated_data)
+        itinerary_date = validated_data.pop('itinerary_date', None)
         category_data = validated_data.pop('category', None)
         visits_data = validated_data.pop('visits', None)
         if 'rating' in validated_data:
@@ -804,7 +813,9 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
             instance.visits.all().delete()
             for visit_data in visits_data:
                 Visit.objects.create(location=instance, **visit_data)
-
+        if itinerary_date:
+            from adventures.services.images.capture_time import ensure_itinerary_visit
+            ensure_itinerary_visit(instance, itinerary_date)
         return instance
     
 class MapPinSerializer(CoordinateSerializerMixin, serializers.ModelSerializer):

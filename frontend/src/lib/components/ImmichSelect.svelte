@@ -27,10 +27,13 @@
 	}: Props = $props();
 
 	// Component state
+	const nearbyContentTypes = ['location', 'lodging', 'transportation', 'visit'];
+	const supportsNearby = $derived(nearbyContentTypes.includes(contentType));
+	let endpoint = $state('origin');
 	let immichImages: any[] = $state([]);
 	let immichSearchValue: string = $state('');
 	let searchCategory: 'nearby' | 'search' | 'date' | 'album' = $state(
-		untrack(() => (contentType === 'location' ? 'nearby' : 'date'))
+		untrack(() => (nearbyContentTypes.includes(contentType) ? 'nearby' : 'date'))
 	);
 	let radius = $state('500');
 	let selectedIds = $state<Set<string>>(new Set());
@@ -208,7 +211,9 @@
 	run(() => {
 		if (searchCategory === 'nearby' && objectId) {
 			immichImages = [];
-			void fetchAssets(`/api/integrations/immich/nearby/?object_id=${objectId}&radius=${radius}`);
+			void fetchAssets(
+				`/api/integrations/immich/nearby/?object_id=${objectId}&content_type=${contentType}&endpoint=${endpoint}&radius=${radius}`
+			);
 		} else if (searchCategory === 'album' && currentAlbum) {
 			immichImages = [];
 			fetchAlbumAssets(currentAlbum);
@@ -223,7 +228,7 @@
 
 <!-- Search Category Tabs -->
 <div class="flex flex-wrap gap-2 mb-3">
-	{#if contentType === 'location'}
+	{#if supportsNearby}
 		<button
 			type="button"
 			class="btn btn-sm"
@@ -262,6 +267,17 @@
 <!-- Search Controls -->
 {#if searchCategory === 'nearby'}
 	<div class="flex flex-wrap items-center gap-3">
+		{#if contentType === 'transportation'}
+			<label class="text-sm" for="nearby-endpoint">Near</label>
+			<select
+				id="nearby-endpoint"
+				class="select select-sm w-auto"
+				bind:value={endpoint}
+				disabled={loading || adding}
+			>
+				<option value="origin">Departure</option><option value="destination">Arrival</option>
+			</select>
+		{/if}
 		<label for="nearby-radius" class="text-sm">Distance from this place</label>
 		<select
 			id="nearby-radius"
@@ -275,8 +291,8 @@
 		</select>
 	</div>
 	<p class="text-xs text-base-content/60 mt-2">
-		Suggestions use photo GPS. Select the photos you want to add. The earliest capture time fills in
-		your visit.
+		Suggestions use photo GPS. Select the photos you want to add.
+		{#if contentType === 'location'}The earliest capture time fills in your visit.{/if}
 	</p>
 {:else if searchCategory === 'search'}
 	<div class="flex gap-2">

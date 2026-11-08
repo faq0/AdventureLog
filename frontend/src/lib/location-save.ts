@@ -5,6 +5,7 @@ type SaveLocationInput = {
 	location: Partial<Location>;
 	locationToEdit?: { id: string } | null;
 	collectionId?: string | null;
+	itineraryDate?: string | null;
 	defaultCurrency?: string;
 };
 
@@ -44,6 +45,7 @@ export async function saveLocation({
 	location,
 	locationToEdit = null,
 	collectionId = null,
+	itineraryDate = null,
 	defaultCurrency = DEFAULT_CURRENCY
 }: SaveLocationInput): Promise<Location> {
 	const payload: Record<string, any> = {
@@ -63,6 +65,8 @@ export async function saveLocation({
 	delete payload.images;
 	delete payload.attachments;
 	delete payload.trails;
+
+	if (itineraryDate) payload.itinerary_date = itineraryDate.split('T')[0];
 
 	if (collectionId) {
 		payload.collections = [collectionId];
