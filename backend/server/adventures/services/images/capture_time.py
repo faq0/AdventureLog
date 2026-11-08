@@ -112,7 +112,14 @@ def sync_photo_visit(image):
             if metadata['capture_time_status'] not in ('known', 'ambiguous', 'invalid_local_time'):
                 continue
             local = datetime.fromisoformat(metadata['captured_local'])
-            candidates.append((local, metadata))
+            # Wall-clock ordering is wrong across a fall-back transition: 01:45
+            # daylight time precedes 01:15 standard time. Compare known instants.
+            # An unresolved time contributes only its day, never a guessed hour.
+            order = metadata['captured_at']
+            if order is None:
+                order = local.replace(hour=0, minute=0, second=0, microsecond=0,
+                    tzinfo=ZoneInfo(metadata['captured_timezone'])).astimezone(timezone.utc)
+            candidates.append((order, metadata))
         if not candidates:
             return
         _, earliest = min(candidates, key=lambda item: item[0])

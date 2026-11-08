@@ -63,10 +63,10 @@ class PhotoVisitTests(TestCase):
         self.location = Location.objects.create(user=self.user, name='Photo place', coordinates=make_point(-74.006, 40.7128))
         self.content_type = ContentType.objects.get_for_model(Location)
 
-    def attach(self, local):
+    def attach(self, local, offset=None):
         image = ContentImage.objects.create(user=self.user, content_type=self.content_type,
             object_id=self.location.id, immich_id='asset', source='immich',
-            **resolve_capture_time(local, point=self.location.coordinates))
+            **resolve_capture_time(local, offset=offset, point=self.location.coordinates))
         sync_photo_visit(image)
         return image
 
@@ -78,6 +78,13 @@ class PhotoVisitTests(TestCase):
         self.assertEqual(visit.start_date, visit.end_date)
         self.assertFalse(visit.date_only)
         self.assertTrue(visit.photo_derived)
+
+    def test_earliest_photo_compares_instants_across_repeated_hour(self):
+        self.attach('2024-11-03T01:15:00', offset='-05:00')
+        self.attach('2024-11-03T01:45:00', offset='-04:00')
+        visit = self.location.visits.get()
+        self.assertEqual(visit.start_date, datetime(2024, 11, 3, 5, 45, tzinfo=timezone.utc))
+        self.assertEqual(self.location.visits.count(), 1)
 
     def test_manual_edit_protects_visit_from_later_photos(self):
         self.attach('2024-07-10T12:00:00'); visit = self.location.visits.get()
