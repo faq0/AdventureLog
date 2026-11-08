@@ -287,7 +287,7 @@ export function buildCollectionCalendarEvents(
 				end: visit.end_date || visit.start_date,
 				timezone: visit.timezone,
 				mode,
-				allDay: isVisitAllDay(visit.start_date, visit.end_date),
+				allDay: visit.date_only ?? isVisitAllDay(visit.start_date, visit.end_date),
 				userTimezone,
 				timezoneLabelEvent: labels.eventTimezone,
 				timezoneLabelLocal: labels.localTimezone,

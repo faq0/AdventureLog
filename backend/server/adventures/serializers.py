@@ -56,8 +56,9 @@ class ContentImageSerializer(CoordinateSerializerMixin, CustomModelSerializer):
         fields = [
             'id', 'image', 'is_primary', 'user', 'immich_id',
             'source', 'source_url', 'latitude', 'longitude',
+            'captured_at', 'captured_local', 'captured_timezone', 'capture_time_status',
         ]
-        read_only_fields = ['id', 'user']
+        read_only_fields = ['id', 'user', 'captured_at', 'captured_local', 'captured_timezone', 'capture_time_status']
 
     def _get_immich_integration(self, user_id):
         """Cache Immich integrations per request to avoid N+1 lookups."""
@@ -471,8 +472,13 @@ class VisitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Visit
-        fields = ['id', 'start_date', 'end_date', 'timezone', 'notes', 'activities','location', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = ['id', 'start_date', 'end_date', 'timezone', 'notes', 'activities','location', 'created_at', 'updated_at', 'date_only', 'photo_derived']
+        read_only_fields = ['id', 'created_at', 'updated_at', 'photo_derived']
+
+    def update(self, instance, validated_data):
+        if any(k in validated_data for k in ('start_date', 'end_date', 'timezone', 'date_only')):
+            validated_data['photo_derived'] = False
+        return super().update(instance, validated_data)
 
     def validate(self, attrs):
         for field in ('start_date', 'end_date'):
@@ -483,7 +489,7 @@ class VisitSerializer(serializers.ModelSerializer):
         start = attrs.get('start_date', getattr(instance, 'start_date', None) if instance else None)
         end = attrs.get('end_date', getattr(instance, 'end_date', None) if instance else None)
 
-        if start is not None:
+        if start is not None and attrs.get('date_only', getattr(instance, 'date_only', None)) is not False:
             normalized_start, normalized_end = normalize_all_day_visit_dates(start, end)
             attrs['start_date'] = normalized_start
             if normalized_end is not None:
@@ -500,7 +506,7 @@ class VisitSerializer(serializers.ModelSerializer):
 class CalendarVisitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visit
-        fields = ['id', 'start_date', 'end_date', 'timezone']
+        fields = ['id', 'start_date', 'end_date', 'timezone', 'date_only']
 
 
 class CalendarLocationSerializer(serializers.ModelSerializer):
@@ -522,6 +528,12 @@ class CalendarLocationSerializer(serializers.ModelSerializer):
 
 
 class LocationListSerializer(CoordinateSerializerMixin, serializers.ModelSerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if not instance.rating_is_manual:
+            data['rating'] = None
+        return data
+
     """
     Lightweight serializer for location list endpoints (e.g. /filtered/).
     Omits visits/activities/geojson, attachments, trails, and geo objects that
@@ -604,6 +616,8 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
     # Makes it so the whole user object is returned in the serializer instead of just the user uuid
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        if not instance.rating_is_manual:
+            representation['rating'] = None
         is_nested = self.context.get('nested', False)
         allowed_nested_fields = set(self.context.get('allowed_nested_fields', []))
 
@@ -734,6 +748,8 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
 
     def create(self, validated_data):
         validated_data = self._pop_lat_lon(validated_data)
+        if 'rating' in validated_data:
+            validated_data['rating_is_manual'] = validated_data['rating'] is not None
         category_data = validated_data.pop('category', None)
         collections_data = validated_data.pop('collections', [])
         
@@ -756,6 +772,8 @@ class LocationSerializer(CoordinateSerializerMixin, CustomModelSerializer):
         validated_data = self._pop_lat_lon(validated_data)
         category_data = validated_data.pop('category', None)
         visits_data = validated_data.pop('visits', None)
+        if 'rating' in validated_data:
+            validated_data['rating_is_manual'] = validated_data['rating'] is not None
         collections_data = validated_data.pop('collections', None)
 
         # Update regular fields

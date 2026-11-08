@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy';
+	import { DateTime } from 'luxon';
 
 	import type {
 		Collection,
@@ -86,6 +87,24 @@
 	// Component state
 	let allDay: boolean = $state(true);
 	let localStartDate: string = $state('');
+	let selectedOffset = $state('');
+	const localMoment = $derived(DateTime.fromISO(localStartDate, { zone: selectedStartTimezone }));
+	const possibleTimes = $derived(
+		!allDay && localMoment.isValid ? localMoment.getPossibleOffsets() : []
+	);
+	const nonexistentTime = $derived(
+		!allDay &&
+			Boolean(localStartDate) &&
+			(!localMoment.isValid ||
+				localMoment.toFormat("yyyy-MM-dd'T'HH:mm") !== localStartDate.slice(0, 16))
+	);
+	const ambiguousTime = $derived(possibleTimes.length > 1);
+	function visitIsDateOnly(visit: Visit | TransportationVisit) {
+		return (
+			('date_only' in visit ? visit.date_only : null) ??
+			isVisitAllDay(visit.start_date, visit.end_date)
+		);
+	}
 	let localEndDate: string = $state('');
 	let fullStartDate: string = $state('');
 	let fullEndDate: string = $state('');
@@ -285,58 +304,30 @@
 
 	// Event handlers
 	function handleLocalDateChange() {
+		selectedOffset = '';
 		utcStartDate = updateUTCDate({
 			localDate: localStartDate,
 			timezone: selectedStartTimezone,
 			allDay
 		}).utcDate;
-
-		utcEndDate = updateUTCDate({
-			localDate: localEndDate,
-			timezone: selectedStartTimezone,
-			allDay
-		}).utcDate;
+		localEndDate = localStartDate;
+		utcEndDate = utcStartDate;
 	}
 
 	function handleAllDayToggle(event: Event) {
-		const nextAllDay = (event.currentTarget as HTMLInputElement).checked;
-
-		if (nextAllDay) {
-			localStartDate = toDateOnlyLocal(localStartDate);
-			localEndDate = toDateOnlyLocal(localEndDate);
-		} else {
-			localStartDate = toTimedLocalDefault(localStartDate);
-			localEndDate = toTimedLocalDefault(localEndDate, true);
-		}
-
-		allDay = nextAllDay;
-
-		utcStartDate = updateUTCDate({
-			localDate: localStartDate,
-			timezone: selectedStartTimezone,
-			allDay
-		}).utcDate;
-
-		utcEndDate = updateUTCDate({
-			localDate: localEndDate,
-			timezone: selectedStartTimezone,
-			allDay
-		}).utcDate;
-
-		if (!allDay) {
-			localStartDate = updateLocalDate({
-				utcDate: utcStartDate,
-				timezone: selectedStartTimezone
-			}).localDate;
-
-			localEndDate = updateLocalDate({
-				utcDate: utcEndDate,
-				timezone: selectedStartTimezone
-			}).localDate;
-		}
+		allDay = (event.currentTarget as HTMLInputElement).checked;
+		localStartDate = allDay ? toDateOnlyLocal(localStartDate) : toTimedLocalDefault(localStartDate);
+		handleLocalDateChange();
 	}
 
 	async function addVisit(isAuto: boolean = false): Promise<boolean> {
+		if (!allDay && (nonexistentTime || (ambiguousTime && !selectedOffset))) return false;
+		if (!allDay) {
+			const moment =
+				possibleTimes.find((time) => String(time.offset) === selectedOffset) ?? localMoment;
+			utcStartDate = moment.toUTC().toISO();
+		}
+		utcEndDate = utcStartDate;
 		isSavingVisit = true;
 		try {
 			// If editing an existing visit, patch instead of creating new
@@ -349,7 +340,8 @@
 					},
 					body: JSON.stringify({
 						start_date: utcStartDate,
-						end_date: utcEndDate,
+						end_date: utcStartDate,
+						date_only: allDay,
 						notes: note,
 						timezone: selectedStartTimezone
 					})
@@ -382,7 +374,8 @@
 					body: JSON.stringify({
 						object_id: objectId,
 						start_date: utcStartDate,
-						end_date: utcEndDate,
+						end_date: utcStartDate,
+						date_only: allDay,
 						notes: note,
 						timezone: selectedStartTimezone,
 						location: objectId
@@ -452,7 +445,7 @@
 			let startDate = new Date(visit.start_date);
 			let endDate = new Date(visit.end_date);
 
-			if (isVisitAllDay(visit.start_date, visit.end_date)) {
+			if (visitIsDateOnly(visit)) {
 				const endDatePart = allDayDatePart(visit.end_date);
 				endDate = new Date(`${endDatePart}T23:59:59Z`);
 			}
@@ -519,7 +512,7 @@
 			let startDate = new Date(visit.start_date);
 			let endDate = new Date(visit.end_date);
 
-			if (isVisitAllDay(visit.start_date, visit.end_date)) {
+			if (visitIsDateOnly(visit)) {
 				const endDatePart = allDayDatePart(visit.end_date);
 				endDate = new Date(`${endDatePart}T23:59:59Z`);
 			}
@@ -852,7 +845,7 @@
 	function editVisit(visit: Visit) {
 		isEditing = true;
 		visitIdEditing = visit.id;
-		const isAllDayEvent = isVisitAllDay(visit.start_date, visit.end_date);
+		const isAllDayEvent = visitIsDateOnly(visit);
 		allDay = isAllDayEvent;
 
 		if ('start_timezone' in visit && typeof visit.start_timezone === 'string') {
@@ -885,7 +878,10 @@
 		note = visit.notes;
 		constrainDates = Boolean(collection?.start_date && collection?.end_date);
 		utcStartDate = visit.start_date;
-		utcEndDate = visit.end_date;
+		utcEndDate = visit.start_date;
+		selectedOffset = String(
+			DateTime.fromISO(visit.start_date).setZone(selectedStartTimezone).offset
+		);
 
 		setTimeout(() => {
 			isEditing = false;
@@ -941,6 +937,17 @@
 
 	// Lifecycle
 	onMount(async () => {
+		try {
+			const response = await fetch(`/api/locations/${objectId}/`);
+			if (response.ok) {
+				const latest = await response.json();
+				visits = latest.visits ?? visits;
+				const inferred = visits?.find((visit) => visit.photo_derived);
+				if (inferred) editVisit(inferred);
+			}
+		} catch {
+			/* Keep the visits already loaded by the parent. */
+		}
 		localStartDate = updateLocalDate({
 			utcDate: utcStartDate,
 			timezone: selectedStartTimezone
@@ -1015,7 +1022,12 @@
 		}
 	});
 
-	let isDateValid = $derived(validateDateRange(utcStartDate ?? '', utcEndDate ?? '').valid);
+	let isDateValid = $derived(
+		Boolean(localStartDate) &&
+			(allDay ||
+				(!nonexistentTime &&
+					(!ambiguousTime || possibleTimes.some((time) => String(time.offset) === selectedOffset))))
+	);
 </script>
 
 <div class="h-full min-h-0 flex flex-col bg-base-200">
@@ -1032,8 +1044,7 @@
 								checked={allDay}
 								onchange={handleAllDayToggle}
 							/>
-							<span class="font-semibold text-sm text-base-content">{$t('adventures.all_day')}</span
-							>
+							<span class="font-semibold text-sm text-base-content">Date only</span>
 						</label>
 
 						{#if collection?.start_date && collection?.end_date}
@@ -1051,17 +1062,18 @@
 						{/if}
 					</div>
 
-					{#if !isDateValid}
+					{#if localStartDate && nonexistentTime}
 						<div class="alert alert-error bg-error/10 border border-error/30 text-error">
 							<AlertIcon class="w-4 h-4" />
-							<span class="text-sm">{$t('adventures.invalid_date_range')}</span>
+							<span class="text-sm"
+								>This time does not exist here because the clocks move forward. Choose another time.</span
+							>
 						</div>
 					{/if}
 
-					<div class="grid grid-cols-1 items-start lg:grid-cols-3 gap-4">
+					<div class="grid grid-cols-1 items-start lg:grid-cols-2 gap-4">
 						<div class="flex flex-col">
-							<label class="field-label" for="start-date-input">{$t('adventures.start_date')}</label
-							>
+							<label class="field-label" for="start-date-input">Visited on</label>
 							<DateInput
 								id="start-date-input"
 								bind:value={localStartDate}
@@ -1072,24 +1084,30 @@
 							/>
 						</div>
 
-						{#if localStartDate}
-							<div class="flex flex-col">
-								<label class="field-label" for="end-date-input">{$t('adventures.end_date')}</label>
-								<DateInput
-									id="end-date-input"
-									bind:value={localEndDate}
-									onchange={handleLocalDateChange}
-									showTime={!allDay}
-									min={constrainDates ? localStartDate : undefined}
-									max={constrainDates ? constraintEndDate : undefined}
-								/>
-							</div>
-						{/if}
-
 						{#if !allDay}
 							<TimezoneSelector bind:selectedTimezone={selectedStartTimezone} />
 						{/if}
 					</div>
+
+					{#if !allDay && ambiguousTime}
+						<label class="flex flex-col gap-2 text-sm" for="visit-offset"
+							>This time occurs twice when the clocks move back. Choose the UTC offset.
+							<select id="visit-offset" class="select" bind:value={selectedOffset}>
+								<option value="">Choose offset</option>
+								{#each possibleTimes as moment}<option value={String(moment.offset)}
+										>{moment.toFormat('HH:mm ZZZZ')} (UTC{moment.toFormat('ZZ')})</option
+									>{/each}
+							</select>
+						</label>
+					{/if}
+					{#if visits?.find((visit) => visit.id === visitIdEditing)?.photo_derived}
+						<p class="text-sm text-base-content/60">
+							Filled from the earliest selected photo. {allDay
+								? 'The photo time needs confirmation; only the day was added.'
+								: 'The timezone and daylight saving offset are based on this place and capture date.'}
+							You can change it here.
+						</p>
+					{/if}
 
 					<div>
 						<label class="field-label" for="visit-notes">{$t('adventures.notes')}</label>
@@ -1255,7 +1273,7 @@
 										<div class="flex items-start justify-between gap-3">
 											<div class="flex-1 min-w-0">
 												<div class="flex flex-wrap items-center gap-2 mb-1">
-													{#if isVisitAllDay(visit.start_date, visit.end_date)}
+													{#if visitIsDateOnly(visit)}
 														<span class="badge badge-outline badge-sm"
 															>{$t('adventures.all_day')}</span
 														>
@@ -1265,20 +1283,17 @@
 															{$t('adventures.timed')}
 														</span>
 													{/if}
-													{#if visit.timezone && !isVisitAllDay(visit.start_date, visit.end_date)}
+													{#if visit.timezone && !visitIsDateOnly(visit)}
 														<span class="badge badge-ghost badge-sm">{visit.timezone}</span>
 													{/if}
 												</div>
 												<div class="text-base font-semibold truncate">
-													{#if isVisitAllDay(visit.start_date, visit.end_date)}
+													{#if visitIsDateOnly(visit)}
 														{formatAllDayDate(visit.start_date, dateFormat)}
-														– {formatAllDayDate(visit.end_date, dateFormat)}
 													{:else if visit.timezone}
 														{formatDateInTimezone(visit.start_date, visit.timezone, dateFormat)}
-														– {formatDateInTimezone(visit.end_date, visit.timezone, dateFormat)}
 													{:else}
 														{formatDateInTimezone(visit.start_date, null, dateFormat)}
-														– {formatDateInTimezone(visit.end_date, null, dateFormat)}
 													{/if}
 												</div>
 

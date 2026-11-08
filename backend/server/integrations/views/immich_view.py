@@ -1,4 +1,5 @@
 import os
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 
 from rest_framework.response import Response
@@ -52,6 +53,42 @@ class ImmichIntegrationView(viewsets.ViewSet):
             )
 
         return user_integrations.first()
+
+    @action(detail=False, methods=['get'])
+    def nearby(self, request):
+        import math
+        from adventures.models import Location
+        from adventures.permissions import IsOwnerOrSharedWithFullAccess
+        from integrations.immich_nearby import nearby_assets
+        integration = self.check_integration(request)
+        if isinstance(integration, Response):
+            return integration
+        try:
+            location = Location.objects.get(pk=request.query_params.get('object_id'))
+        except (Location.DoesNotExist, ValueError, TypeError, ValidationError):
+            return Response({'message': 'Location not found.'}, status=404)
+        if not IsOwnerOrSharedWithFullAccess().has_object_permission(request, self, location):
+            return Response({'message': 'You cannot edit this location.'}, status=403)
+        if location.coordinates is None:
+            return Response({'message': 'Set the location on the map to find nearby photos.'}, status=400)
+        try:
+            radius = float(request.query_params.get('radius', 500))
+            page = int(request.query_params.get('page', 1))
+            if not math.isfinite(radius) or not 50 <= radius <= 5000 or not 1 <= page <= 5000:
+                raise ValueError()
+        except (ValueError, TypeError):
+            return Response({'message': 'Choose a radius between 50 m and 5 km.'}, status=400)
+        try:
+            items, has_next = nearby_assets(integration, location.coordinates.y, location.coordinates.x, radius, page)
+        except ValueError as exc:
+            return Response({'message': str(exc)}, status=422)
+        except requests.RequestException:
+            return Response({'message': 'Nearby photos are unavailable. Check that your Immich API key allows map.read and asset.read.'}, status=503)
+        public_url = os.environ.get('PUBLIC_URL', '').strip("'").rstrip('/')
+        for item in items:
+            item['image_url'] = f'{public_url}/api/integrations/immich/{integration.id}/get/{item["id"]}'
+        next_url = f'/api/integrations/immich/nearby/?object_id={location.id}&radius={radius}&page={page + 1}' if has_next else None
+        return Response({'results': items, 'next': next_url})
 
     def _immich_connection_error(self):
         return Response(

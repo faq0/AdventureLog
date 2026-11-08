@@ -147,7 +147,9 @@ function getEntityDateRange(entity: Visit | Transportation | Lodging | Note | Ch
 	try {
 		let timezone = (entity as Visit).timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
 		if ('start_date' in entity && 'end_date' in entity) {
-			isAllDayEvent = isVisitAllDay(entity.start_date, entity.end_date);
+			isAllDayEvent =
+				('date_only' in entity ? entity.date_only : null) ??
+				isVisitAllDay(entity.start_date, entity.end_date);
 			if (isAllDayEvent) {
 				start = entity.start_date
 					? DateTime.fromISO(allDayDatePart(entity.start_date), { zone: 'UTC' }).startOf('day')
@@ -157,33 +159,33 @@ function getEntityDateRange(entity: Visit | Transportation | Lodging | Note | Ch
 					: null;
 			} else {
 				start = DateTime.fromISO(entity.start_date, { zone: 'UTC' }).setZone(timezone);
-				end = DateTime.fromISO(entity.end_date, { zone: 'UTC' }).setZone(timezone);
+				end = DateTime.fromISO(entity.end_date ?? '', { zone: 'UTC' }).setZone(timezone);
 			}
 		} else if ('date' in entity && 'end_date' in entity) {
 			isAllDayEvent = !!(entity.date && entity.date.length === 10);
 			if (isAllDayEvent) {
-				start = DateTime.fromISO(entity.date, { zone: 'UTC' }).startOf('day');
-				end = DateTime.fromISO(entity.end_date, { zone: 'UTC' }).endOf('day');
+				start = DateTime.fromISO(entity.date ?? '', { zone: 'UTC' }).startOf('day');
+				end = DateTime.fromISO(entity.end_date ?? '', { zone: 'UTC' }).endOf('day');
 			} else {
-				start = DateTime.fromISO(entity.date, { zone: 'UTC' }).setZone(timezone);
-				end = DateTime.fromISO(entity.end_date, { zone: 'UTC' }).setZone(timezone);
+				start = DateTime.fromISO(entity.date ?? '', { zone: 'UTC' }).setZone(timezone);
+				end = DateTime.fromISO(entity.end_date ?? '', { zone: 'UTC' }).setZone(timezone);
 			}
 		} else if ('check_in' in entity && 'check_out' in entity) {
 			isAllDayEvent = !!(entity.check_in && entity.check_in.length === 10);
 			if (isAllDayEvent) {
-				start = DateTime.fromISO(entity.check_in, { zone: 'UTC' }).startOf('day');
-				end = DateTime.fromISO(entity.check_out, { zone: 'UTC' }).endOf('day');
+				start = DateTime.fromISO(entity.check_in ?? '', { zone: 'UTC' }).startOf('day');
+				end = DateTime.fromISO(entity.check_out ?? '', { zone: 'UTC' }).endOf('day');
 			} else {
-				start = DateTime.fromISO(entity.check_in, { zone: 'UTC' }).setZone(timezone);
-				end = DateTime.fromISO(entity.check_out, { zone: 'UTC' }).setZone(timezone);
+				start = DateTime.fromISO(entity.check_in ?? '', { zone: 'UTC' }).setZone(timezone);
+				end = DateTime.fromISO(entity.check_out ?? '', { zone: 'UTC' }).setZone(timezone);
 			}
 		} else if ('date' in entity) {
 			isAllDayEvent = !!(entity.date && entity.date.length === 10);
 			if (isAllDayEvent) {
-				start = DateTime.fromISO(entity.date, { zone: 'UTC' }).startOf('day');
+				start = DateTime.fromISO(entity.date ?? '', { zone: 'UTC' }).startOf('day');
 				end = start;
 			} else {
-				start = DateTime.fromISO(entity.date, { zone: 'UTC' }).setZone(timezone);
+				start = DateTime.fromISO(entity.date ?? '', { zone: 'UTC' }).setZone(timezone);
 				end = start;
 			}
 		}
@@ -236,7 +238,7 @@ export function isEntityInCollectionDateRange(
 	} = getCollectionDateRange(collection);
 
 	// If any dates are missing, don't match
-	if (!entityStart || !collStart) return false;
+	if (!entityStart || !collStart || !collEnd) return false;
 
 	// If either side is all-day, use date comparison
 	if (entityAllDay || collAllDay) {

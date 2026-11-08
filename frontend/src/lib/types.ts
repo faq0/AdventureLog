@@ -68,6 +68,10 @@ export type ContentImage = {
 	image: string;
 	is_primary: boolean;
 	immich_id: string | null;
+	captured_at?: string | null;
+	captured_local?: string | null;
+	captured_timezone?: string | null;
+	capture_time_status?: string;
 	source: ImageSource;
 	source_url?: string | null;
 	latitude?: number | null;
@@ -550,6 +554,8 @@ export type Activity = {
 
 export type Visit = {
 	id: string;
+	date_only?: boolean | null;
+	photo_derived?: boolean;
 	start_date: string;
 	end_date: string;
 	notes: string;

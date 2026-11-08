@@ -5,6 +5,10 @@ export function normalizeContentImage(
 ): ContentImage {
 	return {
 		id: partial.id,
+		captured_at: partial.captured_at ?? null,
+		captured_local: partial.captured_local ?? null,
+		captured_timezone: partial.captured_timezone ?? null,
+		capture_time_status: partial.capture_time_status ?? 'missing',
 		image: partial.image,
 		is_primary: partial.is_primary ?? false,
 		immich_id: partial.immich_id ?? null,

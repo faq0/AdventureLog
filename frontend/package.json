@@ -21,6 +21,7 @@
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.3.3",
+		"@types/luxon": "3.7.1",
 		"@types/node": "^22.15.2",
 		"@types/qrcode": "^1.5.5",
 		"baseline-browser-mapping": "^2.11.33",

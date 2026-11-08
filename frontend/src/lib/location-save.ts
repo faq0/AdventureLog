@@ -57,6 +57,13 @@ export async function saveLocation({
 				: null
 	};
 
+	// Visits and media are persisted by their own editors. Resending a stale
+	// snapshot here would replace visits and discard capture-time provenance.
+	delete payload.visits;
+	delete payload.images;
+	delete payload.attachments;
+	delete payload.trails;
+
 	if (collectionId) {
 		payload.collections = [collectionId];
 	}

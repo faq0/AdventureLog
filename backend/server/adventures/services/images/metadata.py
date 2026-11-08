@@ -187,6 +187,7 @@ def create_content_image(
     explicit_source: str | None = None,
     immich_integration=None,
     coordinates: Point | None = None,
+    metadata_immich_id: str | None = None,
 ) -> ContentImage:
     metadata = resolve_image_metadata(
         file_bytes=file_bytes,
@@ -214,7 +215,32 @@ def create_content_image(
     if image_file is not None:
         create_kwargs['image'] = image_file
 
-    return ContentImage.objects.create(**create_kwargs)
+    from .capture_time import capture_from_bytes, capture_from_immich, sync_photo_visit
+    capture_point = metadata['coordinates']
+    content_object = content_type.get_object_for_this_type(pk=object_id)
+    capture_point = getattr(content_object, 'coordinates', None) or capture_point
+    capture = capture_from_bytes(file_bytes, point=capture_point) if file_bytes else {}
+    asset_id = metadata_immich_id or immich_id
+    if asset_id and immich_integration:
+        try:
+            response = requests.get(
+                f'{immich_integration.server_url.rstrip("/")}/assets/{asset_id}',
+                headers={'x-api-key': immich_integration.api_key}, timeout=8)
+            response.raise_for_status()
+            payload = response.json()
+            capture = capture_from_immich(payload, point=capture_point)
+            if not metadata['coordinates']:
+                exif = payload.get('exifInfo') or {}
+                if exif.get('latitude') is not None and exif.get('longitude') is not None:
+                    create_kwargs['coordinates'] = make_point(exif['longitude'], exif['latitude'])
+                    if not capture_point:
+                        capture = capture_from_immich(payload, point=create_kwargs['coordinates'])
+        except (requests.RequestException, ValueError, TypeError):
+            logger.warning('Immich capture metadata unavailable for selected photo')
+    create_kwargs.update(capture)
+    image = ContentImage.objects.create(**create_kwargs)
+    sync_photo_visit(image)
+    return image
 
 
 def resolve_coordinates_for_image(image: ContentImage, immich_integration=None):
