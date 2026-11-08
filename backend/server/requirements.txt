@@ -35,3 +35,5 @@ legacy-cgi==2.6.4
 requests>=2.32.4
 stripe==11.3.0
 reportlab>=4.2.0,<5
+# Offline geographic timezone lookup; historical offsets are resolved by zoneinfo.
+tzfpy==2.1.2

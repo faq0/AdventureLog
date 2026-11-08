@@ -1,4 +1,5 @@
 import os
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 
 from rest_framework.response import Response
@@ -52,6 +53,56 @@ class ImmichIntegrationView(viewsets.ViewSet):
             )
 
         return user_integrations.first()
+
+    @action(detail=False, methods=['get'])
+    def nearby(self, request):
+        import math
+        from adventures.models import Location, Lodging, Transportation, Visit
+        from adventures.permissions import IsOwnerOrSharedWithFullAccess
+        from integrations.immich_nearby import nearby_assets
+        integration = self.check_integration(request)
+        if isinstance(integration, Response):
+            return integration
+        models = {'location': Location, 'lodging': Lodging, 'transportation': Transportation, 'visit': Visit}
+        content_type = request.query_params.get('content_type', 'location')
+        model = models.get(content_type)
+        if model is None:
+            return Response({'message': 'Nearby photos require an entry with a map position.'}, status=400)
+        try:
+            entry = model.objects.get(pk=request.query_params.get('object_id'))
+        except (model.DoesNotExist, ValueError, TypeError, ValidationError):
+            return Response({'message': 'Entry not found.'}, status=404)
+        if not IsOwnerOrSharedWithFullAccess().has_object_permission(request, self, entry):
+            return Response({'message': 'You cannot access this entry.'}, status=403)
+        endpoint = request.query_params.get('endpoint', 'origin')
+        if content_type == 'transportation':
+            if endpoint not in ('origin', 'destination'):
+                return Response({'message': 'Choose the departure or arrival point.'}, status=400)
+            coordinates = getattr(entry, endpoint)
+        elif content_type == 'visit':
+            coordinates = entry.location.coordinates
+        else:
+            coordinates = entry.coordinates
+        if coordinates is None:
+            return Response({'message': 'Set a map position for this entry to find nearby photos.'}, status=400)
+        try:
+            radius = float(request.query_params.get('radius', 500))
+            page = int(request.query_params.get('page', 1))
+            if not math.isfinite(radius) or not 50 <= radius <= 5000 or not 1 <= page <= 5000:
+                raise ValueError()
+        except (ValueError, TypeError):
+            return Response({'message': 'Choose a radius between 50 m and 5 km.'}, status=400)
+        try:
+            items, has_next = nearby_assets(integration, coordinates.y, coordinates.x, radius, page)
+        except ValueError as exc:
+            return Response({'message': str(exc)}, status=422)
+        except requests.RequestException:
+            return Response({'message': 'Nearby photos are unavailable. Check that your Immich API key allows map.read and asset.read.'}, status=503)
+        public_url = os.environ.get('PUBLIC_URL', '').strip("'").rstrip('/')
+        for item in items:
+            item['image_url'] = f'{public_url}/api/integrations/immich/{integration.id}/get/{item["id"]}'
+        next_url = f'/api/integrations/immich/nearby/?object_id={entry.id}&content_type={content_type}&endpoint={endpoint if content_type == "transportation" else "origin"}&radius={radius}&page={page + 1}' if has_next else None
+        return Response({'results': items, 'next': next_url})
 
     def _immich_connection_error(self):
         return Response(

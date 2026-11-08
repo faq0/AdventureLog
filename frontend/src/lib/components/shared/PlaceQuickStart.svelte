@@ -458,7 +458,7 @@
 			country: locationData?.country,
 			display_name: locationData?.display_name,
 			location_name: locationData?.location_name,
-			rating: selectedLocation.rating ?? null,
+			rating: null,
 			review_count: selectedLocation.review_count ?? null,
 			photos: selectedLocation.photos || [],
 			description: selectedLocation.description || null,

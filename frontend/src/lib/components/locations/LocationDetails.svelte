@@ -71,6 +71,7 @@
 
 	interface Props {
 		initialLocation?: any;
+		initialVisitDate?: string | null;
 		currentUser?: any;
 		editingLocation?: any;
 		collection?: Collection | null;
@@ -78,6 +79,7 @@
 
 	let {
 		initialLocation = null,
+		initialVisitDate = null,
 		currentUser = null,
 		editingLocation = $bindable(null),
 		collection = null
@@ -173,6 +175,7 @@
 				location,
 				locationToEdit,
 				collectionId: collection?.id || null,
+				itineraryDate: initialVisitDate,
 				defaultCurrency
 			});
 			location = {

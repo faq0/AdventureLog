@@ -106,7 +106,10 @@ class ItineraryViewSet(viewsets.ModelViewSet):
                     clean_date = str(target_date).split('T')[0] if 'T' in str(target_date) else str(target_date)
                     
                     # For locations, create an all-day visit instead of updating a date field
-                    if content_type_val == 'location':
+                    if content_type_val == 'location' and not data.get('source_visit_id') and not data.get('start_date') and not data.get('end_date'):
+                        from adventures.services.images.capture_time import ensure_itinerary_visit
+                        ensure_itinerary_visit(content_object, parse_date(clean_date))
+                    elif content_type_val == 'location':
                         # Determine start/end bounds. Support single date or optional start_date/end_date in payload.
                         # Prefer explicit start_date/end_date if provided, otherwise use the single target date.
                         start_input = data.get('start_date') or clean_date
@@ -164,9 +167,22 @@ class ItineraryViewSet(viewsets.ModelViewSet):
                             if source_visit_id:
                                 try:
                                     source_visit = Visit.objects.get(id=source_visit_id, location=content_object)
-                                    source_visit.start_date = new_start
-                                    source_visit.end_date = new_end
-                                    source_visit.save(update_fields=['start_date', 'end_date'])
+                                    if not data.get('start_date') and not data.get('end_date') and (source_visit.photo_derived or source_visit.itinerary_date):
+                                        # Moving an automatic visit keeps the explicitly chosen
+                                        # day; only matching photos may supply its clock time.
+                                        source_visit.start_date = source_visit.end_date = new_start
+                                        source_visit.itinerary_date = parse_date(clean_date)
+                                        source_visit.date_only = True
+                                        source_visit.photo_derived = False
+                                        source_visit.save(update_fields=['start_date', 'end_date', 'itinerary_date', 'date_only', 'photo_derived'])
+                                        from adventures.services.images.capture_time import ensure_itinerary_visit
+                                        ensure_itinerary_visit(content_object, source_visit.itinerary_date)
+                                    else:
+                                        source_visit.start_date = new_start
+                                        source_visit.end_date = new_end
+                                        source_visit.itinerary_date = None
+                                        source_visit.photo_derived = False
+                                        source_visit.save(update_fields=['start_date', 'end_date', 'itinerary_date', 'photo_derived'])
                                 except Visit.DoesNotExist:
                                     # Fall back to create logic below
                                     pass
@@ -189,7 +205,9 @@ class ItineraryViewSet(viewsets.ModelViewSet):
                                         # Update existing overlapping visit
                                         existing.start_date = new_start
                                         existing.end_date = new_end
-                                        existing.save(update_fields=['start_date', 'end_date'])
+                                        existing.itinerary_date = None
+                                        existing.photo_derived = False
+                                        existing.save(update_fields=['start_date', 'end_date', 'itinerary_date', 'photo_derived'])
                                     else:
                                         # Create new visit
                                         Visit.objects.create(
@@ -329,7 +347,11 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         # If we updated the item's date, include the updated object in response for frontend sync
         response_data = serializer.data
         if update_item_date and content_type_val and object_id:
-            if content_type_val == 'transportation':
+            if content_type_val == 'location':
+                from adventures.serializers import LocationSerializer
+                location = Location.objects.get(id=object_id)
+                response_data['updated_object'] = LocationSerializer(location, context=self.get_serializer_context()).data
+            elif content_type_val == 'transportation':
                 try:
                     t = Transportation.objects.get(id=object_id)
                     from adventures.serializers import TransportationSerializer

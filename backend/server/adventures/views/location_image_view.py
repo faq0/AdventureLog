@@ -395,6 +395,8 @@ class ContentImageViewSet(viewsets.ModelViewSet):
                 image_file=image_file,
                 file_bytes=immich_response.content,
                 explicit_source=ImageSource.IMMICH,
+                metadata_immich_id=immich_id,
+                immich_integration=user_integration,
             )
             serializer = self.get_serializer(image)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -415,6 +417,20 @@ class ContentImageViewSet(viewsets.ModelViewSet):
 
         image_file = request.FILES.get('image')
         immich_id = request.data.get('immich_id')
+        metadata_immich_id = immich_id
+        if not image_file and immich_id and request.data.get('copy_locally') is True:
+            integration = ImmichIntegration.objects.filter(user=request.user).first()
+            if integration is None:
+                return Response({'error': 'No Immich integration configured.'}, status=400)
+            try:
+                response = requests.get(f'{integration.server_url.rstrip("/")}/assets/{immich_id}/thumbnail',
+                    params={'size': 'preview'}, headers={'x-api-key': integration.api_key}, timeout=10)
+                response.raise_for_status()
+                if not response.headers.get('Content-Type', '').startswith('image/'):
+                    return Response({'error': 'Immich did not return an image.'}, status=502)
+                image_file = ContentFile(response.content, name=f'immich_{immich_id}.jpg')
+            except requests.RequestException:
+                return Response({'error': 'Could not copy this photo from Immich.'}, status=502)
 
         if not image_file and not immich_id:
             return Response({"error": "No image uploaded"}, status=status.HTTP_400_BAD_REQUEST)
@@ -444,12 +460,12 @@ class ContentImageViewSet(viewsets.ModelViewSet):
             image_file = ContentFile(file_bytes, name=image_file.name)
 
             if immich_id:
-                immich_integration = ImmichIntegration.objects.filter(user=owner).first()
-                coordinates = fetch_immich_coordinates(immich_integration, immich_id)
+                immich_integration = ImmichIntegration.objects.filter(user=request.user).first()
+                explicit_source = ImageSource.IMMICH
                 immich_id = None
         else:
             file_bytes = None
-            immich_integration = ImmichIntegration.objects.filter(user=owner).first()
+            immich_integration = ImmichIntegration.objects.filter(user=request.user).first()
 
         image = create_content_image(
             user=owner,
@@ -462,6 +478,7 @@ class ContentImageViewSet(viewsets.ModelViewSet):
             explicit_source=explicit_source,
             immich_integration=immich_integration,
             coordinates=coordinates,
+            metadata_immich_id=metadata_immich_id,
         )
 
         serializer = self.get_serializer(image)

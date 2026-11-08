@@ -138,7 +138,7 @@
 		if (prefill.location) location.location = prefill.location;
 		if (typeof prefill.latitude === 'number') location.latitude = prefill.latitude;
 		if (typeof prefill.longitude === 'number') location.longitude = prefill.longitude;
-		if (typeof prefill.rating === 'number') location.rating = prefill.rating;
+
 		if (!location.link && (prefill.website || prefill.google_maps_url)) {
 			location.link = prefill.website || prefill.google_maps_url;
 		}
@@ -421,6 +421,7 @@
 				<LocationDetails
 					currentUser={user}
 					initialLocation={location}
+					initialVisitDate={storedInitialVisitDate}
 					{collection}
 					bind:editingLocation={location}
 					on:back={handleDetailsBack}

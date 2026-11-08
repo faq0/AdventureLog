@@ -457,7 +457,7 @@
 			{/if}
 		</div>
 		{#if adventure.images?.length > 0}
-			<div class="detail-gallery">
+			<div class="detail-gallery photo-gallery">
 				{#each adventure.images as image, i}
 					<div
 						class="absolute inset-0 transition-opacity duration-300"
@@ -476,7 +476,7 @@
 								><img
 									src={image.image}
 									alt={adventure.name}
-									class="w-full h-full object-cover"
+									class="w-full h-full object-contain"
 								/></ImageFrame
 							>
 						</button>
@@ -500,6 +500,21 @@
 					</div>
 				{/if}
 			</div>
+			{#if adventure.images.length > 1}
+				<div class="photo-thumbnails" aria-label="Location photos">
+					{#each adventure.images as image, i}
+						<button
+							type="button"
+							class:current={i === currentSlide}
+							aria-current={i === currentSlide ? 'true' : undefined}
+							aria-label={`Show photo ${i + 1}`}
+							onclick={() => (currentSlide = i)}
+						>
+							<img src={image.image} alt="" loading="lazy" />
+						</button>
+					{/each}
+				</div>
+			{/if}
 		{/if}
 		<header class="detail-header">
 			<div class="flex flex-wrap items-start justify-between gap-4">
@@ -630,42 +645,26 @@
 												<div class="card-body p-4">
 													<div class="flex gap-2">
 														<div class="flex-1 min-w-0">
-															{#if isVisitAllDay(visit.start_date, visit.end_date)}
-																<div class="flex items-center gap-2 mb-2">
-																	<span class="badge badge-primary">All Day</span>
-																	<span class="font-semibold">
-																		{formatAllDayDate(visit.start_date, dateFormat)} – {formatAllDayDate(
-																			visit.end_date,
+															<div class="space-y-1">
+																<p class="font-semibold">
+																	{#if visit.date_only ?? isVisitAllDay(visit.start_date, visit.end_date)}{formatAllDayDate(
+																			visit.start_date,
 																			dateFormat
-																		)}
-																	</span>
-																</div>
-															{:else}
-																<div class="space-y-2">
-																	<div class="flex items-center gap-2">
-																		<span class="badge badge-primary">
-																			{$t('adventures.timed')}</span
-																		>
-																		{#if visit.timezone}
-																			<span class="badge badge-outline">{visit.timezone}</span>
-																		{/if}
-																	</div>
-																	<div class="text-sm">
-																		<strong>{$t('adventures.start')}:</strong>
-																		{formatDateInTimezone(
+																		)}{:else}{formatDateInTimezone(
 																			visit.start_date,
 																			visit.timezone,
 																			dateFormat
-																		)}<br />
-																		<strong>{$t('adventures.end')}:</strong>
-																		{formatDateInTimezone(
-																			visit.end_date,
-																			visit.timezone,
-																			dateFormat
-																		)}
-																	</div>
-																</div>
-															{/if}
+																		)}{/if}
+																</p>
+																{#if !(visit.date_only ?? isVisitAllDay(visit.start_date, visit.end_date)) && visit.timezone}<p
+																		class="text-xs text-base-content/60"
+																	>
+																		{visit.timezone}
+																	</p>{/if}
+																{#if visit.photo_derived}<p class="text-xs text-base-content/50">
+																		From photos
+																	</p>{/if}
+															</div>
 															{#if visit.notes}
 																<div class="mt-3 p-3 bg-base-200 rounded-lg">
 																	<p class="text-sm italic">"{visit.notes}"</p>

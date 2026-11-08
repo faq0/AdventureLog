@@ -867,6 +867,7 @@
 		const days: DayGroup[] = [];
 		for (let dt = start; dt <= end; dt = dt.plus({ days: 1 })) {
 			const iso = dt.toISODate();
+			if (!iso) continue;
 			const items = (grouped.get(iso) || []).sort((a, b) => a.order - b.order);
 			const overnightLodging = getOvernightLodgingForDate(collection, iso);
 			const globalDatedItems = globalByDate.get(iso) || [];
@@ -1407,7 +1408,11 @@
 
 			// If we updated the item's date, sync the updated object from server response
 			if (updateItemDate && created.updated_object) {
-				if (objectType === 'transportation') {
+				if (objectType === 'location') {
+					collection.locations = (collection.locations || []).map((location) =>
+						location.id === objectId ? { ...location, ...created.updated_object } : location
+					);
+				} else if (objectType === 'transportation') {
 					if (collection.transportations) {
 						collection.transportations = collection.transportations.map((t) =>
 							t.id === objectId ? { ...t, ...created.updated_object } : t
@@ -1465,24 +1470,24 @@
 							const endDT = v.end_date ? DateTime.fromISO(v.end_date) : null;
 							const baseStart = DateTime.fromISO(dateISO);
 							const newStart = startDT
-								? baseStart
+								? (baseStart
 										.set({
 											second: startDT.second,
 											minute: startDT.minute,
 											hour: startDT.hour,
 											millisecond: startDT.millisecond
 										})
-										.toISO()
+										.toISO() ?? v.start_date)
 								: `${dateISO}T00:00:00Z`;
 							const newEnd = endDT
-								? DateTime.fromISO(dateISO)
+								? (DateTime.fromISO(dateISO)
 										.set({
 											second: endDT.second,
 											minute: endDT.minute,
 											hour: endDT.hour,
 											millisecond: endDT.millisecond
 										})
-										.toISO()
+										.toISO() ?? v.end_date)
 								: `${dateISO}T00:00:00Z`;
 
 							const nextVisits = [...visits];

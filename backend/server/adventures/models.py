@@ -132,6 +132,9 @@ class Visit(models.Model):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     timezone = models.CharField(max_length=50, choices=[(tz, tz) for tz in TIMEZONES], null=True, blank=True)
+    date_only = models.BooleanField(null=True, blank=True, default=None)
+    photo_derived = models.BooleanField(default=False)
+    itinerary_date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -164,6 +167,7 @@ class Location(models.Model):
     tags = ArrayField(models.CharField(max_length=100), blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     rating = models.FloatField(blank=True, null=True)
+    rating_is_manual = models.BooleanField(default=False)
     price = MoneyField(max_digits=12, decimal_places=2, default_currency='USD', null=True, blank=True)
     link = models.URLField(blank=True, null=True, max_length=2083)
     is_public = models.BooleanField(default=False)
@@ -475,6 +479,10 @@ class ContentImage(models.Model):
         default=Source.UPLOAD,
     )
     source_url = models.URLField(max_length=2048, null=True, blank=True)
+    captured_at = models.DateTimeField(null=True, blank=True)
+    captured_local = models.CharField(max_length=40, null=True, blank=True)
+    captured_timezone = models.CharField(max_length=64, null=True, blank=True)
+    capture_time_status = models.CharField(max_length=24, blank=True, default='missing')
     coordinates = gis_models.PointField(srid=4326, null=True, blank=True)
     
     # Generic foreign key fields

@@ -124,7 +124,7 @@ class LocationViewSet(viewsets.ModelViewSet):
             queryset = queryset.annotate(lower_name=Lower('name'))
             ordering = 'lower_name'
         elif order_by == 'rating':
-            queryset = queryset.filter(rating__isnull=False)
+            queryset = queryset.filter(rating__isnull=False, rating_is_manual=True)
             ordering = 'rating'
         elif order_by == 'updated_at':
             # Special handling for updated_at (reverse default order)
@@ -238,9 +238,6 @@ class LocationViewSet(viewsets.ModelViewSet):
         except Exception:
             reverse_data = {}
 
-        rating = coerce_float(payload.get('rating'))
-        if rating is None:
-            rating = coerce_float(details.get('rating'))
 
         review_count = coerce_int(payload.get('review_count'))
         if review_count is None:
@@ -266,7 +263,6 @@ class LocationViewSet(viewsets.ModelViewSet):
             'location': location_label,
             'latitude': latitude,
             'longitude': longitude,
-            'rating': rating,
             'description': description,
             'link': link,
             'tags': sanitize_tags(payload.get('types') or payload.get('tags')),
@@ -518,6 +514,7 @@ class LocationViewSet(viewsets.ModelViewSet):
                     name=f"Copy of {original.name}",
                     description=original.description,
                     rating=original.rating,
+                    rating_is_manual=original.rating_is_manual,
                     link=original.link,
                     location=original.location,
                     tags=list(original.tags) if original.tags else None,

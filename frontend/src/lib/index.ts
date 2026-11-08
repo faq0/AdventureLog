@@ -95,53 +95,66 @@ export function groupLocationsByDate(
 	for (let i = 0; i < numberOfDays; i++) {
 		const currentDate = DateTime.fromJSDate(startDate).plus({ days: i });
 		const dateString = currentDate.toISODate(); // 'YYYY-MM-DD'
-		groupedLocations[dateString] = [];
+		if (dateString) groupedLocations[dateString] = [];
 	}
 
 	locations.forEach((location) => {
-		location.visits.forEach((visit: { start_date: string; end_date: string; timezone: any }) => {
-			if (visit.start_date) {
-				const isAllDayEvent = isVisitAllDay(visit.start_date, visit.end_date);
+		location.visits.forEach(
+			(visit: {
+				start_date: string;
+				end_date: string;
+				timezone: any;
+				date_only?: boolean | null;
+			}) => {
+				if (visit.start_date) {
+					const isAllDayEvent = visit.date_only ?? isVisitAllDay(visit.start_date, visit.end_date);
 
-				let startDT: DateTime;
-				let endDT: DateTime;
+					let startDT: DateTime;
+					let endDT: DateTime;
 
-				if (isAllDayEvent) {
-					// For all-day events, extract just the date part and ignore timezone
-					const dateOnly = visit.start_date.split('T')[0]; // Get 'YYYY-MM-DD'
-					startDT = DateTime.fromISO(dateOnly); // This creates a date without time/timezone
+					if (isAllDayEvent) {
+						// For all-day events, extract just the date part and ignore timezone
+						const dateOnly = visit.start_date.split('T')[0]; // Get 'YYYY-MM-DD'
+						startDT = DateTime.fromISO(dateOnly); // This creates a date without time/timezone
 
-					endDT = visit.end_date ? DateTime.fromISO(visit.end_date.split('T')[0]) : startDT;
-				} else {
-					// For timed events, use timezone conversion
-					startDT = DateTime.fromISO(visit.start_date, {
-						zone: visit.timezone ?? 'UTC'
-					});
+						endDT = visit.end_date ? DateTime.fromISO(visit.end_date.split('T')[0]) : startDT;
+					} else {
+						// For timed events, use timezone conversion
+						startDT = DateTime.fromISO(visit.start_date, {
+							zone: visit.timezone ?? 'UTC'
+						});
 
-					endDT = visit.end_date
-						? DateTime.fromISO(visit.end_date, {
-								zone: visit.timezone ?? 'UTC'
-							})
-						: startDT;
-				}
+						endDT = visit.end_date
+							? DateTime.fromISO(visit.end_date, {
+									zone: visit.timezone ?? 'UTC'
+								})
+							: startDT;
+					}
 
-				const startDateStr = startDT.toISODate();
-				const endDateStr = endDT.toISODate();
+					const startDateStr = startDT.toISODate();
+					const endDateStr = endDT.toISODate();
 
-				// Loop through all days in range
-				for (let i = 0; i < numberOfDays; i++) {
-					const currentDate = DateTime.fromJSDate(startDate).plus({ days: i });
-					const currentDateStr = currentDate.toISODate();
+					// Loop through all days in range
+					for (let i = 0; i < numberOfDays; i++) {
+						const currentDate = DateTime.fromJSDate(startDate).plus({ days: i });
+						const currentDateStr = currentDate.toISODate();
 
-					// Include the current day if it falls within the location date range
-					if (currentDateStr >= startDateStr && currentDateStr <= endDateStr) {
-						if (groupedLocations[currentDateStr]) {
-							groupedLocations[currentDateStr].push(location);
+						// Include the current day if it falls within the location date range
+						if (
+							currentDateStr &&
+							startDateStr &&
+							endDateStr &&
+							currentDateStr >= startDateStr &&
+							currentDateStr <= endDateStr
+						) {
+							if (groupedLocations[currentDateStr]) {
+								groupedLocations[currentDateStr].push(location);
+							}
 						}
 					}
 				}
 			}
-		});
+		);
 	});
 
 	return groupedLocations;
@@ -165,7 +178,7 @@ export function groupTransportationsByDate(
 	for (let i = 0; i < numberOfDays; i++) {
 		const currentDate = DateTime.fromJSDate(startDate).plus({ days: i });
 		const dateString = currentDate.toISODate(); // 'YYYY-MM-DD'
-		groupedTransportations[dateString] = [];
+		if (dateString) groupedTransportations[dateString] = [];
 	}
 
 	transportations.forEach((transportation) => {
@@ -209,7 +222,13 @@ export function groupTransportationsByDate(
 				const currentDate = DateTime.fromJSDate(startDate).plus({ days: i });
 				const currentDateStr = currentDate.toISODate();
 
-				if (currentDateStr >= startDateStr && currentDateStr <= endDateStr) {
+				if (
+					currentDateStr &&
+					startDateStr &&
+					endDateStr &&
+					currentDateStr >= startDateStr &&
+					currentDateStr <= endDateStr
+				) {
 					groupedTransportations[currentDateStr]?.push(transportation);
 				}
 			}
@@ -232,7 +251,7 @@ export function groupLodgingByDate(
 	for (let i = 0; i < lodgingDays; i++) {
 		const currentDate = DateTime.fromJSDate(startDate).plus({ days: i });
 		const dateString = currentDate.toISODate(); // 'YYYY-MM-DD'
-		groupedLodging[dateString] = [];
+		if (dateString) groupedLodging[dateString] = [];
 	}
 
 	lodging.forEach((hotel) => {
@@ -274,7 +293,13 @@ export function groupLodgingByDate(
 
 				// Show lodging on days where check-in occurs through the day before check-out
 				// For lodging, we typically want to show it on the nights you're staying
-				if (currentDateStr >= startDateStr && currentDateStr < endDateStr) {
+				if (
+					currentDateStr &&
+					startDateStr &&
+					endDateStr &&
+					currentDateStr >= startDateStr &&
+					currentDateStr < endDateStr
+				) {
 					groupedLodging[currentDateStr]?.push(hotel);
 				}
 			}

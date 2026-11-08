@@ -1,0 +1,23 @@
+# Build this fork's frontend and backend on the pinned, deployed runtime.
+FROM node:22-bookworm-slim@sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d AS interface-build
+ARG PNPM_VERSION=10.32.1
+WORKDIR /app
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml frontend/.npmrc ./
+RUN pnpm install --frozen-lockfile
+COPY frontend/ ./
+RUN rm -f .env && pnpm run build
+ENV CI=true
+RUN pnpm prune --prod
+
+FROM ghcr.io/seanmorley15/adventurelog@sha256:b65149c8a84b89e1101e22e10ad217a5be443c8408244ec97aa4535d24dce6ad
+ARG VCS_REF=unknown
+LABEL org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.source="https://github.com/faq0/AdventureLog" \
+      org.opencontainers.image.title="AdventureLog photo workflow"
+COPY --from=interface-build /app/build /app/build
+COPY --from=interface-build /app/node_modules /app/node_modules
+COPY --from=interface-build /app/package.json /app/package.json
+COPY frontend/start.js /app/start.js
+RUN pip install --no-cache-dir tzfpy==2.1.2
+COPY backend/server /code/

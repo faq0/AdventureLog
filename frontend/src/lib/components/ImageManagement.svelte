@@ -643,6 +643,7 @@
 						{contentType}
 						{copyImmichLocally}
 						{defaultDate}
+						bind:adding={importInProgress}
 						on:localImage={handleImmichLocalImage}
 						on:remoteImmichSaved={handleImmichImageSaved}
 					/>

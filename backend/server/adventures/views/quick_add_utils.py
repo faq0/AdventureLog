@@ -266,29 +266,8 @@ def apply_quick_add_itinerary_date(content_object, date_value):
     model_name = content_object._meta.model_name
 
     if model_name == "location":
-        start_dt = aware_utc_from_date(date_value)
-        end_dt = aware_utc_from_date(date_value)
-
-        exact_match = Visit.objects.filter(
-            location=content_object, start_date=start_dt, end_date=end_dt
-        ).first()
-        if exact_match:
-            return
-
-        overlap_q = models.Q(start_date__lte=end_dt) & models.Q(end_date__gte=start_dt)
-        existing = Visit.objects.filter(location=content_object).filter(overlap_q).first()
-        if existing:
-            existing.start_date = start_dt
-            existing.end_date = end_dt
-            existing.save(update_fields=["start_date", "end_date"])
-            return
-
-        Visit.objects.create(
-            location=content_object,
-            start_date=start_dt,
-            end_date=end_dt,
-            notes="Created from quick add",
-        )
+        from adventures.services.images.capture_time import ensure_itinerary_visit
+        ensure_itinerary_visit(content_object, date_value)
         return
 
     if model_name == "lodging":
